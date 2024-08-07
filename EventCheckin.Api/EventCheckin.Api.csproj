@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <!--<StartupObject></StartupObject>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoWrapper.Core" Version="4.5.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.32" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.32" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.32">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.32" />
+	<PackageReference Include="Serilog" Version="3.1.1" />
+	<PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
+	<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+	<PackageReference Include="Serilog.Sinks.File" Version="3.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EventCheckin.DbContext\EventCheckin.DbContext.csproj" />
+    <ProjectReference Include="..\EventCheckin.Infrastructure\EventCheckin.Infrastructure.csproj" />
+    <ProjectReference Include="..\EventCheckin.Services\EventCheckin.Services.csproj" />
+  </ItemGroup>
+
+	<Target Name="BeforeBuildStep" BeforeTargets="AfterBuild">
+		<Exec Command="swagger tofile --output ..\..\ng-matero\Swagger\swagger.json ..\EventCheckin.Api\bin\Debug\net7.0\EventCheckin.Api.dll v1" />
+		<Exec Command="npm --prefix ../../ng-matero run generate-clients" />
+	</Target>
+   
+</Project>

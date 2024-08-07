@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="5.3.2" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\EventCheckin.DbContext\EventCheckin.DbContext.csproj" />
+    <ProjectReference Include="..\EventCheckin.Infrastructure\EventCheckin.Infrastructure.csproj" />
+    <ProjectReference Include="..\EventCheckin.Utility\EventCheckin.Utility.csproj" />
+  </ItemGroup>
+
+</Project>
