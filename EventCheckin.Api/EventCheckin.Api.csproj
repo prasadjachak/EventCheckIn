@@ -30,8 +30,8 @@
   </ItemGroup>
 
 	<Target Name="BeforeBuildStep" BeforeTargets="AfterBuild">
-		<Exec Command="swagger tofile --output ..\..\ng-matero\Swagger\swagger.json ..\EventCheckin.Api\bin\Debug\net7.0\EventCheckin.Api.dll v1" />
-		<Exec Command="npm --prefix ../../ng-matero run generate-clients" />
+		<Exec Command="swagger tofile --output ..\..\EventCheckin\EventCheckin.ClientApp\Swagger\swagger.json ..\EventCheckin.Api\bin\Debug\net7.0\EventCheckin.Api.dll v1" />
+		<Exec Command="npm --prefix  ../../../EventCheckin/EventCheckin.ClientApp run generate-clients" />
 	</Target>
    
 </Project>
