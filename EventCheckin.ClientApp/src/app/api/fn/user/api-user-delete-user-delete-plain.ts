@@ -8,14 +8,14 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
 
-export interface ApiUserDeleteUserIdDelete$Plain$Params {
-  id: number;
+export interface ApiUserDeleteUserDelete$Plain$Params {
+  id?: number;
 }
 
-export function apiUserDeleteUserIdDelete$Plain(http: HttpClient, rootUrl: string, params: ApiUserDeleteUserIdDelete$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiUserDeleteUserIdDelete$Plain.PATH, 'delete');
+export function apiUserDeleteUserDelete$Plain(http: HttpClient, rootUrl: string, params?: ApiUserDeleteUserDelete$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiUserDeleteUserDelete$Plain.PATH, 'delete');
   if (params) {
-    rb.path('id', params.id, {});
+    rb.query('id', params.id, {});
   }
 
   return http.request(
@@ -28,4 +28,4 @@ export function apiUserDeleteUserIdDelete$Plain(http: HttpClient, rootUrl: strin
   );
 }
 
-apiUserDeleteUserIdDelete$Plain.PATH = '/api/User/DeleteUser/{Id}';
+apiUserDeleteUserDelete$Plain.PATH = '/api/User/DeleteUser';

@@ -90,7 +90,6 @@ namespace EventCheckin.Api.Controllers.Identity
             {
                 UserName = model.Email,
                 Email = model.Email,
-
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Title = model.Title,

@@ -7,18 +7,15 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
-import { UserModel } from '../../models/user-model';
 
-export interface ApiUserUpdateUserIdPut$Json$Params {
-  id: number;
-      body?: UserModel
+export interface ApiUserDeleteUserDelete$Json$Params {
+  id?: number;
 }
 
-export function apiUserUpdateUserIdPut$Json(http: HttpClient, rootUrl: string, params: ApiUserUpdateUserIdPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiUserUpdateUserIdPut$Json.PATH, 'put');
+export function apiUserDeleteUserDelete$Json(http: HttpClient, rootUrl: string, params?: ApiUserDeleteUserDelete$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiUserDeleteUserDelete$Json.PATH, 'delete');
   if (params) {
-    rb.path('id', params.id, {});
-    rb.body(params.body, 'application/*+json');
+    rb.query('id', params.id, {});
   }
 
   return http.request(
@@ -31,4 +28,4 @@ export function apiUserUpdateUserIdPut$Json(http: HttpClient, rootUrl: string, p
   );
 }
 
-apiUserUpdateUserIdPut$Json.PATH = '/api/User/UpdateUser/{Id}';
+apiUserDeleteUserDelete$Json.PATH = '/api/User/DeleteUser';

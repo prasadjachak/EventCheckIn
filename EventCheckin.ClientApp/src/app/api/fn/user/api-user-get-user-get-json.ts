@@ -8,18 +8,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
 
-export interface ApiUserGetUserIdGet$Plain$Params {
-  id: number;
+export interface ApiUserGetUserGet$Json$Params {
+  id?: number;
 }
 
-export function apiUserGetUserIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiUserGetUserIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiUserGetUserIdGet$Plain.PATH, 'get');
+export function apiUserGetUserGet$Json(http: HttpClient, rootUrl: string, params?: ApiUserGetUserGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiUserGetUserGet$Json.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
+    rb.query('id', params.id, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -28,4 +28,4 @@ export function apiUserGetUserIdGet$Plain(http: HttpClient, rootUrl: string, par
   );
 }
 
-apiUserGetUserIdGet$Plain.PATH = '/api/User/GetUser/{Id}';
+apiUserGetUserGet$Json.PATH = '/api/User/GetUser';

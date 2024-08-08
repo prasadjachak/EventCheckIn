@@ -1,16 +1,10 @@
 <form [formGroup]="userForm">
-  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
-    <mat-label>Username</mat-label>
-    <input formControlName="username" matInput placeholder="Username" />
-    <mat-error *ngIf="fieldHasError('username')">
-      {{ getErrorMessage("username") }}
-    </mat-error>
-  </mat-form-field>
+
   <mat-form-field appearance="outline" class="d-block mb-2">
-    <mat-label>Email</mat-label>
-    <input formControlName="email" matInput placeholder="Email" />
-    <mat-error *ngIf="fieldHasError('email')">
-      {{ getErrorMessage("email") }}
+    <mat-label>Mobile</mat-label>
+    <input formControlName="phoneNumber" matInput placeholder="Mobile" />
+    <mat-error *ngIf="fieldHasError('phoneNumber')">
+      {{ getErrorMessage("phoneNumber") }}
     </mat-error>
   </mat-form-field>
   <mat-form-field appearance="outline" class="d-block mb-2">
@@ -28,7 +22,13 @@
       {{ getErrorMessage("lastName") }}
     </mat-error>
   </mat-form-field>
-
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>DeviceId</mat-label>
+    <input formControlName="deviceId" matInput placeholder="DeviceId" />
+    <mat-error *ngIf="fieldHasError('deviceId')">
+      {{ getErrorMessage("deviceId") }}
+    </mat-error>
+  </mat-form-field>
   <ng-container  >
     <mat-form-field appearance="outline" class="d-block mb-2">
       <mat-label>Role</mat-label>

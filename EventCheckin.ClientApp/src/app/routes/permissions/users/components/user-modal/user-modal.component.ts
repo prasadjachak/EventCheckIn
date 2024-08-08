@@ -21,20 +21,20 @@ export class UserModalComponent implements OnInit {
     console.log(formData);
     this.data.firstName = formData?.firstName;
     this.data.lastName = formData?.lastName;
-    this.data.userName = formData?.username;
+    this.data.phoneNumber = formData?.phoneNumber;
     this.data.email = formData?.email;
     this.data.roleId = formData?.roleId;
 
      this.data.id > 0
-      ? await this.userService.apiUserUpdateUserIdPut$Json$Response({
-        id:this.data.id, body:this.data
+      ? await this.userService.apiUserUpdateUserPut$Json$Response({
+         body:this.data
         }).subscribe(result =>{
           var user = result.body.result
-          this.dialogRef.close({ success: user.errors.length == 0 ? true:false, userData: user });
+          this.dialogRef.close({ success: result.body.isSuccess, userData: user });
         })
       : await this.userService.apiUserAddUserPost$Json$Response({body:this.data}).subscribe(result =>{
         var user = result.body.result
-        this.dialogRef.close({ success: user.errors.length == 0 ? true:false, userData: user });
+        this.dialogRef.close({ success: result.body.isSuccess, userData: user });
       });
   }
 

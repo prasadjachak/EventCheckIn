@@ -78,22 +78,17 @@ export class UserFormComponent implements OnInit {
           Validators.maxLength(60),
         ]),
         roleId: new FormControl(this.userData.roleId || '', []),
-        email: new FormControl(this.userData?.email || '',
+        phoneNumber: new FormControl(this.userData?.phoneNumber || '',
           [
-            Validators.required,
-            Validators.email
+            Validators.required
           ]
         ),
-        username: new FormControl(this.userData?.userName || '',
+        deviceId: new FormControl(this.userData?.deviceId || '',
           [
             Validators.required,
           ]
-        ),
-        password: new FormControl('', this.userData ? [] : passwordValidator),
-        passwordConfirm: new FormControl(
-          '',
-          this.userData ? [] : passwordConfirmValidator
-        ),
+        )
+
       }
       // TODO CAN ACTIVATE FOR BETTER PERFORMANCE
       // { updateOn: 'blur' }

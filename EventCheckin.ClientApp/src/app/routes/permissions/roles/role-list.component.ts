@@ -139,8 +139,7 @@ export class RoleListComponent implements OnInit {
     .subscribe(result =>{
       //this.source = result.body.result;
       var role = result.body;
-      console.log(result.body);
-      console.log(role);
+
         const roleIndex = this.source.findIndex(
           (usr) => usr.id === roleData?.id
         );

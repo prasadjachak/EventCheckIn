@@ -59,19 +59,15 @@ namespace EventCheckin.Api.Controllers.Identity
             
             var users = _userManager.Users
               .Skip((model.PageNumber - 1) * model.PageSize)
-              .Take(model.PageSize).Select(user => new
-              {
-                  user.Id,
-                  user.Email,
-                  user.PhoneNumber,
-                  user.EmailConfirmed,
-                  user.LockoutEnabled,
-                  user.TwoFactorEnabled
-              }).Select(t=> new ApplicationUser()
+              .Take(model.PageSize)
+              .Select(t=> new ApplicationUser()
               {
                   Id= t.Id,
-                  Email = t.Email,
+                  UserName = t.UserName,
                   PhoneNumber = t.PhoneNumber,
+                  FirstName = t.FirstName,
+                  LastName = t.LastName,
+                  DeviceId = t.DeviceId,
               }).ToList();
 
             var userModels = new List<UserModel>();
@@ -83,7 +79,7 @@ namespace EventCheckin.Api.Controllers.Identity
             return new CustomApiResponse(userModels);
         }
 
-        [HttpGet("GetUser/{Id}")]
+        [HttpGet("GetUser")]
         public ActionResult<CustomApiResponse> GetUser(int id)
         {
             if (string.IsNullOrEmpty(id.ToString()))
@@ -104,18 +100,24 @@ namespace EventCheckin.Api.Controllers.Identity
         }
 
         [HttpPost("AddUser")]
-        public async Task<ActionResult<CustomApiResponse>> AddUser([FromBody] UserModel model)
+        public async Task<ActionResult<CustomApiResponse>> AddUser(UserModel model)
         {
             if (!ModelState.IsValid)
                 return new CustomApiResponse(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage),200,false);
 
             ApplicationUser user = new ApplicationUser
             {
-                UserName = model.Email,
-                Email = model.Email,
-                EmailConfirmed = model.EmailConfirmed,
-                PhoneNumber = model.PhoneNumber
+                UserName = model.PhoneNumber,
+                PhoneNumber = model.PhoneNumber,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PhoneNumberConfirmed = false,
+                Email = model.PhoneNumber + "@abc123.com",
+                Title = "",
+                EmailConfirmed = true,
             };
+            model.Password = "Admin@32149870";
+            model.ConfirmPassword = "Admin@32149870";
 
             ApplicationRole role = await _roleManager.FindByIdAsync(model.RoleId).ConfigureAwait(false);
             if (role == null)
@@ -127,37 +129,35 @@ namespace EventCheckin.Api.Controllers.Identity
                 IdentityResult result2 = await _userManager.AddToRoleAsync(user, role.Name).ConfigureAwait(false);
                 if (result2.Succeeded)
                 {
-                    return Ok(new
+                    return new CustomApiResponse(new UserModel
                     {
-                        user.Id,
-                        user.Email,
-                        user.PhoneNumber,
-                        user.EmailConfirmed,
-                        user.LockoutEnabled,
-                        user.TwoFactorEnabled
-                    });
+                        Id = user.Id,
+                        PhoneNumber = user.PhoneNumber,
+                        UserName = user.PhoneNumber,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName
+                    }, 200, true);
                 }
             }
-            return BadRequest(result.Errors.Select(x => x.Description));
+            return new CustomApiResponse(result.Errors.Select(x => x.Description), 200, false);
         }
 
-        [HttpPut("UpdateUser/{Id}")]
-        public async Task<ActionResult<CustomApiResponse>> UpdateUser(int id, [FromBody] UserModel model)
+        [HttpPut("UpdateUser")]
+        public async Task<ActionResult<CustomApiResponse>> UpdateUser(UserModel model)
         {
             if (!ModelState.IsValid)
                 return new CustomApiResponse(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage), 200, false);
 
-            ApplicationUser user = await _userManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
+            ApplicationUser user = await _userManager.FindByIdAsync(model.Id.ToString()).ConfigureAwait(false);
             if (user == null)
                 return new CustomApiResponse(new[] { "Could not find user!" }, 200, false); 
 
             // Add more fields to update
             user.Email = model.Email;
-            user.UserName = model.Email;
-            user.EmailConfirmed = model.EmailConfirmed;
             user.PhoneNumber = model.PhoneNumber;
-            user.LockoutEnabled = model.LockoutEnabled;
-            //user.TwoFactorEnabled = model.TwoFactorEnabled;
+            user.UserName = model.PhoneNumber;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
 
             IdentityResult result = await _userManager.UpdateAsync(user).ConfigureAwait(false);
             if (result.Succeeded)
@@ -167,7 +167,7 @@ namespace EventCheckin.Api.Controllers.Identity
             return new CustomApiResponse(result.Errors.Select(x => x.Description), 200, false);
         }
 
-        [HttpDelete("DeleteUser/{Id}")]
+        [HttpDelete("DeleteUser")]
         public async Task<ActionResult<CustomApiResponse>> DeleteUser(int id)
         {
             if (String.IsNullOrEmpty(id.ToString()))
@@ -180,11 +180,10 @@ namespace EventCheckin.Api.Controllers.Identity
             IdentityResult result = await _userManager.DeleteAsync(user).ConfigureAwait(false);
             if (result.Succeeded)
             {
-                return Ok();
+                return new CustomApiResponse(id.ToString(), 200, true);
             }
             return new CustomApiResponse(result.Errors.Select(x => x.Description), 200, false);
         }
-
 
         [HttpGet("mymenu")]
         public async Task<ActionResult<CustomApiResponse>> GetAllMenuTree()
@@ -264,7 +263,6 @@ namespace EventCheckin.Api.Controllers.Identity
             }
             return Ok(JsonConvert.SerializeObject(menuResponseModel, settings));
         }
-
 
         [NonAction]
         public virtual string GetMenuFromMenuJsonAsync(string physicalPath)

@@ -807,7 +807,7 @@
         }
       }
     },
-    "/api/User/GetUser/{Id}": {
+    "/api/User/GetUser": {
       "get": {
         "tags": [
           "User"
@@ -815,8 +815,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -900,21 +899,10 @@
         }
       }
     },
-    "/api/User/UpdateUser/{Id}": {
+    "/api/User/UpdateUser": {
       "put": {
         "tags": [
           "User"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
         ],
         "requestBody": {
           "content": {
@@ -964,7 +952,7 @@
         }
       }
     },
-    "/api/User/DeleteUser/{Id}": {
+    "/api/User/DeleteUser": {
       "delete": {
         "tags": [
           "User"
@@ -972,8 +960,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -1243,11 +1230,6 @@
   "components": {
     "schemas": {
       "ApplicationUser": {
-        "required": [
-          "firstName",
-          "lastName",
-          "title"
-        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1308,16 +1290,16 @@
             "format": "int32"
           },
           "firstName": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "lastName": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "title": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "birthDate": {
             "type": "string",

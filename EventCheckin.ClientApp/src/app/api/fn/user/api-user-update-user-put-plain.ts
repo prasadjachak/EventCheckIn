@@ -7,19 +7,20 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
+import { UserModel } from '../../models/user-model';
 
-export interface ApiUserDeleteUserIdDelete$Json$Params {
-  id: number;
+export interface ApiUserUpdateUserPut$Plain$Params {
+      body?: UserModel
 }
 
-export function apiUserDeleteUserIdDelete$Json(http: HttpClient, rootUrl: string, params: ApiUserDeleteUserIdDelete$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiUserDeleteUserIdDelete$Json.PATH, 'delete');
+export function apiUserUpdateUserPut$Plain(http: HttpClient, rootUrl: string, params?: ApiUserUpdateUserPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiUserUpdateUserPut$Plain.PATH, 'put');
   if (params) {
-    rb.path('id', params.id, {});
+    rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -28,4 +29,4 @@ export function apiUserDeleteUserIdDelete$Json(http: HttpClient, rootUrl: string
   );
 }
 
-apiUserDeleteUserIdDelete$Json.PATH = '/api/User/DeleteUser/{Id}';
+apiUserUpdateUserPut$Plain.PATH = '/api/User/UpdateUser';

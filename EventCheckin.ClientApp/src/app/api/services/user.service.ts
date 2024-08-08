@@ -13,14 +13,14 @@ import { apiUserAddUserPost$Json } from '../fn/user/api-user-add-user-post-json'
 import { ApiUserAddUserPost$Json$Params } from '../fn/user/api-user-add-user-post-json';
 import { apiUserAddUserPost$Plain } from '../fn/user/api-user-add-user-post-plain';
 import { ApiUserAddUserPost$Plain$Params } from '../fn/user/api-user-add-user-post-plain';
-import { apiUserDeleteUserIdDelete$Json } from '../fn/user/api-user-delete-user-id-delete-json';
-import { ApiUserDeleteUserIdDelete$Json$Params } from '../fn/user/api-user-delete-user-id-delete-json';
-import { apiUserDeleteUserIdDelete$Plain } from '../fn/user/api-user-delete-user-id-delete-plain';
-import { ApiUserDeleteUserIdDelete$Plain$Params } from '../fn/user/api-user-delete-user-id-delete-plain';
-import { apiUserGetUserIdGet$Json } from '../fn/user/api-user-get-user-id-get-json';
-import { ApiUserGetUserIdGet$Json$Params } from '../fn/user/api-user-get-user-id-get-json';
-import { apiUserGetUserIdGet$Plain } from '../fn/user/api-user-get-user-id-get-plain';
-import { ApiUserGetUserIdGet$Plain$Params } from '../fn/user/api-user-get-user-id-get-plain';
+import { apiUserDeleteUserDelete$Json } from '../fn/user/api-user-delete-user-delete-json';
+import { ApiUserDeleteUserDelete$Json$Params } from '../fn/user/api-user-delete-user-delete-json';
+import { apiUserDeleteUserDelete$Plain } from '../fn/user/api-user-delete-user-delete-plain';
+import { ApiUserDeleteUserDelete$Plain$Params } from '../fn/user/api-user-delete-user-delete-plain';
+import { apiUserGetUserGet$Json } from '../fn/user/api-user-get-user-get-json';
+import { ApiUserGetUserGet$Json$Params } from '../fn/user/api-user-get-user-get-json';
+import { apiUserGetUserGet$Plain } from '../fn/user/api-user-get-user-get-plain';
+import { ApiUserGetUserGet$Plain$Params } from '../fn/user/api-user-get-user-get-plain';
 import { apiUserListUserPost$Json } from '../fn/user/api-user-list-user-post-json';
 import { ApiUserListUserPost$Json$Params } from '../fn/user/api-user-list-user-post-json';
 import { apiUserListUserPost$Plain } from '../fn/user/api-user-list-user-post-plain';
@@ -29,10 +29,10 @@ import { apiUserMymenuGet$Json } from '../fn/user/api-user-mymenu-get-json';
 import { ApiUserMymenuGet$Json$Params } from '../fn/user/api-user-mymenu-get-json';
 import { apiUserMymenuGet$Plain } from '../fn/user/api-user-mymenu-get-plain';
 import { ApiUserMymenuGet$Plain$Params } from '../fn/user/api-user-mymenu-get-plain';
-import { apiUserUpdateUserIdPut$Json } from '../fn/user/api-user-update-user-id-put-json';
-import { ApiUserUpdateUserIdPut$Json$Params } from '../fn/user/api-user-update-user-id-put-json';
-import { apiUserUpdateUserIdPut$Plain } from '../fn/user/api-user-update-user-id-put-plain';
-import { ApiUserUpdateUserIdPut$Plain$Params } from '../fn/user/api-user-update-user-id-put-plain';
+import { apiUserUpdateUserPut$Json } from '../fn/user/api-user-update-user-put-json';
+import { ApiUserUpdateUserPut$Json$Params } from '../fn/user/api-user-update-user-put-json';
+import { apiUserUpdateUserPut$Plain } from '../fn/user/api-user-update-user-put-plain';
+import { ApiUserUpdateUserPut$Plain$Params } from '../fn/user/api-user-update-user-put-plain';
 import { CustomApiResponse } from '../models/custom-api-response';
 
 @Injectable({ providedIn: 'root' })
@@ -88,49 +88,49 @@ export class UserService extends BaseService {
     );
   }
 
-  /** Path part for operation `apiUserGetUserIdGet()` */
-  static readonly ApiUserGetUserIdGetPath = '/api/User/GetUser/{Id}';
+  /** Path part for operation `apiUserGetUserGet()` */
+  static readonly ApiUserGetUserGetPath = '/api/User/GetUser';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserGetUserIdGet$Plain()` instead.
+   * To access only the response body, use `apiUserGetUserGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserGetUserIdGet$Plain$Response(params: ApiUserGetUserIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiUserGetUserIdGet$Plain(this.http, this.rootUrl, params, context);
+  apiUserGetUserGet$Plain$Response(params?: ApiUserGetUserGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiUserGetUserGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserGetUserIdGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiUserGetUserGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserGetUserIdGet$Plain(params: ApiUserGetUserIdGet$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiUserGetUserIdGet$Plain$Response(params, context).pipe(
+  apiUserGetUserGet$Plain(params?: ApiUserGetUserGet$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiUserGetUserGet$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserGetUserIdGet$Json()` instead.
+   * To access only the response body, use `apiUserGetUserGet$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserGetUserIdGet$Json$Response(params: ApiUserGetUserIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiUserGetUserIdGet$Json(this.http, this.rootUrl, params, context);
+  apiUserGetUserGet$Json$Response(params?: ApiUserGetUserGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiUserGetUserGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserGetUserIdGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiUserGetUserGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserGetUserIdGet$Json(params: ApiUserGetUserIdGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiUserGetUserIdGet$Json$Response(params, context).pipe(
+  apiUserGetUserGet$Json(params?: ApiUserGetUserGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiUserGetUserGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
@@ -182,96 +182,96 @@ export class UserService extends BaseService {
     );
   }
 
-  /** Path part for operation `apiUserUpdateUserIdPut()` */
-  static readonly ApiUserUpdateUserIdPutPath = '/api/User/UpdateUser/{Id}';
+  /** Path part for operation `apiUserUpdateUserPut()` */
+  static readonly ApiUserUpdateUserPutPath = '/api/User/UpdateUser';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserUpdateUserIdPut$Plain()` instead.
+   * To access only the response body, use `apiUserUpdateUserPut$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiUserUpdateUserIdPut$Plain$Response(params: ApiUserUpdateUserIdPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiUserUpdateUserIdPut$Plain(this.http, this.rootUrl, params, context);
+  apiUserUpdateUserPut$Plain$Response(params?: ApiUserUpdateUserPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiUserUpdateUserPut$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserUpdateUserIdPut$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiUserUpdateUserPut$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiUserUpdateUserIdPut$Plain(params: ApiUserUpdateUserIdPut$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiUserUpdateUserIdPut$Plain$Response(params, context).pipe(
+  apiUserUpdateUserPut$Plain(params?: ApiUserUpdateUserPut$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiUserUpdateUserPut$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserUpdateUserIdPut$Json()` instead.
+   * To access only the response body, use `apiUserUpdateUserPut$Json()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiUserUpdateUserIdPut$Json$Response(params: ApiUserUpdateUserIdPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiUserUpdateUserIdPut$Json(this.http, this.rootUrl, params, context);
+  apiUserUpdateUserPut$Json$Response(params?: ApiUserUpdateUserPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiUserUpdateUserPut$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserUpdateUserIdPut$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiUserUpdateUserPut$Json$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiUserUpdateUserIdPut$Json(params: ApiUserUpdateUserIdPut$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiUserUpdateUserIdPut$Json$Response(params, context).pipe(
+  apiUserUpdateUserPut$Json(params?: ApiUserUpdateUserPut$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiUserUpdateUserPut$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
-  /** Path part for operation `apiUserDeleteUserIdDelete()` */
-  static readonly ApiUserDeleteUserIdDeletePath = '/api/User/DeleteUser/{Id}';
+  /** Path part for operation `apiUserDeleteUserDelete()` */
+  static readonly ApiUserDeleteUserDeletePath = '/api/User/DeleteUser';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserDeleteUserIdDelete$Plain()` instead.
+   * To access only the response body, use `apiUserDeleteUserDelete$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserDeleteUserIdDelete$Plain$Response(params: ApiUserDeleteUserIdDelete$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiUserDeleteUserIdDelete$Plain(this.http, this.rootUrl, params, context);
+  apiUserDeleteUserDelete$Plain$Response(params?: ApiUserDeleteUserDelete$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiUserDeleteUserDelete$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserDeleteUserIdDelete$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiUserDeleteUserDelete$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserDeleteUserIdDelete$Plain(params: ApiUserDeleteUserIdDelete$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiUserDeleteUserIdDelete$Plain$Response(params, context).pipe(
+  apiUserDeleteUserDelete$Plain(params?: ApiUserDeleteUserDelete$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiUserDeleteUserDelete$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiUserDeleteUserIdDelete$Json()` instead.
+   * To access only the response body, use `apiUserDeleteUserDelete$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserDeleteUserIdDelete$Json$Response(params: ApiUserDeleteUserIdDelete$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiUserDeleteUserIdDelete$Json(this.http, this.rootUrl, params, context);
+  apiUserDeleteUserDelete$Json$Response(params?: ApiUserDeleteUserDelete$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiUserDeleteUserDelete$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiUserDeleteUserIdDelete$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiUserDeleteUserDelete$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiUserDeleteUserIdDelete$Json(params: ApiUserDeleteUserIdDelete$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiUserDeleteUserIdDelete$Json$Response(params, context).pipe(
+  apiUserDeleteUserDelete$Json(params?: ApiUserDeleteUserDelete$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiUserDeleteUserDelete$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

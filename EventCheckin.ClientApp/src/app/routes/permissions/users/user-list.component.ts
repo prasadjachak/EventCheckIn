@@ -21,8 +21,9 @@ export class UserListComponent implements OnInit {
   userRoles : RoleModel[] = [];
 
   columns: MtxGridColumn[] = [
-    { header: 'Fullname', field: 'fullName' },
-    { header: 'Username', field: 'userName'  },
+    { header: 'Mobile', field: 'phoneNumber'  },
+    { header: 'FirstName', field: 'firstName' },
+    { header: 'LastName', field: 'lastName' },
     { header: 'Role', field: 'roleName'  },
     {
       header: 'Operation',
@@ -87,6 +88,8 @@ export class UserListComponent implements OnInit {
     var user1 = {roles : this.userRoles};
     try {
       const { success, userData } = await this.openUserModal(user1);
+      console.log(userData);
+      console.log(success);
       if (success) {
         this.source.push(userData);
         this.getList();
@@ -96,8 +99,8 @@ export class UserListComponent implements OnInit {
       }
       else{
         console.log(userData);
-        if(userData !=undefined && userData.errors.length > 0){
-          this.toastr.error(userData.errors[0]);
+        if(userData !=undefined && userData.length > 0){
+          this.toastr.error(userData[0]);
         }
       }
     } catch (error: any) {
@@ -124,8 +127,9 @@ export class UserListComponent implements OnInit {
         }
       }
       else{
-        if(userData !=undefined && userData.errors.length > 0){
-          this.toastr.error(userData.errors[0]);
+        console.log(userData);
+        if(userData !=undefined && userData.length > 0){
+          this.toastr.error(userData[0]);
         }
       }
     } catch (error: any) {
@@ -137,14 +141,14 @@ export class UserListComponent implements OnInit {
 
   async delete(userData: UserModel) {
     this.userService
-    .apiUserDeleteUserIdDelete$Json$Response({id:userData?.id})
+    .apiUserDeleteUserDelete$Json$Response({id:userData?.id})
     .subscribe(result =>{
-      var user = result.body.result
+      var user = result.body;
 
         const userIndex = this.source.findIndex(
           (usr) => usr.id === userData?.id
         );
-        if(user.errors ===undefined || user.errors.length == 0){
+        if(result.body.isSuccess == true){
           if (userIndex >= 0 ) {
             this.source.splice(userIndex, 1);
             this.getList();
@@ -153,8 +157,8 @@ export class UserListComponent implements OnInit {
             );
           }
         }else{
-          if(userData !=undefined && user.errors.length > 0){
-            this.toastr.error(user.errors[0]);
+          if(userData !=undefined && user.isSuccess ==false){
+            this.toastr.error(user.message);
           }
         }
     });
@@ -223,7 +227,7 @@ export class UserListComponent implements OnInit {
       })
     )
     .subscribe(result =>{
-      //this.userRoles = result.body.result.items;
+      this.userRoles = result.body.result;
       this.isLoading = false;
     });
   }

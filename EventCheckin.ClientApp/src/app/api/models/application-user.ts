@@ -8,10 +8,10 @@ export interface ApplicationUser {
   deviceId?: string | null;
   email?: string | null;
   emailConfirmed?: boolean;
-  firstName: string;
+  firstName?: string | null;
   fullName?: string | null;
   id?: number;
-  lastName: string;
+  lastName?: string | null;
   lockoutEnabled?: boolean;
   lockoutEnd?: string | null;
   loggings?: Array<Logging> | null;
@@ -22,7 +22,7 @@ export interface ApplicationUser {
   phoneNumber?: string | null;
   phoneNumberConfirmed?: boolean;
   securityStamp?: string | null;
-  title: string;
+  title?: string | null;
   twoFactorEnabled?: boolean;
   userName?: string | null;
 }

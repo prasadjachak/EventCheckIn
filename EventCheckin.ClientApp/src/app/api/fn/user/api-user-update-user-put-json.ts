@@ -9,20 +9,18 @@ import { RequestBuilder } from '../../request-builder';
 import { CustomApiResponse } from '../../models/custom-api-response';
 import { UserModel } from '../../models/user-model';
 
-export interface ApiUserUpdateUserIdPut$Plain$Params {
-  id: number;
+export interface ApiUserUpdateUserPut$Json$Params {
       body?: UserModel
 }
 
-export function apiUserUpdateUserIdPut$Plain(http: HttpClient, rootUrl: string, params: ApiUserUpdateUserIdPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiUserUpdateUserIdPut$Plain.PATH, 'put');
+export function apiUserUpdateUserPut$Json(http: HttpClient, rootUrl: string, params?: ApiUserUpdateUserPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiUserUpdateUserPut$Json.PATH, 'put');
   if (params) {
-    rb.path('id', params.id, {});
     rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -31,4 +29,4 @@ export function apiUserUpdateUserIdPut$Plain(http: HttpClient, rootUrl: string, 
   );
 }
 
-apiUserUpdateUserIdPut$Plain.PATH = '/api/User/UpdateUser/{Id}';
+apiUserUpdateUserPut$Json.PATH = '/api/User/UpdateUser';
