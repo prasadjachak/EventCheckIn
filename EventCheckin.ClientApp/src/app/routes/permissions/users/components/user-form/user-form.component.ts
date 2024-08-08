@@ -70,12 +70,8 @@ export class UserFormComponent implements OnInit {
     return new FormGroup(
       {
         firstName: new FormControl(this.userData?.firstName || '', [
-          Validators.required,
-          Validators.maxLength(60),
         ]),
         lastName: new FormControl(this.userData?.lastName || '', [
-          Validators.required,
-          Validators.maxLength(60),
         ]),
         roleId: new FormControl(this.userData.roleId || '', []),
         phoneNumber: new FormControl(this.userData?.phoneNumber || '',
@@ -85,7 +81,6 @@ export class UserFormComponent implements OnInit {
         ),
         deviceId: new FormControl(this.userData?.deviceId || '',
           [
-            Validators.required,
           ]
         )
 

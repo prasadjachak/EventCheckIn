@@ -18,7 +18,7 @@ export enum PermissionsEnum {
 	productioncontrol = 'Production Control',
   masters = 'Masters',
   events = 'Events',
-  material = 'Material Configuration',
+  passes = 'Event Pass',
   equipmentmaterial = 'Equipment Material Configuration',
   evententity = 'Event Entity Configuration',
 	eventday = 'Event Day Configuration',

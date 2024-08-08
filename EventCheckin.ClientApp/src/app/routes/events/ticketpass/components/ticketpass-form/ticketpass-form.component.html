@@ -1,0 +1,42 @@
+<form [formGroup]="eventDayForm">
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Pass No</mat-label>
+    <input formControlName="ticketNo" matInput placeholder="ticketNo" />
+    <mat-error *ngIf="fieldHasError('ticketNo')">
+      {{ getErrorMessage("ticketNo") }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Allowed Guest</mat-label>
+    <input formControlName="allowedGuest" matInput placeholder="allowedGuest" />
+    <mat-error *ngIf="fieldHasError('allowedGuest')">
+      {{ getErrorMessage("allowedGuest") }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Allowed Parking Count</mat-label>
+    <input formControlName="allowedParkingCount" matInput placeholder="allowedParkingCount" />
+    <mat-error *ngIf="fieldHasError('allowedParkingCount')">
+      {{ getErrorMessage("allowedParkingCount") }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Event Day Id</mat-label>
+    <input formControlName="eventDayId" matInput placeholder="eventDayId" />
+    <mat-error *ngIf="fieldHasError('eventDayId')">
+      {{ getErrorMessage("eventDayId") }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>User Id</mat-label>
+    <input formControlName="userId" matInput placeholder="userId" />
+    <mat-error *ngIf="fieldHasError('userId')">
+      {{ getErrorMessage("userId") }}
+    </mat-error>
+  </mat-form-field>
+</form>

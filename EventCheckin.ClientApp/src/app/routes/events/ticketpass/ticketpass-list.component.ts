@@ -7,23 +7,23 @@ import { ToastrService } from 'ngx-toastr';
 import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs';
-import { EventDayService,EventService } from 'app/api/services';
-import { EventDayModel, EventModel } from 'app/api/models';
-import { EventDayModal } from './components';
+import { TicketPassService } from 'app/api/services';
+import { TicketPassModel } from 'app/api/models';
+import { TicketPassModal } from './components';
 // COMP
 @Component({
-  selector: 'app-eventday-list',
-  templateUrl: './eventday-list.component.html',
-  styleUrls: ['./eventday-list.component.scss'],
+  selector: 'app-ticketpass-list',
+  templateUrl: './ticketpass-list.component.html',
+  styleUrls: ['./ticketpass-list.component.scss'],
 
 })
-export class EventDayListComponent implements OnInit {
-  eventDayEvents : EventModel[] = [];
+export class TicketPassListComponent implements OnInit {
+
   columns: MtxGridColumn[] = [
-    { header: 'Event Day Name', field: 'eventDayName'  },
-    { header: 'Start Date', field: 'startDate'  },
-    { header: 'End Date', field: 'endDate'  },
-    { header: 'EventId', field: 'eventId'  },
+    { header: 'Pass No', field: 'ticketNo'  },
+    { header: 'Allowed Guest', field: 'allowedGuest'  },
+    { header: 'Allowed Parking', field: 'allowedParkingCount'  },
+    { header: 'Event Day Id', field: 'eventDayId'  },
     {
       header: 'Operation',
       field: 'operation',
@@ -72,8 +72,7 @@ export class EventDayListComponent implements OnInit {
   }
 
   constructor(
-    private eventDayService: EventDayService,
-    private eventService: EventService,
+    private ticketPassService: TicketPassService,
     private dialog: MatDialog,
     private toastr: ToastrService
   ) {}
@@ -82,20 +81,20 @@ export class EventDayListComponent implements OnInit {
     this.getList();
   }
 
-  async createNewEventDay() {
-    var event1 = {id:0,events : this.eventDayEvents};
+  async createNewTicketPass() {
+    var event1 : TicketPassModel= {id:0};
     try {
-      const { success, eventdayData } = await this.openEventDayModal(event1);
+      const { success, ticketpassData } = await this.openTicketPassModal(event1);
       if (success) {
-        this.source.push(eventdayData);
+        this.source.push(ticketpassData);
         this.getList();
         this.toastr.info(
-          `EventDay (${eventdayData?.name}) has been created successfully`
+          `TicketPass (${ticketpassData?.name}) has been created successfully`
         );
       }
       else{
-        if(eventdayData != undefined && eventdayData.errors.length > 0){
-          this.toastr.error(eventdayData.errors[0]);
+        if(ticketpassData != undefined && ticketpassData.errors.length > 0){
+          this.toastr.error(ticketpassData.errors[0]);
         }
       }
     } catch (error: any) {
@@ -105,26 +104,26 @@ export class EventDayListComponent implements OnInit {
     }
   }
 
-  async update(event: EventDayModel) {
+  async update(event: TicketPassModel) {
     try {
-      const { success, eventdayData } = await this.openEventDayModal(event);
+      const { success, ticketpassData } = await this.openTicketPassModal(event);
       if (success) {
-        console.log(eventdayData);
+        console.log(ticketpassData);
         const eventIndex = this.source.findIndex(
           (usr) => usr?.id === event?.id
         );
         console.log(eventIndex);
         if (eventIndex >= 0) {
-          this.source[eventIndex] = eventdayData;
+          this.source[eventIndex] = ticketpassData;
           this.getList();
           this.toastr.info(
-             `EventDay (${eventdayData?.name}) has been updated successfully`
+             `TicketPass (${ticketpassData?.name}) has been updated successfully`
            );
         }
       }
       else{
-        if(eventdayData != undefined && eventdayData.errors.length > 0){
-          this.toastr.error(eventdayData.errors[0]);
+        if(ticketpassData != undefined && ticketpassData.errors.length > 0){
+          this.toastr.error(ticketpassData.errors[0]);
         }
       }
     } catch (error: any) {
@@ -134,24 +133,24 @@ export class EventDayListComponent implements OnInit {
     }
   }
 
-  async delete(eventdayData: EventDayModel) {
-    this.eventDayService
-    .apiEventDayDeleteEventEntityPut$Json$Response({id:eventdayData?.id})
+  async delete(ticketpassData: TicketPassModel) {
+    this.ticketPassService
+    .apiTicketPassDeleteTicketPassPut$Json$Response({id:ticketpassData?.id})
     .subscribe(result =>{
       //this.source = result.body.result;
       var event = result.body;
 
         const eventIndex = this.source.findIndex(
-          (usr) => usr.id === eventdayData?.id
+          (usr) => usr.id === ticketpassData?.id
         );
         if(result.body.isSuccess == true){
           this.source.splice(eventIndex, 1);
           this.getList();
           this.toastr.info(
-            `EventDay (${eventdayData?.eventDayName}) has been removed successfully`,
+            `TicketPass (${ticketpassData?.ticketNo}) has been removed successfully`,
           );
         }else{
-          if(eventdayData != undefined && event.isSuccess ==false){
+          if(ticketpassData != undefined && event.isSuccess ==false){
             this.toastr.error(event.message);
           }
         }
@@ -160,8 +159,8 @@ export class EventDayListComponent implements OnInit {
   }
 
   // OPEN MODAL WITH SOME CONFIGRATION
-  private async openEventDayModal(event?: EventDayModel) {
-    const eventDialog = this.dialog.open(EventDayModal, {
+  private async openTicketPassModal(event?: TicketPassModel) {
+    const eventDialog = this.dialog.open(TicketPassModal, {
       width: '450px',
       maxWidth: '100%',
       data: event,
@@ -173,8 +172,8 @@ export class EventDayListComponent implements OnInit {
   async getList() {
     this.isLoading = true;
 
-    this.eventDayService
-    .apiEventDayListEventDayGet$Json$Response()
+    this.ticketPassService
+    .apiTicketPassListTicketPasssGet$Json$Response()
     .pipe(
       finalize(() => {
         this.isLoading = false;
@@ -206,21 +205,5 @@ export class EventDayListComponent implements OnInit {
     this.query.per_page = 10;
     this.query.start = 1;
     this.getList();
-  }
-
-  async getEventList() {
-    this.isLoading = true;
-
-    this.eventService
-    .apiEventListEventEntitysGet$Json$Response()
-    .pipe(
-      finalize(() => {
-        this.isLoading = false;
-      })
-    )
-    .subscribe(result =>{
-      this.eventDayEvents = result.body.result;
-      this.isLoading = false;
-    });
   }
 }

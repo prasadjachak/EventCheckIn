@@ -21,6 +21,9 @@ namespace EventCheckin.Api.Infrastructure
 
             this.CreateMap<EventDayModel, EventDay>();
             this.CreateMap<EventDay, EventDayModel>();
+
+            this.CreateMap<TicketPassModel, TicketPass>();
+            this.CreateMap<TicketPass, TicketPassModel>();
         }
     }
 }

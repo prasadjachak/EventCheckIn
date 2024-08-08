@@ -26,6 +26,11 @@
           "route": "eventday",
           "name": "eventday",
           "type": "link"
+        },
+        {
+          "route": "passes",
+          "name": "passes",
+          "type": "link"
         }
       ],
       "permissions": {

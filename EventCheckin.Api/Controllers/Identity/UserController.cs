@@ -19,17 +19,23 @@ using Microsoft.AspNetCore.Hosting;
 using System.Data;
 using AutoMapper;
 using EventCheckin.Services.Permission;
+using EventCheckin.Api.Models.Events;
+using System.IdentityModel.Tokens.Jwt;
+using EventCheckin.Services;
+using EventCheckin.Api.Infrastructure;
 
 namespace EventCheckin.Api.Controllers.Identity
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IPermissionService _permissionService;
+        private readonly ITicketPassService _ticketPassService;
+    
         private IHostingEnvironment _env;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
@@ -38,6 +44,7 @@ namespace EventCheckin.Api.Controllers.Identity
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
             IPermissionService permissionService,
+            ITicketPassService ticketPassService,
             IMapper mapper,
             IHostingEnvironment env,
             IHttpContextAccessor httpContextAccessor
@@ -46,6 +53,8 @@ namespace EventCheckin.Api.Controllers.Identity
             this._userManager = userManager;
             this._roleManager = roleManager;
             this._permissionService = permissionService;
+           
+            _ticketPassService = ticketPassService;
             _mapper = mapper;
             _env = env;
             _httpContextAccessor = httpContextAccessor;
@@ -264,6 +273,8 @@ namespace EventCheckin.Api.Controllers.Identity
             }
             return Ok(JsonConvert.SerializeObject(menuResponseModel, settings));
         }
+
+
 
         [NonAction]
         public virtual string GetMenuFromMenuJsonAsync(string physicalPath)

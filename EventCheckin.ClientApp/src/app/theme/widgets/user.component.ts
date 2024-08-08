@@ -30,7 +30,6 @@ import screenfull from 'screenfull';
         <span>{{ 'logout' | translate }}</span>
       </button>
     </mat-menu>
-    <div class="row"><span style="margin:0 auto;padding-left:10px;">v4.0</span></div>
   `,
   styles: [
     `

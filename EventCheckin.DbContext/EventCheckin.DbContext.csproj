@@ -22,8 +22,4 @@
     <ProjectReference Include="..\EventCheckin.Infrastructure\EventCheckin.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

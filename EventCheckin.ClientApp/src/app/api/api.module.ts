@@ -9,9 +9,9 @@ import { EventService } from './services/event.service';
 import { EventDayService } from './services/event-day.service';
 import { RolesService } from './services/roles.service';
 import { SecurityService } from './services/security.service';
+import { TicketPassService } from './services/ticket-pass.service';
 import { UserService } from './services/user.service';
 import { UserRolesService } from './services/user-roles.service';
-import { VueBoilerplateService } from './services/vue-boilerplate.service';
 
 /**
  * Module that provides all services and configuration.
@@ -26,9 +26,9 @@ import { VueBoilerplateService } from './services/vue-boilerplate.service';
     EventDayService,
     RolesService,
     SecurityService,
+    TicketPassService,
     UserService,
     UserRolesService,
-    VueBoilerplateService,
     ApiConfiguration
   ],
 })

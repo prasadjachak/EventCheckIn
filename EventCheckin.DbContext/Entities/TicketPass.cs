@@ -21,6 +21,8 @@ namespace EventCheckin.DbContext.Entities
 
         public int AllowedGuest { get; set; }
 
+        public int AllowedParkingCount { get; set; }
+
         public int UserId { get; set; }
 
         public int AssignedBy { get; set; }

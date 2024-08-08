@@ -14,5 +14,7 @@ namespace EventCheckin.Api.Models.Events
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
+
+        public EventModel EventModel { get; set; }
     }
 }

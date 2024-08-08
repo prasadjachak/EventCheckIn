@@ -1,7 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ApplicationUser } from './models/application-user';
-export { ClientsOverviewFilterDto } from './models/clients-overview-filter-dto';
 export { ConfirmEmailViewModel } from './models/confirm-email-view-model';
 export { CustomApiResponse } from './models/custom-api-response';
 export { ELogType } from './models/e-log-type';
@@ -17,6 +16,7 @@ export { RoleModel } from './models/role-model';
 export { RolePermissionModel } from './models/role-permission-model';
 export { SelectListGroup } from './models/select-list-group';
 export { SelectListItem } from './models/select-list-item';
+export { TicketPassModel } from './models/ticket-pass-model';
 export { UserModel } from './models/user-model';
 export { UserRoleModel } from './models/user-role-model';
 export { UserSearchModel } from './models/user-search-model';
