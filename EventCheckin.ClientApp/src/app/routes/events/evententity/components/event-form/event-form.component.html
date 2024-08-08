@@ -1,0 +1,41 @@
+<form [formGroup]="eventForm">
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Name</mat-label>
+    <input formControlName="name" matInput placeholder="Name" />
+    <mat-error *ngIf="fieldHasError('name')">
+      {{ getErrorMessage("name") }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="col-md-7 masterFormField" appearance="outline" style="padding: 0px;">
+    <mat-label>From Date</mat-label>
+    <mtx-datetimepicker-toggle [for]="startDate" matSuffix></mtx-datetimepicker-toggle>
+    <mtx-datetimepicker #startDate  ></mtx-datetimepicker>
+    <input [mtxDatetimepicker]="startDate"  [disabled]="startDate"  matInput required  formControlName="startDate"   >
+  </mat-form-field>
+
+  <mat-form-field class="col-md-7 masterFormField" appearance="outline" style="padding: 0px;">
+    <mat-label>To Date</mat-label>
+    <mtx-datetimepicker-toggle [for]="endDate" matSuffix></mtx-datetimepicker-toggle>
+    <mtx-datetimepicker #endDate  ></mtx-datetimepicker>
+    <input [mtxDatetimepicker]="endDate"  [disabled]="endDate"  matInput required  formControlName="endDate"   >
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Address</mat-label>
+    <input formControlName="venueAddress1" matInput placeholder="venueAddress1" />
+    <mat-error *ngIf="fieldHasError('venueAddress1')">
+      {{ getErrorMessage("venueAddress1") }}
+    </mat-error>
+  </mat-form-field>
+
+  <div appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Is Live</mat-label>
+    <mat-checkbox formControlName="isLive" placeholder="isLive" />
+    <mat-error *ngIf="fieldHasError('isLive')">
+      {{ getErrorMessage("isLive") }}
+    </mat-error>
+  </div>
+
+</form>

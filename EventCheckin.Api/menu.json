@@ -10,91 +10,21 @@
         "value": "5"
       }
     },
+
     {
-      "route": "productionrun",
-      "name": "productionrun",
-      "type": "sub",
-      "icon": "shop",
-      "children": [
-        {
-          "route": "managerun",
-          "name": "managerun",
-          "type": "link",
-          "icon": "shop"
-        },
-        {
-          "route": "productioncontrol",
-          "name": "productioncontrol",
-          "type": "link",
-          "icon": "shop"
-        }
-      ],
-      "permissions": {
-        "except": "GUEST"
-      }
-    },
-    {
-      "route": "analytics",
-      "name": "analytics",
-      "type": "sub",
-      "icon": "equalizer",
-      "children": [
-        {
-          "route": "lineanalytics",
-          "name": "lineanalytics",
-          "type": "link"
-        }
-      ]
-    },
-    {
-      "route": "masters",
-      "name": "masters",
+      "route": "events",
+      "name": "events",
       "type": "sub",
       "icon": "format_line_spacing",
       "children": [
         {
-          "route": "plant",
-          "name": "plant",
+          "route": "evententity",
+          "name": "evententity",
           "type": "link"
         },
         {
-          "route": "material",
-          "name": "material",
-          "type": "link"
-        },
-        {
-          "route": "equipmentmaterial",
-          "name": "equipmentmaterial",
-          "type": "link"
-        },
-        {
-          "route": "shift",
-          "name": "shift",
-          "type": "link"
-        },
-        {
-          "route": "reason",
-          "name": "reason",
-          "type": "link"
-        },
-        {
-          "route": "designation",
-          "name": "designation",
-          "type": "link"
-        },
-        {
-          "route": "team",
-          "name": "team",
-          "type": "link"
-        },
-        {
-          "route": "employee",
-          "name": "employee",
-          "type": "link"
-        },
-        {
-          "route": "holiday",
-          "name": "holiday",
+          "route": "eventday",
+          "name": "eventday",
           "type": "link"
         }
       ],
@@ -102,22 +32,7 @@
         "except": "GUEST"
       }
     },
-    {
-      "route": "energies",
-      "name": "energies",
-      "type": "sub",
-      "icon": "bolt",
-      "children": [
-        {
-          "route": "energypanel",
-          "name": "energypanel",
-          "type": "link"
-        }
-      ],
-      "permissions": {
-        "except": "GUEST"
-      }
-    },
+     
     {
       "route": "permissions",
       "name": "permissions",

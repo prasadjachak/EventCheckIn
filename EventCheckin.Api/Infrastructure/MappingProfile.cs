@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using EventCheckin.Api.Models;
+using EventCheckin.Api.Models.Events;
+using EventCheckin.DbContext.Entities;
 using EventCheckin.DbContext.Entities.Identity;
 
 namespace EventCheckin.Api.Infrastructure
@@ -13,6 +15,12 @@ namespace EventCheckin.Api.Infrastructure
 
             this.CreateMap<RoleModel, ApplicationRole>();
             this.CreateMap<ApplicationRole, RoleModel>();
+
+            this.CreateMap<EventModel, EventEntity>();
+            this.CreateMap<EventEntity, EventModel>();
+
+            this.CreateMap<EventDayModel, EventDay>();
+            this.CreateMap<EventDay, EventDayModel>();
         }
     }
 }

@@ -1,0 +1,32 @@
+<form [formGroup]="eventDayForm">
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Event Day Name</mat-label>
+    <input formControlName="eventDayName" matInput placeholder="eventDayName" />
+    <mat-error *ngIf="fieldHasError('eventDayName')">
+      {{ getErrorMessage("eventDayName") }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="col-md-7 masterFormField" appearance="outline" style="padding: 0px;">
+    <mat-label>From Date</mat-label>
+    <mtx-datetimepicker-toggle [for]="startDate" matSuffix></mtx-datetimepicker-toggle>
+    <mtx-datetimepicker #startDate  ></mtx-datetimepicker>
+    <input [mtxDatetimepicker]="startDate"  [disabled]="startDate"  matInput required  formControlName="startDate"   >
+  </mat-form-field>
+
+  <mat-form-field class="col-md-7 masterFormField" appearance="outline" style="padding: 0px;">
+    <mat-label>To Date</mat-label>
+    <mtx-datetimepicker-toggle [for]="endDate" matSuffix></mtx-datetimepicker-toggle>
+    <mtx-datetimepicker #endDate  ></mtx-datetimepicker>
+    <input [mtxDatetimepicker]="endDate"  [disabled]="endDate"  matInput required  formControlName="endDate"   >
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Event Day Id</mat-label>
+    <input formControlName="eventId" matInput placeholder="eventId" />
+    <mat-error *ngIf="fieldHasError('eventId')">
+      {{ getErrorMessage("eventId") }}
+    </mat-error>
+  </mat-form-field>
+</form>

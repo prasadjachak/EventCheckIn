@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventCheckin.DbContext.Entities;
 using EventCheckin.Infrastructure.DbUtility;
 using EventCheckin.Infrastructure.Services;
-using EventCheckin.Services.EventDay.Dto;
 using NLog;
-#pragma warning disable 1998
 
-namespace EventCheckin.Services.EventDay
+namespace EventCheckin.Services
 {
     public interface IEventDayService : IService
     {
-        Task<List<EventDayDto>> GetEventDays();
-        Task<EventDayDto> GetEventDay(long eventDayId);
-        Task<EventDayDto> AddEventDay(EventDayDto dto);
-        Task<bool> UpdateEventDay(EventDayDto dto);
+        Task<List<EventDay>> GetEventDays();
+        Task<EventDay> GetEventDay(long eventDayId);
+        Task<EventDay> AddEventDay(EventDay dto);
+        Task<bool> UpdateEventDay(EventDay dto);
+
+        Task<bool> DeleteEventDay(EventDay dto);
     }
 
     public class EventDayService : IEventDayService
@@ -28,7 +29,7 @@ namespace EventCheckin.Services.EventDay
             _uow = uow;
         }
 
-        public async Task<List<EventDayDto>> GetEventDays()
+        public async Task<List<EventDay>> GetEventDays()
         {
             try
             {
@@ -37,12 +38,7 @@ namespace EventCheckin.Services.EventDay
                 if (!dbEventDays.Any())
                     return null;
 
-                return dbEventDays.Select(s => new EventDayDto
-                {
-                    Id = s.Id,
-                    EventId = s.EventId,
-               
-                }).ToList();
+                return dbEventDays.ToList();
             }
             catch (Exception e)
             {
@@ -51,7 +47,7 @@ namespace EventCheckin.Services.EventDay
             }
         }
 
-        public async Task<EventDayDto> GetEventDay(long eventDayId)
+        public async Task<EventDay> GetEventDay(long eventDayId)
         {
             try
             {
@@ -59,11 +55,7 @@ namespace EventCheckin.Services.EventDay
                 if (dbEventDay == null)
                     return null;
 
-                return new EventDayDto
-                {
-                    Id = dbEventDay.Id,
-                    EventId = dbEventDay.EventId,
-                };
+                return dbEventDay;
             }
             catch (Exception e)
             {
@@ -72,19 +64,12 @@ namespace EventCheckin.Services.EventDay
             }
         }
 
-        public async Task<EventDayDto> AddEventDay(EventDayDto dto)
+        public async Task<EventDay> AddEventDay(EventDay dto)
         {
             try
             {
-                var dbEventDay = new DbContext.Entities.EventDay
-                {
-                    EventId = dto.EventId,
-                };
-
-                _uow.Context.Set<DbContext.Entities.EventDay>().Add(dbEventDay);
+                _uow.Context.Set<DbContext.Entities.EventDay>().Add(dto);
                 _uow.Commit();
-
-                dto.Id = dbEventDay.Id;
 
                 return dto;
             }
@@ -95,7 +80,25 @@ namespace EventCheckin.Services.EventDay
             }
         }
 
-        public async Task<bool> UpdateEventDay(EventDayDto dto)
+        public async Task<bool> UpdateEventDay(EventDay dto)
+        {
+            try
+            {
+                if (dto == null)
+                    return false;
+                _uow.Context.Set<DbContext.Entities.EventDay>().Update(dto);
+                _uow.Commit();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteEventDay(EventDay dto)
         {
             try
             {
@@ -104,8 +107,7 @@ namespace EventCheckin.Services.EventDay
                 if (dbEventDay == null)
                     return false;
 
-                dbEventDay.Id = dto.Id;
-                dbEventDay.EventId = dto.EventId;
+                _uow.Context.Set<DbContext.Entities.EventDay>().Remove(dbEventDay);
                 _uow.Commit();
 
                 return true;

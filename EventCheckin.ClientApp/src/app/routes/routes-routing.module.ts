@@ -23,6 +23,11 @@ const routes: Routes = [
         loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),
       },
       {
+        path: 'events',
+        loadChildren: () =>
+          import('./events/events.module').then(m => m.EventsModule),
+      },
+      {
         path: 'permissions',
         loadChildren: () =>
           import('./permissions/permissions.module').then(m => m.PermissionsModule),

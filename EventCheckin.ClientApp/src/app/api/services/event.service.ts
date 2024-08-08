@@ -9,14 +9,27 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiEventAddEventEntityPost } from '../fn/event/api-event-add-event-entity-post';
-import { ApiEventAddEventEntityPost$Params } from '../fn/event/api-event-add-event-entity-post';
-import { apiEventGetEventEntityGet } from '../fn/event/api-event-get-event-entity-get';
-import { ApiEventGetEventEntityGet$Params } from '../fn/event/api-event-get-event-entity-get';
-import { apiEventGetEventEntitysGet } from '../fn/event/api-event-get-event-entitys-get';
-import { ApiEventGetEventEntitysGet$Params } from '../fn/event/api-event-get-event-entitys-get';
-import { apiEventUpdateEventEntityPut } from '../fn/event/api-event-update-event-entity-put';
-import { ApiEventUpdateEventEntityPut$Params } from '../fn/event/api-event-update-event-entity-put';
+import { apiEventAddEventEntityPost$Json } from '../fn/event/api-event-add-event-entity-post-json';
+import { ApiEventAddEventEntityPost$Json$Params } from '../fn/event/api-event-add-event-entity-post-json';
+import { apiEventAddEventEntityPost$Plain } from '../fn/event/api-event-add-event-entity-post-plain';
+import { ApiEventAddEventEntityPost$Plain$Params } from '../fn/event/api-event-add-event-entity-post-plain';
+import { apiEventDeleteEventEntityPut$Json } from '../fn/event/api-event-delete-event-entity-put-json';
+import { ApiEventDeleteEventEntityPut$Json$Params } from '../fn/event/api-event-delete-event-entity-put-json';
+import { apiEventDeleteEventEntityPut$Plain } from '../fn/event/api-event-delete-event-entity-put-plain';
+import { ApiEventDeleteEventEntityPut$Plain$Params } from '../fn/event/api-event-delete-event-entity-put-plain';
+import { apiEventGetEventEntityGet$Json } from '../fn/event/api-event-get-event-entity-get-json';
+import { ApiEventGetEventEntityGet$Json$Params } from '../fn/event/api-event-get-event-entity-get-json';
+import { apiEventGetEventEntityGet$Plain } from '../fn/event/api-event-get-event-entity-get-plain';
+import { ApiEventGetEventEntityGet$Plain$Params } from '../fn/event/api-event-get-event-entity-get-plain';
+import { apiEventListEventEntitysGet$Json } from '../fn/event/api-event-list-event-entitys-get-json';
+import { ApiEventListEventEntitysGet$Json$Params } from '../fn/event/api-event-list-event-entitys-get-json';
+import { apiEventListEventEntitysGet$Plain } from '../fn/event/api-event-list-event-entitys-get-plain';
+import { ApiEventListEventEntitysGet$Plain$Params } from '../fn/event/api-event-list-event-entitys-get-plain';
+import { apiEventUpdateEventEntityPut$Json } from '../fn/event/api-event-update-event-entity-put-json';
+import { ApiEventUpdateEventEntityPut$Json$Params } from '../fn/event/api-event-update-event-entity-put-json';
+import { apiEventUpdateEventEntityPut$Plain } from '../fn/event/api-event-update-event-entity-put-plain';
+import { ApiEventUpdateEventEntityPut$Plain$Params } from '../fn/event/api-event-update-event-entity-put-plain';
+import { CustomApiResponse } from '../models/custom-api-response';
 
 @Injectable({ providedIn: 'root' })
 export class EventService extends BaseService {
@@ -24,28 +37,50 @@ export class EventService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiEventGetEventEntitysGet()` */
-  static readonly ApiEventGetEventEntitysGetPath = '/api/Event/GetEventEntitys';
+  /** Path part for operation `apiEventListEventEntitysGet()` */
+  static readonly ApiEventListEventEntitysGetPath = '/api/Event/ListEventEntitys';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiEventGetEventEntitysGet()` instead.
+   * To access only the response body, use `apiEventListEventEntitysGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiEventGetEventEntitysGet$Response(params?: ApiEventGetEventEntitysGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiEventGetEventEntitysGet(this.http, this.rootUrl, params, context);
+  apiEventListEventEntitysGet$Plain$Response(params?: ApiEventListEventEntitysGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventListEventEntitysGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiEventGetEventEntitysGet$Response()` instead.
+   * To access the full response (for headers, for example), `apiEventListEventEntitysGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiEventGetEventEntitysGet(params?: ApiEventGetEventEntitysGet$Params, context?: HttpContext): Observable<void> {
-    return this.apiEventGetEventEntitysGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiEventListEventEntitysGet$Plain(params?: ApiEventListEventEntitysGet$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventListEventEntitysGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiEventListEventEntitysGet$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventListEventEntitysGet$Json$Response(params?: ApiEventListEventEntitysGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventListEventEntitysGet$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiEventListEventEntitysGet$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventListEventEntitysGet$Json(params?: ApiEventListEventEntitysGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventListEventEntitysGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
@@ -54,23 +89,45 @@ export class EventService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiEventGetEventEntityGet()` instead.
+   * To access only the response body, use `apiEventGetEventEntityGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiEventGetEventEntityGet$Response(params?: ApiEventGetEventEntityGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiEventGetEventEntityGet(this.http, this.rootUrl, params, context);
+  apiEventGetEventEntityGet$Plain$Response(params?: ApiEventGetEventEntityGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventGetEventEntityGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiEventGetEventEntityGet$Response()` instead.
+   * To access the full response (for headers, for example), `apiEventGetEventEntityGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiEventGetEventEntityGet(params?: ApiEventGetEventEntityGet$Params, context?: HttpContext): Observable<void> {
-    return this.apiEventGetEventEntityGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiEventGetEventEntityGet$Plain(params?: ApiEventGetEventEntityGet$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventGetEventEntityGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiEventGetEventEntityGet$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventGetEventEntityGet$Json$Response(params?: ApiEventGetEventEntityGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventGetEventEntityGet$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiEventGetEventEntityGet$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventGetEventEntityGet$Json(params?: ApiEventGetEventEntityGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventGetEventEntityGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
@@ -79,23 +136,45 @@ export class EventService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiEventAddEventEntityPost()` instead.
+   * To access only the response body, use `apiEventAddEventEntityPost$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiEventAddEventEntityPost$Response(params?: ApiEventAddEventEntityPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiEventAddEventEntityPost(this.http, this.rootUrl, params, context);
+  apiEventAddEventEntityPost$Plain$Response(params?: ApiEventAddEventEntityPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventAddEventEntityPost$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiEventAddEventEntityPost$Response()` instead.
+   * To access the full response (for headers, for example), `apiEventAddEventEntityPost$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiEventAddEventEntityPost(params?: ApiEventAddEventEntityPost$Params, context?: HttpContext): Observable<void> {
-    return this.apiEventAddEventEntityPost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiEventAddEventEntityPost$Plain(params?: ApiEventAddEventEntityPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventAddEventEntityPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiEventAddEventEntityPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiEventAddEventEntityPost$Json$Response(params?: ApiEventAddEventEntityPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventAddEventEntityPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiEventAddEventEntityPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiEventAddEventEntityPost$Json(params?: ApiEventAddEventEntityPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventAddEventEntityPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
@@ -104,23 +183,92 @@ export class EventService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiEventUpdateEventEntityPut()` instead.
+   * To access only the response body, use `apiEventUpdateEventEntityPut$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiEventUpdateEventEntityPut$Response(params?: ApiEventUpdateEventEntityPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiEventUpdateEventEntityPut(this.http, this.rootUrl, params, context);
+  apiEventUpdateEventEntityPut$Plain$Response(params?: ApiEventUpdateEventEntityPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventUpdateEventEntityPut$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiEventUpdateEventEntityPut$Response()` instead.
+   * To access the full response (for headers, for example), `apiEventUpdateEventEntityPut$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiEventUpdateEventEntityPut(params?: ApiEventUpdateEventEntityPut$Params, context?: HttpContext): Observable<void> {
-    return this.apiEventUpdateEventEntityPut$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiEventUpdateEventEntityPut$Plain(params?: ApiEventUpdateEventEntityPut$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventUpdateEventEntityPut$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiEventUpdateEventEntityPut$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiEventUpdateEventEntityPut$Json$Response(params?: ApiEventUpdateEventEntityPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventUpdateEventEntityPut$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiEventUpdateEventEntityPut$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiEventUpdateEventEntityPut$Json(params?: ApiEventUpdateEventEntityPut$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventUpdateEventEntityPut$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiEventDeleteEventEntityPut()` */
+  static readonly ApiEventDeleteEventEntityPutPath = '/api/Event/DeleteEventEntity';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiEventDeleteEventEntityPut$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventDeleteEventEntityPut$Plain$Response(params?: ApiEventDeleteEventEntityPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventDeleteEventEntityPut$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiEventDeleteEventEntityPut$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventDeleteEventEntityPut$Plain(params?: ApiEventDeleteEventEntityPut$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventDeleteEventEntityPut$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiEventDeleteEventEntityPut$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventDeleteEventEntityPut$Json$Response(params?: ApiEventDeleteEventEntityPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventDeleteEventEntityPut$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiEventDeleteEventEntityPut$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventDeleteEventEntityPut$Json(params?: ApiEventDeleteEventEntityPut$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventDeleteEventEntityPut$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 

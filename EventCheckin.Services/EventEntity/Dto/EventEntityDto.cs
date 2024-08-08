@@ -1,4 +1,4 @@
-﻿namespace EventCheckin.Services.EventEntity.Dto
+﻿namespace EventCheckin.Services.Dto
 {
     public class EventEntityDto
     {

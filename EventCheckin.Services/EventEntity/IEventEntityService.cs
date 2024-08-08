@@ -6,18 +6,20 @@ using Microsoft.EntityFrameworkCore;
 using EventCheckin.DbContext.Enums;
 using EventCheckin.Infrastructure.DbUtility;
 using EventCheckin.Infrastructure.Services;
-using EventCheckin.Services.EventEntity.Dto;
 using EventCheckin.Services.Logging;
 using NLog;
+using EventCheckin.DbContext.Entities;
 
-namespace EventCheckin.Services.EventEntity
+namespace EventCheckin.Services
 {
     public interface IEventEntityService : IService
     {
-        Task<List<EventEntityDto>> GetEventEntitys();
-        Task<EventEntityDto> GetEventEntity(long eventEntityId);
-        Task<EventEntityDto> AddEventEntity(EventEntityDto dto);
-        Task<bool> UpdateEventEntity(EventEntityDto dto);
+        Task<List<EventEntity>> GetEventEntitys();
+        Task<EventEntity> GetEventEntity(long eventEntityId);
+        Task<EventEntity> AddEventEntity(EventEntity dto);
+        Task<bool> UpdateEventEntity(EventEntity dto);
+
+        Task<bool> DeleteEventDay(EventEntity dto);
     }
 
     public class EventEntityService : IEventEntityService
@@ -32,7 +34,7 @@ namespace EventCheckin.Services.EventEntity
             _logsService = logsService;
         }
 
-        public async Task<List<EventEntityDto>> GetEventEntitys()
+        public async Task<List<EventEntity>> GetEventEntitys()
         {
             try
             {
@@ -42,7 +44,7 @@ namespace EventCheckin.Services.EventEntity
                 if (!eventEntitys.Any())
                     return null;
 
-                return eventEntitys.Select(s => new EventEntityDto { Id = s.Id, Name = s.Name }).ToList();
+                return eventEntitys.ToList();
             }
             catch (Exception e)
             {
@@ -51,7 +53,7 @@ namespace EventCheckin.Services.EventEntity
             }
         }
 
-        public async Task<EventEntityDto> GetEventEntity(long eventEntityId)
+        public async Task<EventEntity> GetEventEntity(long eventEntityId)
         {
             try
             {
@@ -61,7 +63,7 @@ namespace EventCheckin.Services.EventEntity
                 if (eventEntity == null)
                     return null;
 
-                return new EventEntityDto { Id = eventEntity.Id, Name = eventEntity.Name };
+                return eventEntity;
             }
             catch (Exception e)
             {
@@ -70,20 +72,13 @@ namespace EventCheckin.Services.EventEntity
             }
         }
 
-        public async Task<EventEntityDto> AddEventEntity(EventEntityDto dto)
+        public async Task<EventEntity> AddEventEntity(EventEntity dto)
         {
             try
             {
-                var dbEventEntity = new DbContext.Entities.EventEntity
-                {
-                    Name = dto.Name
-                };
-
-                await _uow.Context.Set<DbContext.Entities.EventEntity>().AddAsync(dbEventEntity);
-                await _logsService.SaveLogNoCommit(DateTime.Now, dto.CurrentUserId, ELogType.EventEntityAdded, $"New eventEntity with url {dto.Name}."); // save log of this action
+                await _uow.Context.Set<DbContext.Entities.EventEntity>().AddAsync(dto);
+                await _logsService.SaveLogNoCommit(DateTime.Now,1, ELogType.EventEntityAdded, $"New eventEntity with url {dto.Name}."); // save log of this action
                 await _uow.CommitAsync();
-
-                dto.Id = dbEventEntity.Id;
 
                 return dto;
             }
@@ -94,20 +89,38 @@ namespace EventCheckin.Services.EventEntity
             }
         }
 
-        public async Task<bool> UpdateEventEntity(EventEntityDto dto)
+        public async Task<bool> UpdateEventEntity(EventEntity dto)
         {
             try
             {
-                var dbEventEntity = await _uow.Query<DbContext.Entities.EventEntity>(s => s.Id == dto.Id).FirstOrDefaultAsync();
-
-                if (dbEventEntity == null)
+                if (dto == null)
                     return false;
 
                 // Save log before we change values, so we can construct our message
-                await _logsService.SaveLogNoCommit(DateTime.Now, dto.CurrentUserId, ELogType.EventEntityAdded, $"Updated eventEntity with id: {dto.Id}", $"Changed url from: {dbEventEntity.Name}, to: {dto.Name}");
-
-                dbEventEntity.Name = dto.Name;
+                await _logsService.SaveLogNoCommit(DateTime.Now, 1, ELogType.EventEntityAdded, $"Updated eventEntity with id: {dto.Id}", $"Changed url from: {dto.Name}, to: {dto.Name}");
+                _uow.Context.Set<DbContext.Entities.EventEntity>().Update(dto);
                 await _uow.CommitAsync();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteEventDay(EventEntity dto)
+        {
+            try
+            {
+                var dbEventDay = _uow.Query<DbContext.Entities.EventEntity>(s => s.Id == dto.Id).FirstOrDefault();
+
+                if (dbEventDay == null)
+                    return false;
+
+                _uow.Context.Set<DbContext.Entities.EventEntity>().Remove(dbEventDay);
+                _uow.Commit();
 
                 return true;
             }

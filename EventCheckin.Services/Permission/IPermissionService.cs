@@ -6,7 +6,6 @@ using System.Xml.Linq;
 using EventCheckin.DbContext.Entities;
 using EventCheckin.Infrastructure.DbUtility;
 using EventCheckin.Infrastructure.Services;
-using EventCheckin.Services.EventDay.Dto;
 using NLog;
 #pragma warning disable 1998
 

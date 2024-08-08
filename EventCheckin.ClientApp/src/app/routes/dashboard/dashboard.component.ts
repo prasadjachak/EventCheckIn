@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   gaugeAppendText = "%";
 
   oeeGaugeValue = 0;
-  oeeGaugeLabel = "OEE";
+  oeeGaugeLabel = "Garba Pass";
   oeeGaugeSize= "200";
   oeeForegroundColor= "#fb8c00";
 

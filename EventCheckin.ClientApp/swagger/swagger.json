@@ -130,6 +130,112 @@
         }
       }
     },
+    "/api/Auth/GetOtp": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/ValidateOtp": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Auth/Logout": {
       "get": {
         "tags": [
@@ -315,14 +421,31 @@
         }
       }
     },
-    "/api/Event/GetEventEntitys": {
+    "/api/Event/ListEventEntitys": {
       "get": {
         "tags": [
           "Event"
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -344,7 +467,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -358,29 +498,46 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/EventEntityViewModel"
+                "$ref": "#/components/schemas/EventModel"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EventEntityViewModel"
+                "$ref": "#/components/schemas/EventModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/EventEntityViewModel"
+                "$ref": "#/components/schemas/EventModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/EventEntityViewModel"
+                "$ref": "#/components/schemas/EventModel"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -394,46 +551,119 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/EventEntityViewModel"
+                "$ref": "#/components/schemas/EventModel"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EventEntityViewModel"
+                "$ref": "#/components/schemas/EventModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/EventEntityViewModel"
+                "$ref": "#/components/schemas/EventModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/EventEntityViewModel"
+                "$ref": "#/components/schemas/EventModel"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/EventDay/GetPosts": {
+    "/api/Event/DeleteEventEntity": {
+      "put": {
+        "tags": [
+          "Event"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EventDay/ListEventDay": {
       "get": {
         "tags": [
           "EventDay"
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/EventDay/GetPost": {
+    "/api/EventDay/GetEventDay": {
       "get": {
         "tags": [
           "EventDay"
@@ -450,12 +680,29 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/EventDay/AddPost": {
+    "/api/EventDay/AddEventDay": {
       "post": {
         "tags": [
           "EventDay"
@@ -464,34 +711,51 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/EvenrDayViewModel"
+                "$ref": "#/components/schemas/EventDayModel"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EvenrDayViewModel"
+                "$ref": "#/components/schemas/EventDayModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/EvenrDayViewModel"
+                "$ref": "#/components/schemas/EventDayModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/EvenrDayViewModel"
+                "$ref": "#/components/schemas/EventDayModel"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/EventDay/UpdatePost": {
+    "/api/EventDay/UpdateEventDay": {
       "put": {
         "tags": [
           "EventDay"
@@ -500,29 +764,85 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/EvenrDayViewModel"
+                "$ref": "#/components/schemas/EventDayModel"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EvenrDayViewModel"
+                "$ref": "#/components/schemas/EventDayModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/EvenrDayViewModel"
+                "$ref": "#/components/schemas/EventDayModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/EvenrDayViewModel"
+                "$ref": "#/components/schemas/EventDayModel"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EventDay/DeleteEventEntity": {
+      "put": {
+        "tags": [
+          "EventDay"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1434,47 +1754,107 @@
         "type": "integer",
         "format": "int32"
       },
-      "EvenrDayViewModel": {
-        "required": [
-          "content",
-          "eventId",
-          "title"
-        ],
+      "EventDayModel": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "format": "int32"
-          },
-          "title": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "content": {
-            "minLength": 1,
-            "type": "string"
           },
           "eventId": {
             "type": "integer",
             "format": "int32"
+          },
+          "eventDayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "EventEntityViewModel": {
+      "EventModel": {
         "required": [
-          "id",
-          "url"
+          "id"
         ],
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int64"
+            "format": "int32"
           },
-          "url": {
-            "minLength": 1,
-            "type": "string"
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "organiserId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "venueName": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueAddress1": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueAddress2": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueState": {
+            "type": "string",
+            "nullable": true
+          },
+          "venuePincode": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueCountry": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueLatlong": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "venueLattitude": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isLive": {
+            "type": "boolean"
+          },
+          "isPublished": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

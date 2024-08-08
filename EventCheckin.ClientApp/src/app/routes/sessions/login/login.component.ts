@@ -15,13 +15,15 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class LoginComponent {
   isSubmitting = false;
-
-  loginForm = this.fb.nonNullable.group({
+  isOtpSubmitting = false;
+  otpForm = this.fb.nonNullable.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]],
-    rememberMe: [false],
   });
 
+
+
+  otp:string;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -31,38 +33,57 @@ export class LoginComponent {
   ) {}
 
   get username() {
-    return this.loginForm.get('username')!;
+    return this.otpForm.get('username')!;
   }
 
   get password() {
-    return this.loginForm.get('password')!;
+    return this.otpForm.get('password')!;
   }
 
   get rememberMe() {
-    return this.loginForm.get('rememberMe')!;
+    return this.otpForm.get('rememberMe')!;
   }
 
-  login() {
+  getOtp() {
     this.isSubmitting = true;
     var loginModel : LoginViewModel ={userName:this.username.value, password: this.password.value};
     this.auth
-        .apiAuthLoginPost$Json$Response({body:loginModel})
+        .apiAuthGetOtpPost$Json$Response({body:loginModel})
         .subscribe(result =>{
           //this.oeeEventModel = result.body.result!;
           console.log(result);
           const loginResponse = result.body.result!;
-          if(loginResponse != null)
-          {
-            this.tokenService.set(loginResponse);
-            this.router.navigateByUrl('/');
-          }
+          this.otp = result.body.result!;
 
           this.toast.error(result.body.message);
           console.log(loginResponse);
           this.isSubmitting = false;
           // this._snackBar.error('Updated Successfully.');
         });
+  }
 
+  submitOtp() {
+    this.isOtpSubmitting = true;
+    var loginModel : LoginViewModel ={userName:this.username.value, password: this.password.value};
+    this.auth
+        .apiAuthValidateOtpPost$Json({body:loginModel})
+        .subscribe(result =>{
+          //this.oeeEventModel = result.body.result!;
+          console.log(result);
+          const loginResponse = result.result!;
+          if(result.isSuccess && result.statusCode == 200)
+          {
+            console.log(loginResponse);
+            this.tokenService.set(loginResponse);
+            this.router.navigateByUrl('/');
+          }else{
+            this.toast.error(result.message);
+          }
 
+          //this.toast.error(result.body.message);
+          console.log(loginResponse);
+          this.isOtpSubmitting = false;
+          // this._snackBar.error('Updated Successfully.');
+        });
   }
 }

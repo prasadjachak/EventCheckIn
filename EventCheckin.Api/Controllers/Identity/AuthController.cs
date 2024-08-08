@@ -179,6 +179,113 @@ namespace EventCheckin.Api.Controllers.Identity
             return apiResponse;
         }
 
+        [HttpPost("GetOtp")]
+        public async Task<CustomApiResponse> GetOtp([FromBody] LoginViewModel model)
+        {
+            var apiResponse = new CustomApiResponse();
+            ApplicationUser user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
+            if (user == null)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "Invalid credentials.";
+                return apiResponse;
+            }
+
+            TokenModel tokenModel = new TokenModel()
+            {
+                HasVerifiedEmail = false
+            };
+
+            // Only allow login if email is confirmed
+            if (!user.EmailConfirmed)
+            {
+                apiResponse.Message = "Email is not confirmed.";
+                return apiResponse;
+            }
+
+            // Used as user lock
+            if (user.LockoutEnabled)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "This account has been locked.";
+                return apiResponse;
+            }
+
+
+            user.OTP = GenerateRandomNo().ToString();
+            IdentityResult result = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+            apiResponse.Result = user.OTP;
+            apiResponse.StatusCode = 200;
+            apiResponse.IsSuccess = true;
+            return apiResponse;
+        }
+
+
+        [HttpPost("ValidateOtp")]
+        public async Task<CustomApiResponse> ValidateOtp([FromBody] LoginViewModel model)
+        {
+            var apiResponse = new CustomApiResponse();
+            ApplicationUser user = _userManager.Users.Where(t=>t.PhoneNumber == model.UserName && t.OTP == model.Password).FirstOrDefault();
+            if (user == null)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "Invalid OTP.";
+                return apiResponse;
+            }
+
+            TokenModel tokenModel = new TokenModel()
+            {
+                HasVerifiedEmail = false
+            };
+
+            // Only allow login if email is confirmed
+            if (!user.EmailConfirmed)
+            {
+                apiResponse.Message = "Email is not confirmed.";
+                return apiResponse;
+            }
+
+            // Used as user lock
+            if (user.LockoutEnabled)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "This account has been locked.";
+                return apiResponse;
+            }
+            
+            tokenModel.HasVerifiedEmail = true;
+
+          
+            try
+            {
+                JwtSecurityToken jwtSecurityToken = await CreateJwtToken(user, model.RememberMe).ConfigureAwait(false);
+                tokenModel.TFAEnabled = false;
+                tokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+                var authResponse = new
+                {
+                    refresh_token = tokenModel.Token,
+                    access_token = tokenModel.Token,
+                    expires_in = DateTime.Now.AddDays(100),
+
+                };
+                apiResponse.Result = authResponse;
+                apiResponse.Message = "You have successfully logged in.";
+                apiResponse.StatusCode = 200;
+                apiResponse.IsSuccess = true;
+                return apiResponse;
+
+            }
+            catch (Exception ex)
+            {
+
+                apiResponse.Message = "Invalid login attempt.";
+                tokenModel.TFAEnabled = true;
+                apiResponse.StatusCode = 400;
+                return apiResponse;
+            }
+        }
+
         [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
@@ -315,6 +422,15 @@ namespace EventCheckin.Api.Controllers.Identity
             apiResponse.Message = test;
             return  (apiResponse);
 
+        }
+
+        [NonAction]
+        public int GenerateRandomNo()
+        {
+            int _min = 1000;
+            int _max = 9999;
+            Random _rdm = new Random();
+            return _rdm.Next(_min, _max);
         }
 
     }

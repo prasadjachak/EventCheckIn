@@ -15,7 +15,6 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using EventCheckin.Services.EventDay;
 using Microsoft.AspNetCore.Hosting;
 using System.Data;
 using AutoMapper;
@@ -115,6 +114,8 @@ namespace EventCheckin.Api.Controllers.Identity
                 Email = model.PhoneNumber + "@abc123.com",
                 Title = "",
                 EmailConfirmed = true,
+                LockoutEnabled = false, 
+                TwoFactorEnabled = false
             };
             model.Password = "Admin@32149870";
             model.ConfirmPassword = "Admin@32149870";

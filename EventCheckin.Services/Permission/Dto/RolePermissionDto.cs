@@ -1,4 +1,4 @@
-﻿namespace EventCheckin.Services.EventDay.Dto
+﻿namespace EventCheckin.Services.Dto
 {
     public class RolePermissionDto
     {
