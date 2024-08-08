@@ -1,16 +1,18 @@
-import { Directive, HostListener, inject } from '@angular/core';
+import { Directive, HostListener, Inject } from '@angular/core';
 import { NavAccordionItemDirective } from './nav-accordion-item.directive';
 
 @Directive({
   selector: '[navAccordionToggle]',
-  exportAs: 'navAccordionToggle',
-  standalone: true,
 })
 export class NavAccordionToggleDirective {
-  private readonly navItem = inject(NavAccordionItemDirective);
+  protected navLink: NavAccordionItemDirective;
+
+  constructor(@Inject(NavAccordionItemDirective) navLink: NavAccordionItemDirective) {
+    this.navLink = navLink;
+  }
 
   @HostListener('click', ['$event'])
   onClick() {
-    this.navItem.toggle();
+    this.navLink.toggle();
   }
 }

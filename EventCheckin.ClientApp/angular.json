@@ -15,31 +15,31 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
               "base64-js",
-              "moment"
+              "moment",
+              "photoviewer"
             ],
             "outputPath": "dist/ng-matero",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/apexcharts/dist/apexcharts.min.js"
+              "node_modules/apexcharts/dist/apexcharts.min.js",
+              "node_modules/chart.js/dist/chart.js"
             ]
           },
           "configurations": {
@@ -64,9 +64,12 @@
               "outputHashing": "all"
             },
             "development": {
+              "buildOptimizer": false,
               "optimization": false,
+              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"
@@ -74,15 +77,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "ng-matero:build",
+            "browserTarget": "ng-matero:build",
             "proxyConfig": "proxy.config.js"
           },
           "configurations": {
             "production": {
-              "buildTarget": "ng-matero:build:production"
+              "browserTarget": "ng-matero:build:production"
             },
             "development": {
-              "buildTarget": "ng-matero:build:development"
+              "browserTarget": "ng-matero:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -90,7 +93,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ng-matero:build"
+            "browserTarget": "ng-matero:build"
           }
         },
         "test": {
@@ -110,10 +113,8 @@
               "node_modules/apexcharts/dist/apexcharts.min.js"
             ],
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ]
           }
         },
@@ -141,7 +142,8 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "/ng-matero/"
+            "baseHref": "/ng-matero/",
+            "noSilent": true
           }
         }
       }

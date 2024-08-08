@@ -10,9 +10,8 @@
           <mat-form-field>
             <mat-label>Username</mat-label>
             <input matInput placeholder="Simple placeholder" formControlName="username" required>
-            @if (reactiveForm.get('username')?.invalid) {
-              <mat-error>Please enter username</mat-error>
-            }
+            <mat-error *ngIf="reactiveForm.get('username')?.invalid">Please enter username
+            </mat-error>
           </mat-form-field>
         </div>
 
@@ -20,23 +19,8 @@
           <mat-form-field>
             <mat-label>Email</mat-label>
             <input matInput placeholder="Simple placeholder" formControlName="email" required>
-            @if (reactiveForm.get('email')?.invalid) {
-              <mat-error>{{getErrorMessage(reactiveForm)}}</mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <div class="col-sm-6 col-xl-4">
-          <mat-form-field>
-            <mat-label>Gender</mat-label>
-            <mat-select formControlName="gender" required>
-              <mat-option>-- None --</mat-option>
-              <mat-option value="1">male</mat-option>
-              <mat-option value="2">female</mat-option>
-            </mat-select>
-            @if (reactiveForm.get('gender')?.invalid) {
-              <mat-error>Please select gender</mat-error>
-            }
+            <mat-error *ngIf="reactiveForm.get('email')?.invalid">
+              {{getErrorMessage(reactiveForm)}}</mat-error>
           </mat-form-field>
         </div>
 
@@ -44,9 +28,7 @@
           <mat-form-field>
             <mat-label>City</mat-label>
             <input matInput placeholder="Simple placeholder" formControlName="city" required>
-            @if (reactiveForm.get('city')?.invalid) {
-              <mat-error>Please enter city</mat-error>
-            }
+            <mat-error *ngIf="reactiveForm.get('city')?.invalid">Please enter city</mat-error>
           </mat-form-field>
         </div>
 
@@ -54,19 +36,7 @@
           <mat-form-field>
             <mat-label>Address</mat-label>
             <input matInput placeholder="Simple placeholder" formControlName="address" required>
-            @if (reactiveForm.get('address')?.invalid) {
-              <mat-error>Please enter address</mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <div class="col-sm-6 col-xl-4">
-          <mat-form-field>
-            <mat-label>Company</mat-label>
-            <input matInput placeholder="Simple placeholder" formControlName="company" required>
-            @if (reactiveForm.get('company')?.invalid) {
-              <mat-error>Please enter company</mat-error>
-            }
+            <mat-error *ngIf="reactiveForm.get('address')?.invalid">Please enter address</mat-error>
           </mat-form-field>
         </div>
 
@@ -74,51 +44,17 @@
           <mat-form-field>
             <mat-label>Mobile</mat-label>
             <input matInput placeholder="Simple placeholder" type="number" formControlName="mobile"
-              required>
+                   required>
             <mat-icon matSuffix>smartphone</mat-icon>
-            @if (reactiveForm.get('mobile')?.invalid) {
-              <mat-error>Please enter mobile</mat-error>
-            }
+            <mat-error *ngIf="reactiveForm.get('mobile')?.invalid">Please enter mobile</mat-error>
           </mat-form-field>
         </div>
 
-        <div class="col-sm-6 col-xl-4">
-          <mat-form-field>
-            <mat-label>Tele</mat-label>
-            <input matInput placeholder="Simple placeholder" type="number" formControlName="tele"
-              required>
-            <mat-icon matSuffix>phone</mat-icon>
-            @if (reactiveForm.get('tele')?.invalid) {
-              <mat-error>Please enter tele</mat-error>
-            }
-          </mat-form-field>
-        </div>
 
-        <div class="col-sm-6 col-xl-4">
-          <mat-form-field>
-            <mat-label>Website</mat-label>
-            <input matInput placeholder="Simple placeholder" formControlName="website" required>
-            @if (reactiveForm.get('website')?.invalid) {
-              <mat-error>Please enter website</mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <div class="col-sm-6 col-xl-4">
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker2" placeholder="Choose a date"
-              formControlName="date">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-            @if (reactiveForm.get('date')?.invalid) {
-              <mat-error>Please enter website</mat-error>
-            }
-          </mat-form-field>
-        </div>
       </div>
 
       <div class="d-flex justify-content-end">
-        <button mat-flat-button>Save</button>
+        <button mat-raised-button color="primary">Save</button>
       </div>
     </form>
   </mat-card-content>

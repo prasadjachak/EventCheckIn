@@ -8,7 +8,7 @@
 }
 
 .matero-breadcrumb-item {
-  line-height: 1.125rem;
+  line-height: 18px;
   text-transform: capitalize;
 
   > * {
@@ -17,7 +17,6 @@
 
   > a.link {
     color: currentColor;
-    text-decoration: none;
 
     &:hover {
       color: currentColor;
@@ -26,9 +25,9 @@
   }
 
   > .chevron {
-    width: 1.125rem;
-    height: 1.125rem;
-    font-size: 1.125rem;
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
     user-select: none;
   }
 }

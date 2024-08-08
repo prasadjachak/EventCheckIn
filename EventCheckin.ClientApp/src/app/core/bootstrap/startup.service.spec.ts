@@ -1,11 +1,10 @@
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { NgxPermissionsModule, NgxPermissionsService, NgxRolesService } from 'ngx-permissions';
 import { LocalStorageService, MemoryStorageService } from '@shared/services/storage.service';
 import { admin, TokenService } from '@core/authentication';
 import { MenuService } from '@core/bootstrap/menu.service';
 import { StartupService } from '@core/bootstrap/startup.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('StartupService', () => {
   let httpMock: HttpTestingController;
@@ -17,7 +16,7 @@ describe('StartupService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NgxPermissionsModule.forRoot()],
+      imports: [HttpClientTestingModule, NgxPermissionsModule.forRoot()],
       providers: [
         {
           provide: LocalStorageService,
@@ -37,8 +36,6 @@ describe('StartupService', () => {
           },
         },
         StartupService,
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
       ],
     });
     httpMock = TestBed.inject(HttpTestingController);

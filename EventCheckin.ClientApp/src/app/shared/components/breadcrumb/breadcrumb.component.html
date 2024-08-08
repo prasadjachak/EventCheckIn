@@ -1,15 +1,12 @@
-<nav aria-label="breadcrumb">
+<nav aria-label="breadcrumb col-md-6">
   <ol class="matero-breadcrumb">
-    @for (item of navItems; track trackByNavItem($index, item); let isFirst = $first) {
-      <li class="matero-breadcrumb-item">
-        @if (isFirst) {
-          <a href="#" class="link">{{item}}</a>
-        }
-        @if (!isFirst) {
-          <mat-icon class="chevron">chevron_right</mat-icon>
-          <span>{{item | translate}}</span>
-        }
-      </li>
-    }
+    <li class="matero-breadcrumb-item"
+        *ngFor="let navLink of nav; trackBy: trackByNavlink; first as isFirst;">
+      <a href="#" class="link" *ngIf="isFirst">{{navLink}}</a>
+      <ng-container *ngIf="!isFirst">
+        <mat-icon class="chevron">chevron_right</mat-icon>
+        <span>{{navLink | translate}}</span>
+      </ng-container>
+    </li>
   </ol>
 </nav>

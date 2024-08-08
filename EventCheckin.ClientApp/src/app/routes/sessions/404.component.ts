@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ErrorCodeComponent } from '@shared/components/error-code/error-code.component';
 
 @Component({
   selector: 'app-error-404',
@@ -8,9 +7,7 @@ import { ErrorCodeComponent } from '@shared/components/error-code/error-code.com
       code="404"
       title="Page not found!"
       message="This is not the web page you are looking for."
-    />
+    ></error-code>
   `,
-  standalone: true,
-  imports: [ErrorCodeComponent],
 })
 export class Error404Component {}

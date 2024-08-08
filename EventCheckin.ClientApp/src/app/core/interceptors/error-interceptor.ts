@@ -1,8 +1,15 @@
-import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { catchError, throwError } from 'rxjs';
 
 export enum STATUS {
   UNAUTHORIZED = 401,
@@ -13,12 +20,10 @@ export enum STATUS {
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  private readonly router = inject(Router);
-  private readonly toast = inject(ToastrService);
-
-  private readonly errorPages = [STATUS.FORBIDDEN, STATUS.NOT_FOUND, STATUS.INTERNAL_SERVER_ERROR];
+  private errorPages = [STATUS.FORBIDDEN, STATUS.NOT_FOUND, STATUS.INTERNAL_SERVER_ERROR];
 
   private getMessage = (error: HttpErrorResponse) => {
+
     if (error.error?.message) {
       return error.error.message;
     }
@@ -30,7 +35,9 @@ export class ErrorInterceptor implements HttpInterceptor {
     return `${error.status} ${error.statusText}`;
   };
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler) {
+  constructor(private router: Router, private toast: ToastrService) {}
+
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next
       .handle(request)
       .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
@@ -38,13 +45,20 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   private handleError(error: HttpErrorResponse) {
     if (this.errorPages.includes(error.status)) {
-      this.router.navigateByUrl(`/${error.status}`, {
-        skipLocationChange: true,
-      });
+      console.error('ERROR2', error);
+      if (error.status === STATUS.FORBIDDEN) {
+        this.toast.error(this.getMessage(error));
+        this.router.navigateByUrl('/auth/login');
+      }
+      else{
+        this.router.navigateByUrl(`/${error.status}`, {
+          skipLocationChange: true,
+        });
+      }
     } else {
-      console.error('ERROR', error);
+      console.error('ERROR1', error);
       this.toast.error(this.getMessage(error));
-      if (error.status === STATUS.UNAUTHORIZED) {
+      if (error.status === STATUS.UNAUTHORIZED || error.status === STATUS.FORBIDDEN) {
         this.router.navigateByUrl('/auth/login');
       }
     }

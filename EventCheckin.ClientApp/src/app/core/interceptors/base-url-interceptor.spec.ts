@@ -1,11 +1,7 @@
-import {
-  HTTP_INTERCEPTORS,
-  HttpClient,
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+
+import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { BASE_URL, BaseUrlInterceptor } from './base-url-interceptor';
 
 describe('BaseUrlInterceptor', () => {
@@ -21,12 +17,10 @@ describe('BaseUrlInterceptor', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [],
+      imports: [HttpClientTestingModule],
       providers: [
         { provide: BASE_URL, useValue: null },
         { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
       ],
     });
   });

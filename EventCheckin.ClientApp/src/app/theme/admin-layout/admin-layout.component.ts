@@ -1,24 +1,10 @@
-import { BidiModule } from '@angular/cdk/bidi';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import {
-  Component,
-  HostBinding,
-  OnDestroy,
-  ViewChild,
-  ViewEncapsulation,
-  inject,
-} from '@angular/core';
-import { MatSidenav, MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { NgProgressComponent } from 'ngx-progressbar';
-import { Subscription, filter } from 'rxjs';
-
+import { Component, HostBinding, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
+import { NavigationEnd, Router } from '@angular/router';
 import { AppSettings, SettingsService } from '@core';
-import { CustomizerComponent } from '../customizer/customizer.component';
-import { HeaderComponent } from '../header/header.component';
-import { SidebarNoticeComponent } from '../sidebar-notice/sidebar-notice.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { TopmenuComponent } from '../topmenu/topmenu.component';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 const MOBILE_MEDIAQUERY = 'screen and (max-width: 599px)';
 const TABLET_MEDIAQUERY = 'screen and (min-width: 600px) and (max-width: 959px)';
@@ -27,28 +13,12 @@ const MONITOR_MEDIAQUERY = 'screen and (min-width: 960px)';
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
-  styleUrl: './admin-layout.component.scss',
+  styleUrls: ['./admin-layout.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    BidiModule,
-    MatSidenavModule,
-    NgProgressComponent,
-    HeaderComponent,
-    TopmenuComponent,
-    SidebarComponent,
-    SidebarNoticeComponent,
-    CustomizerComponent,
-  ],
 })
 export class AdminLayoutComponent implements OnDestroy {
   @ViewChild('sidenav', { static: true }) sidenav!: MatSidenav;
   @ViewChild('content', { static: true }) content!: MatSidenavContent;
-
-  private readonly breakpointObserver = inject(BreakpointObserver);
-  private readonly router = inject(Router);
-  private readonly settings = inject(SettingsService);
 
   options = this.settings.options;
 
@@ -56,14 +26,13 @@ export class AdminLayoutComponent implements OnDestroy {
     return this.settings.themeColor;
   }
 
-  get isOver() {
+  get isOver(): boolean {
     return this.isMobileScreen;
   }
 
   private isMobileScreen = false;
 
-  @HostBinding('class.matero-content-width-fix')
-  get contentWidthFix() {
+  @HostBinding('class.matero-content-width-fix') get contentWidthFix() {
     return (
       this.isContentWidthFixed &&
       this.options.navPos === 'side' &&
@@ -74,8 +43,7 @@ export class AdminLayoutComponent implements OnDestroy {
 
   private isContentWidthFixed = true;
 
-  @HostBinding('class.matero-sidenav-collapsed-fix')
-  get collapsedWidthFix() {
+  @HostBinding('class.matero-sidenav-collapsed-fix') get collapsedWidthFix() {
     return (
       this.isCollapsedWidthFixed &&
       (this.options.navPos === 'top' || (this.options.sidenavOpened && this.isOver))
@@ -86,7 +54,11 @@ export class AdminLayoutComponent implements OnDestroy {
 
   private layoutChangesSubscription = Subscription.EMPTY;
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private breakpointObserver: BreakpointObserver,
+    private settings: SettingsService
+  ) {
     this.layoutChangesSubscription = this.breakpointObserver
       .observe([MOBILE_MEDIAQUERY, TABLET_MEDIAQUERY, MONITOR_MEDIAQUERY])
       .subscribe(state => {
@@ -96,6 +68,8 @@ export class AdminLayoutComponent implements OnDestroy {
         this.isMobileScreen = state.breakpoints[MOBILE_MEDIAQUERY];
         this.options.sidenavCollapsed = state.breakpoints[TABLET_MEDIAQUERY];
         this.isContentWidthFixed = state.breakpoints[MONITOR_MEDIAQUERY];
+        this.options.sidenavCollapsed = false;
+        this. toggleCollapsed();
       });
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(e => {

@@ -1,7 +1,7 @@
 {
   "name": "ng-matero",
-  "version": "18.0.2",
-  "description": "Angular Material admin template",
+  "version": "16.1.2",
+  "description": "Angular Material Admin Dashboard",
   "author": "nzbin<nzb329@163.com>",
   "repository": {
     "type": "git",
@@ -11,7 +11,6 @@
     "angular",
     "angular-material",
     "admin-dashboard",
-    "admin-template",
     "ng-matero",
     "ng-admin",
     "ngx-admin",
@@ -26,7 +25,7 @@
   },
   "homepage": "https://ng-matero.github.io/ng-matero/",
   "scripts": {
-    "build": "npx tsc -p tsconfig.json"
+    "build": "../node_modules/.bin/tsc -p tsconfig.json"
   },
   "schematics": "./collection.json",
   "ng-update": {

@@ -1,0 +1,175 @@
+{
+  "menu": [
+    {
+      "route": "dashboard",
+      "name": "dashboard",
+      "type": "link",
+      "icon": "dashboard",
+      "badge": {
+        "color": "red-500",
+        "value": "5"
+      }
+    },
+    {
+      "route": "forms",
+      "name": "forms",
+      "type": "sub",
+      "icon": "description",
+      "children": [
+        {
+          "route": "managerun",
+          "name": "managerun",
+          "type": "link"
+        },
+        {
+          "route": "productioncontrol",
+          "name": "productioncontrol",
+          "type": "link"
+        }
+      ],
+      "permissions": {
+        "except": "GUEST"
+      }
+    },
+    {
+      "route": "tables",
+      "name": "tables",
+      "type": "sub",
+      "icon": "format_line_spacing",
+      "children": [
+        {
+          "route": "material",
+          "name": "material",
+          "type": "link"
+        },
+        {
+          "route": "equipmentmaterial",
+          "name": "equipmentmaterial",
+          "type": "link"
+        },
+        {
+          "route": "team",
+          "name": "team",
+          "type": "link"
+        },
+        {
+          "route": "shift",
+          "name": "shift",
+          "type": "link"
+        },
+        {
+          "route": "plantentity",
+          "name": "plantentity",
+          "type": "link"
+        },
+        {
+          "route": "oeeevent",
+          "name": "oeeevent",
+          "type": "link"
+        },
+        {
+          "route": "productioncontrol",
+          "name": "productioncontrol",
+          "type": "link"
+        },
+        {
+          "route": "linedowntime",
+          "name": "linedowntime",
+          "type": "link"
+        },
+        {
+          "route": "reason",
+          "name": "reason",
+          "type": "link"
+        },
+        {
+          "route": "role-permissions",
+          "name": "role-permissions",
+          "type": "link"
+        },
+        {
+          "route": "plant",
+          "name": "plant",
+          "type": "link"
+        }
+      ],
+      "permissions": {
+        "except": "GUEST"
+      }
+    },
+    {
+      "route": "permissions",
+      "name": "permissions",
+      "type": "sub",
+      "icon": "lock",
+      "children": [
+
+        {
+          "route": "role-switching",
+          "name": "role-switching",
+          "type": "link"
+        },
+        {
+          "route": "route-guard",
+          "name": "route-guard",
+          "type": "link",
+          "permissions": {
+            "except": "GUEST"
+          }
+        },
+        {
+          "route": "test",
+          "name": "test",
+          "type": "link",
+          "permissions": {
+            "only": "ADMIN"
+          }
+        }
+      ]
+    },
+    {
+      "route": "profile",
+      "name": "profile",
+      "type": "sub",
+      "icon": "person",
+      "children": [
+        {
+          "route": "overview",
+          "name": "overview",
+          "type": "link"
+        },
+        {
+          "route": "settings",
+          "name": "settings",
+          "type": "link"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "name": "sessions",
+      "type": "sub",
+      "icon": "question_answer",
+      "children": [
+        {
+          "route": "403",
+          "name": "403",
+          "type": "link"
+        },
+        {
+          "route": "404",
+          "name": "404",
+          "type": "link"
+        },
+        {
+          "route": "500",
+          "name": "500",
+          "type": "link"
+        }
+      ],
+      "permissions": {
+        "only": "ADMIN"
+      }
+    }
+  ]
+}

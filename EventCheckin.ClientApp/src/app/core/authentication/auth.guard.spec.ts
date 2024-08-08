@@ -1,18 +1,13 @@
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component } from '@angular/core';
 import { TestBed, inject } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AuthService, TokenService, authGuard } from '@core/authentication';
-import { LocalStorageService, MemoryStorageService } from '@shared/services/storage.service';
 
-@Component({
-  template: '',
-  standalone: true,
-  imports: [],
-  providers: [provideHttpClientTesting()],
-})
+import { Router } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Component } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { LocalStorageService, MemoryStorageService } from '@shared/services/storage.service';
+import { TokenService, AuthService, authGuard } from '@core/authentication';
+
+@Component({ template: '' })
 class DummyComponent {}
 
 describe('authGuard function unit test', () => {
@@ -25,17 +20,14 @@ describe('authGuard function unit test', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: DummyComponent, canActivate: [authGuard] },
           { path: 'auth/login', component: DummyComponent },
         ]),
-        DummyComponent,
       ],
-      providers: [
-        { provide: LocalStorageService, useClass: MemoryStorageService },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-      ],
+      declarations: [DummyComponent],
+      providers: [{ provide: LocalStorageService, useClass: MemoryStorageService }],
     });
     TestBed.createComponent(DummyComponent);
     router = TestBed.inject(Router);

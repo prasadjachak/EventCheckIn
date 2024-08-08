@@ -1,23 +1,8 @@
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  ViewEncapsulation,
-  inject,
-} from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTabsModule } from '@angular/material/tabs';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { NgxPermissionsModule } from 'ngx-permissions';
-import { Subscription, filter } from 'rxjs';
-
+import { Component, HostBinding, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { NavigationEnd, Router, RouterLinkActive } from '@angular/router';
 import { Menu, MenuService } from '@core';
-import { TopmenuPanelComponent } from './topmenu-panel.component';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 export interface TopmenuState {
   active: boolean;
@@ -27,31 +12,11 @@ export interface TopmenuState {
 @Component({
   selector: 'app-topmenu',
   templateUrl: './topmenu.component.html',
-  styleUrl: './topmenu.component.scss',
-  host: {
-    class: 'matero-topmenu',
-  },
+  styleUrls: ['./topmenu.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    NgTemplateOutlet,
-    RouterLink,
-    RouterLinkActive,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatTabsModule,
-    NgxPermissionsModule,
-    TranslateModule,
-    TopmenuPanelComponent,
-  ],
 })
 export class TopmenuComponent implements OnDestroy {
-  private readonly menu = inject(MenuService);
-  private readonly router = inject(Router);
-  private readonly cdr = inject(ChangeDetectorRef);
+  @HostBinding('class') class = 'matero-topmenu';
 
   menu$ = this.menu.getAll();
 
@@ -63,7 +28,7 @@ export class TopmenuComponent implements OnDestroy {
   private menuSubscription = Subscription.EMPTY;
   private routerSubscription = Subscription.EMPTY;
 
-  constructor() {
+  constructor(private menu: MenuService, private router: Router) {
     this.menuSubscription = this.menu$.subscribe(res => {
       this.menuList = res;
       this.menuList.forEach(item => {
@@ -73,12 +38,6 @@ export class TopmenuComponent implements OnDestroy {
         });
       });
     });
-
-    this.routerSubscription = this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(e => {
-        this.menuStates.forEach(item => (item.active = false));
-      });
   }
 
   ngOnDestroy() {
@@ -92,10 +51,7 @@ export class TopmenuComponent implements OnDestroy {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(e => {
         this.menuStates.forEach(item => (item.active = false));
-        setTimeout(() => {
-          this.menuStates[index].active = rla.isActive;
-          this.cdr.markForCheck();
-        });
+        setTimeout(() => (this.menuStates[index].active = rla.isActive));
       });
   }
 }

@@ -12,6 +12,8 @@ using EventCheckin.DbContext.Infrastructure;
 using EventCheckin.Infrastructure.Settings;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using AutoMapper;
+using System;
 
 namespace EventCheckin.Api
 {
@@ -32,6 +34,9 @@ namespace EventCheckin.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "_myAllowSpecificOrigins",

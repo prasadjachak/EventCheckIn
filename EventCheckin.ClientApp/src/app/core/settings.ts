@@ -16,10 +16,10 @@ export const defaults: AppSettings = {
   navPos: 'side',
   dir: 'ltr',
   theme: 'auto',
-  showHeader: true,
+  showHeader: false,
   headerPos: 'fixed',
   showUserPanel: true,
   sidenavOpened: true,
-  sidenavCollapsed: false,
+  sidenavCollapsed: true,
   language: 'en-US',
 };

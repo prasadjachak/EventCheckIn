@@ -9,17 +9,23 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiRolesAddRolePost } from '../fn/roles/api-roles-add-role-post';
-import { ApiRolesAddRolePost$Params } from '../fn/roles/api-roles-add-role-post';
-import { apiRolesGetGet$Json } from '../fn/roles/api-roles-get-get-json';
-import { ApiRolesGetGet$Json$Params } from '../fn/roles/api-roles-get-get-json';
-import { apiRolesGetGet$Plain } from '../fn/roles/api-roles-get-get-plain';
-import { ApiRolesGetGet$Plain$Params } from '../fn/roles/api-roles-get-get-plain';
-import { apiRolesRemoveIdDelete } from '../fn/roles/api-roles-remove-id-delete';
-import { ApiRolesRemoveIdDelete$Params } from '../fn/roles/api-roles-remove-id-delete';
-import { apiRolesUpdateRoleIdPut } from '../fn/roles/api-roles-update-role-id-put';
-import { ApiRolesUpdateRoleIdPut$Params } from '../fn/roles/api-roles-update-role-id-put';
-import { ApplicationRole } from '../models/application-role';
+import { apiRolesAddRolePost$Json } from '../fn/roles/api-roles-add-role-post-json';
+import { ApiRolesAddRolePost$Json$Params } from '../fn/roles/api-roles-add-role-post-json';
+import { apiRolesAddRolePost$Plain } from '../fn/roles/api-roles-add-role-post-plain';
+import { ApiRolesAddRolePost$Plain$Params } from '../fn/roles/api-roles-add-role-post-plain';
+import { apiRolesDeleteRoleDelete$Json } from '../fn/roles/api-roles-delete-role-delete-json';
+import { ApiRolesDeleteRoleDelete$Json$Params } from '../fn/roles/api-roles-delete-role-delete-json';
+import { apiRolesDeleteRoleDelete$Plain } from '../fn/roles/api-roles-delete-role-delete-plain';
+import { ApiRolesDeleteRoleDelete$Plain$Params } from '../fn/roles/api-roles-delete-role-delete-plain';
+import { apiRolesListRoleGet$Json } from '../fn/roles/api-roles-list-role-get-json';
+import { ApiRolesListRoleGet$Json$Params } from '../fn/roles/api-roles-list-role-get-json';
+import { apiRolesListRoleGet$Plain } from '../fn/roles/api-roles-list-role-get-plain';
+import { ApiRolesListRoleGet$Plain$Params } from '../fn/roles/api-roles-list-role-get-plain';
+import { apiRolesUpdateRolePut$Json } from '../fn/roles/api-roles-update-role-put-json';
+import { ApiRolesUpdateRolePut$Json$Params } from '../fn/roles/api-roles-update-role-put-json';
+import { apiRolesUpdateRolePut$Plain } from '../fn/roles/api-roles-update-role-put-plain';
+import { ApiRolesUpdateRolePut$Plain$Params } from '../fn/roles/api-roles-update-role-put-plain';
+import { CustomApiResponse } from '../models/custom-api-response';
 
 @Injectable({ providedIn: 'root' })
 export class RolesService extends BaseService {
@@ -27,50 +33,50 @@ export class RolesService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiRolesGetGet()` */
-  static readonly ApiRolesGetGetPath = '/api/Roles/get';
+  /** Path part for operation `apiRolesListRoleGet()` */
+  static readonly ApiRolesListRoleGetPath = '/api/Roles/ListRole';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiRolesGetGet$Plain()` instead.
+   * To access only the response body, use `apiRolesListRoleGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiRolesGetGet$Plain$Response(params?: ApiRolesGetGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ApplicationRole>>> {
-    return apiRolesGetGet$Plain(this.http, this.rootUrl, params, context);
+  apiRolesListRoleGet$Plain$Response(params?: ApiRolesListRoleGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiRolesListRoleGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiRolesGetGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiRolesListRoleGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiRolesGetGet$Plain(params?: ApiRolesGetGet$Plain$Params, context?: HttpContext): Observable<Array<ApplicationRole>> {
-    return this.apiRolesGetGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<ApplicationRole>>): Array<ApplicationRole> => r.body)
+  apiRolesListRoleGet$Plain(params?: ApiRolesListRoleGet$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiRolesListRoleGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiRolesGetGet$Json()` instead.
+   * To access only the response body, use `apiRolesListRoleGet$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiRolesGetGet$Json$Response(params?: ApiRolesGetGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ApplicationRole>>> {
-    return apiRolesGetGet$Json(this.http, this.rootUrl, params, context);
+  apiRolesListRoleGet$Json$Response(params?: ApiRolesListRoleGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiRolesListRoleGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiRolesGetGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiRolesListRoleGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiRolesGetGet$Json(params?: ApiRolesGetGet$Json$Params, context?: HttpContext): Observable<Array<ApplicationRole>> {
-    return this.apiRolesGetGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<ApplicationRole>>): Array<ApplicationRole> => r.body)
+  apiRolesListRoleGet$Json(params?: ApiRolesListRoleGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiRolesListRoleGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
@@ -79,73 +85,139 @@ export class RolesService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiRolesAddRolePost()` instead.
+   * To access only the response body, use `apiRolesAddRolePost$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiRolesAddRolePost$Response(params?: ApiRolesAddRolePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiRolesAddRolePost(this.http, this.rootUrl, params, context);
+  apiRolesAddRolePost$Plain$Response(params?: ApiRolesAddRolePost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiRolesAddRolePost$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiRolesAddRolePost$Response()` instead.
+   * To access the full response (for headers, for example), `apiRolesAddRolePost$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiRolesAddRolePost(params?: ApiRolesAddRolePost$Params, context?: HttpContext): Observable<void> {
-    return this.apiRolesAddRolePost$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiRolesAddRolePost$Plain(params?: ApiRolesAddRolePost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiRolesAddRolePost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
-  /** Path part for operation `apiRolesUpdateRoleIdPut()` */
-  static readonly ApiRolesUpdateRoleIdPutPath = '/api/Roles/UpdateRole/{Id}';
-
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiRolesUpdateRoleIdPut()` instead.
+   * To access only the response body, use `apiRolesAddRolePost$Json()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiRolesUpdateRoleIdPut$Response(params: ApiRolesUpdateRoleIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiRolesUpdateRoleIdPut(this.http, this.rootUrl, params, context);
+  apiRolesAddRolePost$Json$Response(params?: ApiRolesAddRolePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiRolesAddRolePost$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiRolesUpdateRoleIdPut$Response()` instead.
+   * To access the full response (for headers, for example), `apiRolesAddRolePost$Json$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiRolesUpdateRoleIdPut(params: ApiRolesUpdateRoleIdPut$Params, context?: HttpContext): Observable<void> {
-    return this.apiRolesUpdateRoleIdPut$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiRolesAddRolePost$Json(params?: ApiRolesAddRolePost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiRolesAddRolePost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
-  /** Path part for operation `apiRolesRemoveIdDelete()` */
-  static readonly ApiRolesRemoveIdDeletePath = '/api/Roles/Remove/{Id}';
+  /** Path part for operation `apiRolesUpdateRolePut()` */
+  static readonly ApiRolesUpdateRolePutPath = '/api/Roles/UpdateRole';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiRolesRemoveIdDelete()` instead.
+   * To access only the response body, use `apiRolesUpdateRolePut$Plain()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiRolesRemoveIdDelete$Response(params: ApiRolesRemoveIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiRolesRemoveIdDelete(this.http, this.rootUrl, params, context);
+  apiRolesUpdateRolePut$Plain$Response(params?: ApiRolesUpdateRolePut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiRolesUpdateRolePut$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiRolesRemoveIdDelete$Response()` instead.
+   * To access the full response (for headers, for example), `apiRolesUpdateRolePut$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiRolesUpdateRolePut$Plain(params?: ApiRolesUpdateRolePut$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiRolesUpdateRolePut$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiRolesUpdateRolePut$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiRolesUpdateRolePut$Json$Response(params?: ApiRolesUpdateRolePut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiRolesUpdateRolePut$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiRolesUpdateRolePut$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiRolesUpdateRolePut$Json(params?: ApiRolesUpdateRolePut$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiRolesUpdateRolePut$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiRolesDeleteRoleDelete()` */
+  static readonly ApiRolesDeleteRoleDeletePath = '/api/Roles/DeleteRole';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiRolesDeleteRoleDelete$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiRolesRemoveIdDelete(params: ApiRolesRemoveIdDelete$Params, context?: HttpContext): Observable<void> {
-    return this.apiRolesRemoveIdDelete$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiRolesDeleteRoleDelete$Plain$Response(params?: ApiRolesDeleteRoleDelete$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiRolesDeleteRoleDelete$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiRolesDeleteRoleDelete$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiRolesDeleteRoleDelete$Plain(params?: ApiRolesDeleteRoleDelete$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiRolesDeleteRoleDelete$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiRolesDeleteRoleDelete$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiRolesDeleteRoleDelete$Json$Response(params?: ApiRolesDeleteRoleDelete$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiRolesDeleteRoleDelete$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiRolesDeleteRoleDelete$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiRolesDeleteRoleDelete$Json(params?: ApiRolesDeleteRoleDelete$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiRolesDeleteRoleDelete$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 

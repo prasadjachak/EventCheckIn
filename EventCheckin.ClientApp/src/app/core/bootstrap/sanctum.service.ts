@@ -1,5 +1,6 @@
+import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, InjectionToken, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { BASE_URL } from '../interceptors/base-url-interceptor';
 
 export const SANCTUM_PREFIX = new InjectionToken<string>('SANCTUM_PREFIX');
@@ -8,19 +9,21 @@ export const SANCTUM_PREFIX = new InjectionToken<string>('SANCTUM_PREFIX');
   providedIn: 'root',
 })
 export class SanctumService {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = inject(BASE_URL, { optional: true });
-  private readonly prefix = inject(SANCTUM_PREFIX, { optional: true });
+  constructor(
+    private http: HttpClient,
+    @Optional() @Inject(BASE_URL) private baseUrl?: string,
+    @Optional() @Inject(SANCTUM_PREFIX) private prefix?: string
+  ) {}
 
-  load() {
+  load(): Promise<unknown> {
     return new Promise(resolve => this.toObservable().subscribe(resolve));
   }
 
-  toObservable() {
+  toObservable(): Observable<any> {
     return this.http.get(this.getUrl());
   }
 
-  private getUrl() {
+  private getUrl(): string {
     const prefix = this.prefix || 'sanctum';
     const path = `/${prefix.replace(/^\/|\/$/g, '')}/csrf-cookie`;
 

@@ -2,23 +2,16 @@
 @use '../style/badge';
 
 .matero-topmenu {
-  --mat-tab-header-divider-height: 0;
-  --mdc-text-button-label-text-color: var(--topmenu-text-color);
-
   position: sticky;
   z-index: 200;
   display: block;
-  padding: 0.5rem;
-  background-color: var(--topmenu-background-color);
-  backdrop-filter: blur(8px);
+  padding: 8px;
 
-  .mat-mdc-button {
-    padding: 0 1rem;
+  @include mat.elevation(2);
+
+  .mat-mdc-button-base {
+    padding: 0 16px;
     white-space: nowrap;
-
-    &.active {
-      background-color: var(--topmenu-item-active-background-color);
-    }
   }
 
   .menu-icon,
@@ -28,24 +21,24 @@
   }
 
   .mat-icon.menu-icon {
-    width: 1.125rem;
-    height: 1.125rem;
-    margin-right: 0.5rem;
-    font-size: 1.125rem;
-    line-height: 1.125rem;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    font-size: 18px;
+    line-height: 18px;
 
     [dir='rtl'] & {
       margin-right: auto;
-      margin-left: 0.5rem;
+      margin-left: 8px;
     }
   }
 
   .mat-icon.menu-caret {
-    margin-right: -0.5rem;
+    margin-right: -8px;
 
     [dir='rtl'] & {
       margin-right: auto;
-      margin-left: -0.5rem;
+      margin-left: -8px;
     }
   }
 
@@ -53,11 +46,11 @@
   .menu-badge {
     @include badge.badge();
 
-    margin-left: 0.5rem;
-    font-size: 0.75rem;
+    margin-left: 8px;
+    font-size: 12px;
 
     [dir='rtl'] & {
-      margin-right: 0.5rem;
+      margin-right: 8px;
       margin-left: auto;
     }
   }
@@ -73,9 +66,15 @@
 }
 
 .matero-topmenu-panel {
-  .mat-mdc-menu-item {
-    &.active {
-      color: var(--topmenu-dropdown-item-active-text-color);
+  .mat-menu-item {
+    .menu-name {
+      margin-right: 8px;
+      vertical-align: middle;
+
+      [dir='rtl'] & {
+        margin-right: auto;
+        margin-left: 8px;
+      }
     }
   }
 }

@@ -1,40 +1,20 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-branding',
   template: `
-    <a class="branding" href="/">
-      <img src="images/matero.png" class="branding-logo" alt="logo" />
-      @if (showName) {
-        <span class="branding-name">MATERO</span>
-      }
+    <a class="d-inline-block text-nowrap r-full text-reset" href="/">
+      <img src="./assets/images/companylogo.png" style="padding-top: 4px;" class="brand-logo align-middle m-2 r-full" alt="logo" />
+      <span class="align-middle f-s-16 f-w-500 m-x-8"><img src="./assets/images/companyname.png" class=" align-middle m-2" style="width: auto;height:25px;" alt="logo" /></span>
     </a>
   `,
-  styles: `
-    .branding {
-      display: flex;
-      align-items: center;
-      margin: 0 0.5rem;
-      text-decoration: none;
-      white-space: nowrap;
-      color: inherit;
-      border-radius: 50rem;
-    }
-
-    .branding-logo {
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50rem;
-    }
-
-    .branding-name {
-      margin: 0 0.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-  `,
-  standalone: true,
+  styles: [
+    `
+      .brand-logo {
+        width: 30px;
+        height: 35px;
+      }
+    `,
+  ],
 })
-export class BrandingComponent {
-  @Input() showName = true;
-}
+export class BrandingComponent {}

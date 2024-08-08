@@ -5,14 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace EventCheckin.Api.Models
 {
     // BASE MODELS
-    public class UserModel
-    {
-        public string Email { get; set; }
-        public bool EmailConfirmed { get; set; }
-        public bool LockoutEnabled { get; set; }
-        public IList<string> Roles { get; set; }
-    }
-
+   
     public class TokenModel
     {
         public bool? HasVerifiedEmail { get; set; }
@@ -66,12 +59,8 @@ namespace EventCheckin.Api.Models
 
     public class LoginViewModel
     {
-        public string UserName { get; set; }
-
         [Required]
-        [EmailAddress]
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -119,27 +108,6 @@ namespace EventCheckin.Api.Models
         public string Code { get; set; }
     }
 
-    public class UserViewModel
-    {
-        public string Id { get; set; }
-        public string UserName { get; set; }
-
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "The new password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
-
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
-
-        public string UserId { get; set; }
-        public string RoleId { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool EmailConfirmed { get; set; }
-    }
-
     public class EditUserViewModel
     {
         public string Id { get; set; }
@@ -177,12 +145,7 @@ namespace EventCheckin.Api.Models
         public int RoleId { get; set; }
     }
     
-    public class RoleModel
-    {
-        public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-    }
+    
     
     // Manage controller
     public class ChangePasswordViewModel

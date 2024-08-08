@@ -1,39 +1,13 @@
-import { Component, inject } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss',
-  standalone: true,
-  imports: [
-    RouterLink,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatInputModule,
-    TranslateModule,
-  ],
+  styleUrls: ['./register.component.scss'],
+
 })
 export class RegisterComponent {
-  private readonly fb = inject(FormBuilder);
-
   registerForm = this.fb.nonNullable.group(
     {
       username: ['', [Validators.required]],
@@ -44,6 +18,8 @@ export class RegisterComponent {
       validators: [this.matchValidator('password', 'confirmPassword')],
     }
   );
+
+  constructor(private fb: FormBuilder) {}
 
   matchValidator(source: string, target: string) {
     return (control: AbstractControl) => {

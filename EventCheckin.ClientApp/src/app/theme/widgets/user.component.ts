@@ -1,56 +1,55 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { Router, RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { debounceTime, tap } from 'rxjs';
-
-import { AuthService, SettingsService, User } from '@core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { SettingsService } from '@core';
+import { AuthService, User } from '@core/authentication';
+import { debounceTime, tap } from 'rxjs/operators';
+import screenfull from 'screenfull';
 
 @Component({
   selector: 'app-user',
   template: `
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-      <img class="avatar" [src]="user.avatar" width="24" alt="avatar" />
+
+    <button class="r-full" mat-button [matMenuTriggerFor]="menu" style="margin-left: -4px;">
+    <mat-icon style="width: 2.125rem;">account_circle</mat-icon>
+      <span class="m-x-8">{{ user.name }}</span>
     </button>
 
     <mat-menu #menu="matMenu">
-      <button routerLink="/profile/overview" mat-menu-item>
-        <mat-icon>account_circle</mat-icon>
-        <span>{{ 'profile' | translate }}</span>
+      <button mat-menu-item  (click)="toggleFullscreen()">
+        <mat-icon>fullscreen</mat-icon>
+        <span>Full Screen</span>
       </button>
+
       <button routerLink="/profile/settings" mat-menu-item>
         <mat-icon>edit</mat-icon>
         <span>{{ 'edit_profile' | translate }}</span>
       </button>
-      <button mat-menu-item (click)="restore()">
-        <mat-icon>restore</mat-icon>
-        <span>{{ 'restore_defaults' | translate }}</span>
-      </button>
+
       <button mat-menu-item (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>
         <span>{{ 'logout' | translate }}</span>
       </button>
     </mat-menu>
+    <div class="row"><span style="margin:0 auto;padding-left:10px;">v4.0</span></div>
   `,
-  styles: `
-    .avatar {
-      width: 1.5rem;
-      height: 1.5rem;
-      border-radius: 50rem;
-    }
-  `,
-  standalone: true,
-  imports: [RouterLink, MatButtonModule, MatIconModule, MatMenuModule, TranslateModule],
+  styles: [
+    `
+      .avatar {
+        width: 24px;
+        height: 24px;
+      }
+    `,
+  ],
 })
 export class UserComponent implements OnInit {
-  private readonly cdr = inject(ChangeDetectorRef);
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly settings = inject(SettingsService);
-
   user!: User;
+
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+    private cdr: ChangeDetectorRef,
+    private settings: SettingsService
+  ) {}
 
   ngOnInit(): void {
     this.auth
@@ -71,5 +70,12 @@ export class UserComponent implements OnInit {
   restore() {
     this.settings.reset();
     window.location.reload();
+  }
+
+
+  toggleFullscreen() {
+    if (screenfull.isEnabled) {
+      screenfull.toggle();
+    }
   }
 }

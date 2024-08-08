@@ -1,9 +1,4 @@
 import { Component } from '@angular/core';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-notification',
@@ -14,24 +9,14 @@ import { MatMenuModule } from '@angular/material/menu';
 
     <mat-menu #menu="matMenu">
       <mat-nav-list>
-        @for (message of messages; track message) {
-          <mat-list-item>
-            <mat-icon class="m-x-16" matListItemIcon>info</mat-icon>
-            <a matListItemTitle href="#">{{ message }}</a>
-          </mat-list-item>
-        }
+        <mat-list-item *ngFor="let message of messages">
+          <mat-icon class="m-x-16" matListItemIcon>info</mat-icon>
+          <a matListItemTitle href="#">{{ message }}</a>
+        </mat-list-item>
       </mat-nav-list>
     </mat-menu>
   `,
-  styles: `
-    :host ::ng-deep .mat-badge-content {
-      --mat-badge-background-color: #ef0000;
-      --mat-badge-text-color: #fff;
-    }
-  `,
-  standalone: true,
-  imports: [MatBadgeModule, MatButtonModule, MatIconModule, MatListModule, MatMenuModule],
 })
 export class NotificationComponent {
-  messages = ['Server Error Reports 1', 'Server Error Reports 2', 'Server Error Reports 3'];
+  messages = ['Server Error Reports', 'Server Error Reports', 'Server Error Reports'];
 }

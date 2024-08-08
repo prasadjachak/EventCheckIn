@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using EventCheckin.Api.Infrastructure;
 using EventCheckin.Api.Models;
 using EventCheckin.DbContext.Entities.Identity;
+using AutoMapper;
 
 namespace EventCheckin.Api.Controllers.Identity
 {
@@ -17,10 +18,13 @@ namespace EventCheckin.Api.Controllers.Identity
     public class RolesController : BaseController
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
-
-        public RolesController(RoleManager<ApplicationRole> roleManager)
+        private readonly IMapper _mapper;
+        public RolesController(
+            RoleManager<ApplicationRole> roleManager,
+            IMapper mapper)
         {
             this._roleManager = roleManager;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -28,85 +32,95 @@ namespace EventCheckin.Api.Controllers.Identity
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ApplicationRole>), 200)]
-        [Route("get")]
-        public IActionResult GetAll()
+        //[ProducesResponseType(typeof(IEnumerable<ApplicationRole>), 200)]
+        [Route("ListRole")]
+        public ActionResult<CustomApiResponse> ListRole()
         {
             try
             {
-                return Ok(
-                    _roleManager.Roles
-                        .Select(role => new
+               var roles = _roleManager.Roles
+                         .Select(t => new ApplicationRole()
                         {
-                            role.Id,
-                            role.Name
-                        }));
+                            Id = t.Id,
+                             Name = t.Name
+                        });
+                var roleModels = new List<RoleModel>();
+                foreach (var role in roles)
+                {
+                    roleModels.Add(_mapper.Map<RoleModel>(role));
+                }
+
+                return new CustomApiResponse(roleModels);
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return new CustomApiResponse(e, 200, false);
             }
         }
 
 
         [HttpPost("AddRole")]
-        public async Task<IActionResult> AddRole(RoleModel model)
+        public async Task<ActionResult<CustomApiResponse>> AddRole(RoleModel model)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage));
+                return new CustomApiResponse(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage));
 
             var identityRole = new ApplicationRole { Name = model.Name };
 
             var result = await _roleManager.CreateAsync(identityRole).ConfigureAwait(false);
             
             if (!result.Succeeded) 
-                return BadRequest(result.Errors.Select(x => x.Description));
-
-            return Ok(new
+                return new  CustomApiResponse(result.Errors.Select(x => x.Description));
+            
+            return new CustomApiResponse(new RoleModel()
             {
-                identityRole.Id,
-                identityRole.Name
+                Id =identityRole.Id,
+                Name = identityRole.Name
             });
         }
 
         [HttpPut]
-        [Route("UpdateRole/{Id}")]
-        public async Task<IActionResult> UpdateRole(int id, [FromBody] RoleModel model)
+        [Route("UpdateRole")]
+        public async Task<ActionResult<CustomApiResponse>> UpdateRole(RoleModel model)
         {
             // Welcome to shit-show: https://stackoverflow.com/questions/36983656/identity-3-0-getting-a-user-by-id-when-the-id-is-int
             // var identityRole = _roleManager.Roles.FirstOrDefault(s => s.Id == Id);
-            var identityRole = await _roleManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
+            var identityRole = await _roleManager.FindByIdAsync(model.Id.ToString()).ConfigureAwait(false);
 
             if (identityRole == null)
-                return NotFound("Could not find role!");
+                return new CustomApiResponse("Could not find role!",200,false);
 
             identityRole.Name = model.Name;
 
             var result = await _roleManager.UpdateAsync(identityRole).ConfigureAwait(false);
             if (result.Succeeded)
             {
-                return Ok();
+                return new CustomApiResponse(new RoleModel()
+                {
+                    Id = identityRole.Id,
+                    Name = identityRole.Name
+                });
             }
-            return BadRequest(result.Errors.Select(x => x.Description));
+            return new CustomApiResponse(result.Errors.Select(x => x.Description), 200, false);
         }
 
         [HttpDelete]
-        [Route("Remove/{Id}")]
-        public async Task<IActionResult> Remove(int id)
+        [Route("DeleteRole")]
+        public async Task<ActionResult<CustomApiResponse>> DeleteRole(int id)
         {
             if (string.IsNullOrEmpty(id.ToString()))
-                return BadRequest(new[] { "Could not complete request!" });
+                return new CustomApiResponse(new[] { "Could not complete request!" }, 200, false);
 
             var identityRole = await _roleManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
             if (identityRole == null)
-                return BadRequest(new [] { "Could not find role!" });
+                return new CustomApiResponse(new [] { "Could not find role!" }, 200, false);
 
             var result = await _roleManager.DeleteAsync(identityRole).ConfigureAwait(false);
             if (result.Succeeded)
             {
-                return Ok();
+                return new CustomApiResponse(id.ToString(),200, true);
             }
-            return BadRequest(result.Errors.Select(x => x.Description));
+            return new CustomApiResponse(result.Errors.Select(x => x.Description), 200, false);
         }
     }
 }

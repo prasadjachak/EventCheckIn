@@ -1,16 +1,11 @@
-import { Component, OnInit, AfterViewInit, inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { PreloaderService, SettingsService } from '@core';
-import { RouterOutlet } from '@angular/router';
-
 @Component({
   selector: 'app-root',
-  template: `<router-outlet />`,
-  standalone: true,
-  imports: [RouterOutlet],
+  template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  private readonly preloader = inject(PreloaderService);
-  private readonly settings = inject(SettingsService);
+  constructor(private preloader: PreloaderService, private settings: SettingsService) {}
 
   ngOnInit() {
     this.settings.setDirection();

@@ -14,6 +14,9 @@ using EventCheckin.DbContext.Entities.Identity;
 using EventCheckin.Infrastructure.Settings;
 using EventCheckin.Services.Email;
 using EventCheckin.Utility.Helpers;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography.Xml;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,7 +33,7 @@ namespace EventCheckin.Api.Controllers.Identity
         private readonly IJwtSettings _jwt;
         private readonly IClientAppSettings _clientAppSettings;
         private readonly SignInManager<ApplicationUser> _signInManager;
-
+        IHttpContextAccessor _httpContextAccessor;
         public AuthController(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
@@ -38,7 +41,8 @@ namespace EventCheckin.Api.Controllers.Identity
             IEmailService emailService,
             IJwtSettings jwt,
             SignInManager<ApplicationUser> signInManager,
-            IClientAppSettings clientAppSettings)
+            IClientAppSettings clientAppSettings,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -47,6 +51,7 @@ namespace EventCheckin.Api.Controllers.Identity
             _jwt = jwt;
             _signInManager = signInManager;
             _clientAppSettings = clientAppSettings;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost("ConfirmEmail")]
@@ -159,9 +164,9 @@ namespace EventCheckin.Api.Controllers.Identity
 
                     var authResponse = new
                     {
-                        Refresh_token = tokenModel.Token,
-                        Token = tokenModel.Token,
-                        Expires_in = DateTime.Now.AddDays(1),
+                        refresh_token = tokenModel.Token,
+                        access_token = tokenModel.Token,
+                        expires_in = DateTime.Now.AddDays(1),
 
                     };
                     apiResponse.Result = authResponse;
@@ -247,7 +252,7 @@ namespace EventCheckin.Api.Controllers.Identity
         }
 
         [HttpPost("ResendVerificationEmail")]
-        public async Task<IActionResult> ResendVerificationEmail([FromBody] UserViewModel model)
+        public async Task<IActionResult> ResendVerificationEmail([FromBody] UserModel model)
         {
             ApplicationUser user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
             if (user == null)
@@ -302,5 +307,16 @@ namespace EventCheckin.Api.Controllers.Identity
             );
             return jwtSecurityToken;
         }
+
+        [HttpGet("me")]
+        public virtual async Task<ActionResult<CustomApiResponse>> Me()
+        {
+            var test =  _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var apiResponse = new CustomApiResponse();
+            apiResponse.Message = test;
+            return  (apiResponse);
+
+        }
+
     }
 }

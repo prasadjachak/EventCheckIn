@@ -1,17 +1,21 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AuthService, User } from '@core/authentication';
 import { NgxPermissionsService, NgxRolesService } from 'ngx-permissions';
-import { switchMap, tap } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { Menu, MenuService } from './menu.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StartupService {
-  private readonly authService = inject(AuthService);
-  private readonly menuService = inject(MenuService);
-  private readonly permissonsService = inject(NgxPermissionsService);
-  private readonly rolesService = inject(NgxRolesService);
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private menuService: MenuService,
+    private permissonsService: NgxPermissionsService,
+    private rolesService: NgxRolesService
+  ) {}
 
   /**
    * Load the application only after get the menu or other essential informations
@@ -34,16 +38,21 @@ export class StartupService {
   }
 
   private setMenu(menu: Menu[]) {
+    console.log(menu);
     this.menuService.addNamespace(menu, 'menu');
     this.menuService.set(menu);
   }
 
-  private setPermissions(user: User) {
-    // In a real app, you should get permissions and roles from the user information.
-    const permissions = ['canAdd', 'canDelete', 'canEdit', 'canRead'];
-    this.permissonsService.loadPermissions(permissions);
-    this.rolesService.flushRoles();
-    this.rolesService.addRoles({ ADMIN: permissions });
+  private setPermissions(user: any) {
+    if(user.message == 'AccessDenied'){
+      this.router.navigateByUrl('/auth/login');
+    }else{
+      // In a real app, you should get permissions and roles from the user information.
+      const permissions = ['canAdd', 'canDelete', 'canEdit', 'canRead'];
+      this.permissonsService.loadPermissions(permissions);
+      this.rolesService.flushRoles();
+      this.rolesService.addRoles({ ADMIN: permissions });
+  }
 
     // Tips: Alternatively you can add permissions with role at the same time.
     // this.rolesService.addRolesWithPermissions({ ADMIN: permissions });

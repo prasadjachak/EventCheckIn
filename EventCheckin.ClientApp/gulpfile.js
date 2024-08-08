@@ -5,7 +5,7 @@ const pkg = require('./package.json');
 
 const DEST = 'dist/schematics';
 const NG_ADD = DEST + '/ng-add';
-const FILES = NG_ADD + '/files/common-files';
+const FILES = NG_ADD + '/files';
 
 // .vscode
 function copyDotVscode() {
@@ -22,6 +22,8 @@ function copyRoot() {
     'LICENSE',
     'proxy.config.js',
     'tsconfig.json',
+    'tsconfig.app.json',
+    'tsconfig.spec.json',
   ]).pipe(dest(`${FILES}/`));
 }
 
@@ -33,16 +35,18 @@ function copySrcRoot() {
 // src/assets
 function copyAssets() {
   return src([
-    'public/**/*',
-    '!public/data/menu.json',
-    '!public/images/heros/**',
-    '!public/images/pixabay/**',
-  ]).pipe(dest(`${FILES}/public`));
+    'src/assets/**/*',
+    '!src/assets/data/menu.json',
+    '!src/assets/images/avatars/**',
+    '!src/assets/images/pixabay/**',
+  ]).pipe(dest(`${FILES}/src/assets`));
 }
 
 // src/styles
 function copyStyles() {
-  return src(['src/styles/**/*', '!src/styles/_themes.scss']).pipe(dest(`${FILES}/src/styles`));
+  return src(['src/styles/**/*', '!src/styles/_app-theme.scss', '!src/styles/_themes.scss']).pipe(
+    dest(`${FILES}/src/styles`)
+  );
 }
 
 // src/environments
@@ -56,10 +60,13 @@ function copySrcApp() {
     'src/app/**/*',
     '!src/app/core/settings.ts',
     '!src/app/routes/**/*',
-    '!src/app/shared/in-mem/**',
+    '!src/app/shared/shared.module.ts',
     '!src/app/theme/admin-layout/*.html',
-    '!src/app/app.config.ts',
-    '!src/app/app.routes.ts',
+    '!src/app/theme/header/*.html',
+    '!src/app/theme/header/github.*',
+    '!src/app/theme/customizer/**',
+    '!src/app/theme/theme.module.ts',
+    '!src/app/app.module.ts',
   ]).pipe(dest(`${FILES}/src/app`));
 }
 

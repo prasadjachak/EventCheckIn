@@ -148,6 +148,69 @@ namespace EventCheckin.DbContext.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("EventCheckin.DbContext.Entities.Feature", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1, 1);
+
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("FeatureId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SystemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeatureId");
+
+                    b.ToTable("Features");
+                });
+
             modelBuilder.Entity("EventCheckin.DbContext.Entities.Identity.ApplicationRole", b =>
                 {
                     b.Property<long>("Id")
@@ -401,6 +464,56 @@ namespace EventCheckin.DbContext.Migrations
                     b.ToTable("Logging");
                 });
 
+            modelBuilder.Entity("EventCheckin.DbContext.Entities.RolePermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("FeatureId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Permission")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("RoleId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeatureId");
+
+                    b.HasIndex("RoleId1");
+
+                    b.ToTable("RolePermissions");
+                });
+
             modelBuilder.Entity("EventCheckin.DbContext.Entities.TicketPass", b =>
                 {
                     b.Property<int>("Id")
@@ -448,6 +561,13 @@ namespace EventCheckin.DbContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TicketPasses");
+                });
+
+            modelBuilder.Entity("EventCheckin.DbContext.Entities.Feature", b =>
+                {
+                    b.HasOne("EventCheckin.DbContext.Entities.Feature", null)
+                        .WithMany("Children")
+                        .HasForeignKey("FeatureId");
                 });
 
             modelBuilder.Entity("EventCheckin.DbContext.Entities.Identity.ApplicationRoleClaim", b =>
@@ -510,6 +630,30 @@ namespace EventCheckin.DbContext.Migrations
                         .IsRequired();
 
                     b.Navigation("UserNavigation");
+                });
+
+            modelBuilder.Entity("EventCheckin.DbContext.Entities.RolePermission", b =>
+                {
+                    b.HasOne("EventCheckin.DbContext.Entities.Feature", "Feature")
+                        .WithMany()
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventCheckin.DbContext.Entities.Identity.ApplicationRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Feature");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("EventCheckin.DbContext.Entities.Feature", b =>
+                {
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("EventCheckin.DbContext.Entities.Identity.ApplicationUser", b =>

@@ -42,6 +42,8 @@ namespace EventCheckin.DbContext.Infrastructure
             return new Net7BoilerplateContext(optionsBuilder.Options);
         }
 
+        public virtual DbSet<Feature> Features { get; set; }
+        public virtual DbSet<RolePermission> RolePermissions { get; set; }
         public virtual DbSet<EventEntity> Events { get; set; }
         public virtual DbSet<EventDay> EventDays { get; set; }
         public virtual DbSet<TicketPass> TicketPasses { get; set; }
@@ -52,7 +54,7 @@ namespace EventCheckin.DbContext.Infrastructure
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Server=.;Database=DBGARBAPASS;User Id=sa;Password:Pass@123;Encrypt=False;TrustServerCertificate=true;");
+                optionsBuilder.UseSqlServer("Server=.;Database=DBGARBAPASS;User Id=sa;Password:Sql@123;Encrypt=False;TrustServerCertificate=true;");
 
                 // Setup our interceptors
                 optionsBuilder.AddInterceptors(EventEntitygingInterceptors.CreateInterceptors());

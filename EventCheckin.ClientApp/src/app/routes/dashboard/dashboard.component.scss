@@ -1,3 +1,166 @@
+@import '../../../assets/css/style.css';
+
 .mat-mdc-button-base {
   margin: 4px;
 }
+
+::ng-deep .dashboardFormField .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+::ng-deep .reading-label{
+  font-size: 17px !important;
+}
+
+.reading-label{
+  font-size: 17px !important;
+}
+
+
+::ng-deep .dashboardFormField .mat-mdc-form-field-infix {
+  min-height: 20px;
+}
+
+
+::ng-deep .dashboardFormField .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+::ng-deep .mat-mdc-icon-button .mat-mdc-button-touch-target {
+  position: absolute;
+  top: 50%;
+  height: 24px;
+  left: 50%;
+  width: 24px;
+  transform: translate(-50%, -50%);
+}
+
+::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 48px;
+  width: 25px;
+  height: 25px;
+  padding: 0px;
+}
+
+::ng-deep .dashboardFormField .mat-mdc-form-field-subscript-wrapper {
+  height: 10px;
+}
+
+
+.dashboardPanelTitle{
+  font-size: 14px;
+  font-weight: bold;
+
+}
+
+.dashboardKPIContent{
+  min-height: 70px;
+  padding-top: 5px;
+}
+
+.dashboardKPIHedader{
+  height: 40px;
+  padding: 10px 10px;
+  background-color: #3F51B5;
+  color: white;
+}
+
+.dashboardKPILabel{
+  text-align: left;
+  font-size: 14px;
+}
+
+.dashboardKPIValue{
+  text-align: right;
+  font-size: 14px;
+}
+
+.dateInput{
+  width: 100%;
+}
+
+.trendChart{
+  max-height: 350px;
+}
+
+
+::ng-deep .dashboardFormField .mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 0px !important;
+}
+::ng-deep .dashboardFormField .mdc-text-field--outlined {
+  background-color: #fff !important;
+  background-clip: padding-box;
+  border: 1px solid #e9ecef;
+  border-radius: 2px;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  --mdc-outlined-text-field-outline-width: 0px !important;
+  --mdc-outlined-text-field-focus-outline-width: 0px !important;
+  --mdc-outlined-text-field-container-shape: 0px !important;
+}
+
+::ng-deep  .dashboardFormField .mdc-text-field--filled:not(.mdc-text-field--disabled){
+  --mdc-filled-text-field-active-indicator-height:  0px !important;
+  --mdc-filled-text-field-focus-active-indicator-height:  0px !important;
+  --mdc-filled-text-field-container-shape:  0px !important;
+  background-color: #fff !important;
+  background-clip: padding-box;
+  border: 1px solid #e9ecef;
+  border-radius: 2px;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+::ng-deep .mat-mdc-list-base.inline-list {
+  display: flex !important;
+}
+
+::ng-deep .mdc-list {
+  padding: 0 !important;
+}
+
+::ng-deep .mdc-list-item.mdc-list-item--with-one-line{
+  height:20px !important;
+}
+
+
+
+::ng-deep .p-4[_ngcontent-ng-c448906961]{
+padding: 0!important;
+}
+
+::ng-deep .card-body[_ngcontent-ng-c448906961] {
+  flex: 1 1 auto;
+  padding: 0.15rem;
+}
+
+
+::ng-deep .card-body[_ngcontent-ng-c734480472]{
+  padding: 0!important;
+}
+
+::ng-deep .card-body{
+  padding: 0!important;
+}
+
+.card-body{
+  padding: 0!important;
+}
+
+::ng-deep .p-4{
+  padding: 0!important;
+}
+
+.p-4{
+  padding: 0!important;
+}
+
+::ng-deep .card{
+  margin-bottom: 5px !important;
+}
+
+.card{
+  margin-bottom: 5px !important;
+}
+
+

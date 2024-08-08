@@ -1,55 +1,46 @@
-import { CdkDrag, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDragStart } from '@angular/cdk/drag-drop';
 import {
   Component,
   EventEmitter,
+  OnDestroy,
+  OnInit,
   Output,
   TemplateRef,
   ViewEncapsulation,
-  inject,
 } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MtxDrawer, MtxDrawerModule, MtxDrawerRef } from '@ng-matero/extensions/drawer';
-import { Subscription } from 'rxjs';
-
+import { FormBuilder } from '@angular/forms';
 import { AppSettings, SettingsService } from '@core';
-import { DisableControlDirective } from '@shared';
+import { MtxDrawer, MtxDrawerRef } from '@ng-matero/extensions/drawer';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-customizer',
   templateUrl: './customizer.component.html',
-  styleUrl: './customizer.component.scss',
+  styleUrls: ['./customizer.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    CdkDrag,
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule,
-    MatRadioModule,
-    MatSlideToggleModule,
-    MatTooltipModule,
-    MtxDrawerModule,
-    DisableControlDirective,
-  ],
 })
-export class CustomizerComponent {
+export class CustomizerComponent implements OnInit, OnDestroy {
   @Output() optionsChange = new EventEmitter<AppSettings>();
 
-  private readonly settings = inject(SettingsService);
-  private readonly drawer = inject(MtxDrawer);
-  private readonly fb = inject(FormBuilder);
+  options = this.settings.options;
+  isVisible = false;
+  dragging = false;
 
-  form = this.fb.nonNullable.group<AppSettings>(this.settings.options);
+  drawerRef?: MtxDrawerRef;
 
-  private formSubscription = Subscription.EMPTY;
+  form = this.fb.nonNullable.group<AppSettings>({
+    theme: 'auto',
+    showHeader: false,
+    headerPos: 'fixed',
+    showUserPanel: true,
+    navPos: 'side',
+    dir: 'ltr',
+    sidenavOpened: true,
+    sidenavCollapsed: true,
+    language: 'en-US',
+  });
+
+  formSubscription = Subscription.EMPTY;
 
   get isHeaderPosAbove() {
     return this.form.get('headerPos')?.value === 'above';
@@ -63,9 +54,25 @@ export class CustomizerComponent {
     return this.form.get('showHeader')?.value === true;
   }
 
-  private dragging = false;
+  private readonly key = 'ng-matero-settings';
 
-  private drawerRef?: MtxDrawerRef;
+  constructor(
+    private settings: SettingsService,
+    private drawer: MtxDrawer,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    this.form.patchValue(this.options);
+
+    this.formSubscription = this.form.valueChanges.subscribe(value => {
+      this.sendOptions(this.form.getRawValue());
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.formSubscription.unsubscribe();
+  }
 
   onDragStart(event: CdkDragStart) {
     this.dragging = true;
@@ -80,16 +87,6 @@ export class CustomizerComponent {
     this.drawerRef = this.drawer.open(templateRef, {
       position: this.form.get('dir')?.value === 'rtl' ? 'left' : 'right',
       width: '320px',
-    });
-
-    this.drawerRef.afterOpened().subscribe(() => {
-      this.formSubscription = this.form.valueChanges.subscribe(value => {
-        this.sendOptions(this.form.getRawValue());
-      });
-    });
-
-    this.drawerRef.afterDismissed().subscribe(() => {
-      this.formSubscription.unsubscribe();
     });
   }
 

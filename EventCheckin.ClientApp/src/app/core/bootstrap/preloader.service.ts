@@ -1,13 +1,13 @@
+import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Injectable, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PreloaderService {
-  private readonly document = inject(DOCUMENT);
+  private selector = 'globalLoader';
 
-  private readonly selector = 'globalLoader';
+  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   private getElement() {
     return this.document.getElementById(this.selector);

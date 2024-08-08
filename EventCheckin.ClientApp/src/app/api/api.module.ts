@@ -8,6 +8,7 @@ import { AuthService } from './services/auth.service';
 import { EventService } from './services/event.service';
 import { EventDayService } from './services/event-day.service';
 import { RolesService } from './services/roles.service';
+import { SecurityService } from './services/security.service';
 import { UserService } from './services/user.service';
 import { UserRolesService } from './services/user-roles.service';
 import { VueBoilerplateService } from './services/vue-boilerplate.service';
@@ -24,6 +25,7 @@ import { VueBoilerplateService } from './services/vue-boilerplate.service';
     EventService,
     EventDayService,
     RolesService,
+    SecurityService,
     UserService,
     UserRolesService,
     VueBoilerplateService,

@@ -1,11 +1,10 @@
-import { Injectable, inject } from '@angular/core';
-import { FormlyConfig, FormlyFieldConfig } from '@ngx-formly/core';
+import { Injectable } from '@angular/core';
+import { FormlyFieldConfig, FormlyConfig } from '@ngx-formly/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class FormlyValidations {
-  private readonly translate = inject(TranslateService);
-  private readonly formlyConfig = inject(FormlyConfig);
+  constructor(private translate: TranslateService, private formlyConfig: FormlyConfig) {}
 
   init(): void {
     // message without params

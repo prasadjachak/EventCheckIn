@@ -23,15 +23,15 @@ namespace EventCheckin.Api.Controllers.Identity
             this._roleManager = roleManager;
         }
 
-        [HttpGet("Get/{Id}")]
-        public async Task<IActionResult> Get(long id)
+        [HttpGet("ListUserRoles/{Id}")]
+        public async Task<IActionResult> ListUserRoles(long id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
             return Ok(await _userManager.GetRolesAsync(user).ConfigureAwait(false));
         }
 
-        [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] UserRoleModel model)
+        [HttpPost("AddUserRole")]
+        public async Task<IActionResult> AddUserRole([FromBody] UserRoleModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage));
@@ -52,8 +52,8 @@ namespace EventCheckin.Api.Controllers.Identity
             return BadRequest(result.Errors.Select(x => x.Description));
         }
 
-        [HttpDelete("Delete/{Id}/{RoleId}")]
-        public async Task<IActionResult> Delete(string id, string roleId)
+        [HttpDelete("DeleteUserRole/{Id}/{RoleId}")]
+        public async Task<IActionResult> DeleteUserRole(string id, string roleId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage));

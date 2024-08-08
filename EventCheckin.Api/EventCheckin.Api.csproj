@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="AutoWrapper.Core" Version="4.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.32" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.32" />
@@ -27,6 +28,12 @@
     <ProjectReference Include="..\EventCheckin.DbContext\EventCheckin.DbContext.csproj" />
     <ProjectReference Include="..\EventCheckin.Infrastructure\EventCheckin.Infrastructure.csproj" />
     <ProjectReference Include="..\EventCheckin.Services\EventCheckin.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="menu.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 	<Target Name="BeforeBuildStep" BeforeTargets="AfterBuild">

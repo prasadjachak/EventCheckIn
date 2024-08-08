@@ -1,61 +1,47 @@
-import { Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatOptionModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-
+import { Component } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { AuthService } from '@core/authentication/auth.service';
+import { User } from '@core/authentication/interface';
 import { ControlsOf, IProfile } from '@shared';
 
 @Component({
   selector: 'app-profile-settings',
   templateUrl: './settings.component.html',
-  styleUrl: './settings.component.scss',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatOptionModule,
-    MatSelectModule,
-  ],
+  styleUrls: ['./settings.component.scss'],
 })
 export class ProfileSettingsComponent {
-  private readonly fb = inject(FormBuilder);
+  user!: User;
 
   reactiveForm = this.fb.nonNullable.group({
     username: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    gender: ['', [Validators.required]],
     city: ['', [Validators.required]],
     address: ['', [Validators.required]],
-    company: ['', [Validators.required]],
     mobile: ['', [Validators.required]],
-    tele: ['', [Validators.required]],
-    website: ['', [Validators.required]],
-    date: ['', [Validators.required]],
+
   });
+
+  constructor(private fb: FormBuilder,
+    private auth: AuthService) {}
+
+  ngOnInit(): void {
+    this.auth.user().subscribe(user => (this.user = user));
+    this.reactiveForm.patchValue({
+      username : this.user.username,
+      email : this.user.email,
+      mobile : this.user.phone,
+      city : this.user.city,
+      address : this.user.streetAddress,
+
+    });
+  }
+
 
   getErrorMessage(form: FormGroup<ControlsOf<IProfile>>) {
     return form.get('email')?.hasError('required')
       ? 'You must enter a value'
       : form.get('email')?.hasError('email')
-        ? 'Not a valid email'
-        : '';
+      ? 'Not a valid email'
+      : '';
   }
 }

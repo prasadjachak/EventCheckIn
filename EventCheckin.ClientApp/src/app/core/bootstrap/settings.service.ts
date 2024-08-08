@@ -1,21 +1,16 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { DOCUMENT } from '@angular/common';
-import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
+import { Inject, Injectable } from '@angular/core';
 import { AppDirectionality, LocalStorageService } from '@shared';
+import { BehaviorSubject } from 'rxjs';
 import { AppSettings, AppTheme, defaults } from '../settings';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SettingsService {
-  private readonly key = 'ng-matero-settings';
-
-  private readonly store = inject(LocalStorageService);
-  private readonly mediaMatcher = inject(MediaMatcher);
-  private readonly document = inject(DOCUMENT);
-  private readonly dir = inject(AppDirectionality);
+  private key = 'ng-matero-settings';
 
   private readonly notify$ = new BehaviorSubject<Partial<AppSettings>>({});
 
@@ -29,7 +24,12 @@ export class SettingsService {
 
   themeColor: Exclude<AppTheme, 'auto'> = 'light';
 
-  constructor() {
+  constructor(
+    private store: LocalStorageService,
+    private mediaMatcher: MediaMatcher,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(Directionality) public dir: AppDirectionality
+  ) {
     const storedOptions = this.store.get(this.key);
     this.options = Object.assign(defaults, storedOptions);
     this.themeColor = this.getThemeColor();

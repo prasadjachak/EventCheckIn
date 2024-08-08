@@ -16,7 +16,7 @@ export abstract class BaseToken {
     return this.attributes.token_type ?? 'bearer';
   }
 
-  get exp(): number | void {
+  get exp(): number  {
     return this.attributes.exp;
   }
 
@@ -31,7 +31,7 @@ export abstract class BaseToken {
   }
 
   needRefresh(): boolean {
-    return this.exp !== undefined && this.exp >= 0;
+    return this.exp !== undefined && this.exp >= 0 ;
   }
 
   getRefreshTime(): number {
@@ -50,7 +50,7 @@ export abstract class BaseToken {
 export class SimpleToken extends BaseToken {}
 
 export class JwtToken extends SimpleToken {
-  private _payload?: { exp?: number | void };
+  private _payload?: { exp : number};
 
   static is(accessToken: string): boolean {
     try {
@@ -63,13 +63,13 @@ export class JwtToken extends SimpleToken {
     }
   }
 
-  get exp(): number | void {
+  get exp(): number  {
     return this.payload?.exp;
   }
 
-  private get payload(): { exp?: number | void } {
+  private get payload(): { exp : number } {
     if (!this.access_token) {
-      return {};
+      return ;
     }
 
     if (this._payload) {

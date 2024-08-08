@@ -1,55 +1,52 @@
-import { Directive, inject } from '@angular/core';
+import { Directive } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuService } from '@core';
-import { filter } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { NavAccordionItemDirective } from './nav-accordion-item.directive';
 
 @Directive({
   selector: '[navAccordion]',
-  exportAs: 'navAccordion',
-  standalone: true,
 })
 export class NavAccordionDirective {
-  private readonly router = inject(Router);
-  private readonly menu = inject(MenuService);
+  protected navLinks: NavAccordionItemDirective[] = [];
 
-  private navItems: NavAccordionItemDirective[] = [];
-
-  constructor() {
+  constructor(private router: Router, private menu: MenuService) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => this.checkOpenedItems());
+      .subscribe(() => this.checkOpenLinks());
 
     // Fix opening status for async menu data
     this.menu.change().subscribe(() => {
-      setTimeout(() => this.checkOpenedItems());
+      setTimeout(() => this.checkOpenLinks());
     });
   }
 
-  addItem(item: NavAccordionItemDirective) {
-    this.navItems.push(item);
+  addLink(link: NavAccordionItemDirective) {
+    this.navLinks.push(link);
   }
 
-  removeItem(item: NavAccordionItemDirective) {
-    const index = this.navItems.indexOf(item);
+  removeLink(link: NavAccordionItemDirective) {
+    const index = this.navLinks.indexOf(link);
     if (index !== -1) {
-      this.navItems.splice(index, 1);
+      this.navLinks.splice(index, 1);
     }
   }
 
-  closeOtherItems(openedItem: NavAccordionItemDirective) {
-    this.navItems.forEach(item => {
-      if (item !== openedItem) {
-        item.expanded = false;
+  closeOtherLinks(openLink: NavAccordionItemDirective) {
+    this.navLinks.forEach(link => {
+      if (link !== openLink) {
+        link.expanded = false;
       }
     });
   }
 
-  checkOpenedItems() {
-    this.navItems.forEach(item => {
-      if (item.route && this.router.url.split('/').includes(item.route)) {
-        item.expanded = true;
-        this.closeOtherItems(item);
+  checkOpenLinks() {
+    this.navLinks.forEach(link => {
+      if (link.route) {
+        if (this.router.url.split('/').includes(link.route)) {
+          link.expanded = true;
+          this.closeOtherLinks(link);
+        }
       }
     });
   }

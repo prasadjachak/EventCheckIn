@@ -1,13 +1,13 @@
-import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-
+import { Injectable } from '@angular/core';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { SettingsService } from '@core';
 
 @Injectable()
 export class SettingsInterceptor implements HttpInterceptor {
-  private settings = inject(SettingsService);
+  constructor(private settings: SettingsService) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler) {
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(
       request.clone({
         headers: request.headers.append('Accept-Language', this.settings.options.language),
