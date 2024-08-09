@@ -21,15 +21,12 @@ namespace EventCheckin.Api.Controllers
     {
         private readonly ITicketPassService _ticketPassService;
         private readonly IEventEntityService _eventService;
-        private readonly IEventDayService _eventDayService;
         private readonly IMapper _mapper;
         public TicketPassController(ITicketPassService eventEntityService,
             IEventEntityService eventService,
-            IEventDayService eventDayService,
             IMapper mapper)
         {
             _ticketPassService = eventEntityService;
-            _eventDayService = eventDayService;
             _eventService = eventService;
             _mapper = mapper;
         }
@@ -101,15 +98,13 @@ namespace EventCheckin.Api.Controllers
                     foreach (var ticketPass in ticketPasses.ToList())
                     {
                         var ticketPassModel = new TicketPassModel();
-                        var eventDay = await _eventDayService.GetEventDay(ticketPass.EventDayId);
                         ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
-                        var eventDayModel = _mapper.Map<EventDayModel>(eventDay);
-                        var evententity = await _eventService.GetEventEntity(eventDayModel.EventId);
-                        eventDayModel.EventModel = _mapper.Map<EventModel>(evententity);
-                        ticketPassModel.EventDayModel = eventDayModel;
-                        ticketPassModel.PassDay = eventDayModel.StartDate.Value.ToString("MMM dd");
-                        ticketPassModel.PassFromTime = eventDayModel.StartDate.Value.ToString("hh:mm tt");
-                        ticketPassModel.PassToTime = eventDayModel.EndDate.Value.ToString("hh:mm tt");
+                        var evententity = await _eventService.GetEventEntity(ticketPass.EventId);
+                        var eventModel = _mapper.Map<EventModel>(evententity);
+                        ticketPassModel.EventModel = eventModel;
+                        ticketPassModel.PassDay = eventModel.StartDate.Value.ToString("MMM dd");
+                        ticketPassModel.PassFromTime = eventModel.StartDate.Value.ToString("hh:mm tt");
+                        ticketPassModel.PassToTime = eventModel.EndDate.Value.ToString("hh:mm tt");
                         ticketPassModels.Add(ticketPassModel);
                     }
                     apiResponse.Result = ticketPassModels;

@@ -10,7 +10,24 @@
         "value": "5"
       }
     },
-
+    {
+      "route": "assignpass",
+      "name": "assignpass",
+      "type": "sub",
+      "icon": "format_line_spacing",
+      "permissions": {
+        "except": "GUEST"
+      }
+    },
+    {
+      "route": "checkpass",
+      "name": "checkpass",
+      "type": "sub",
+      "icon": "format_line_spacing",
+      "permissions": {
+        "except": "GUEST"
+      }
+    },
     {
       "route": "events",
       "name": "events",
@@ -23,11 +40,6 @@
           "type": "link"
         },
         {
-          "route": "eventday",
-          "name": "eventday",
-          "type": "link"
-        },
-        {
           "route": "passes",
           "name": "passes",
           "type": "link"
@@ -37,7 +49,7 @@
         "except": "GUEST"
       }
     },
-     
+
     {
       "route": "permissions",
       "name": "permissions",

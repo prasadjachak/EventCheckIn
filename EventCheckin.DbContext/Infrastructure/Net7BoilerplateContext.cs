@@ -45,7 +45,6 @@ namespace EventCheckin.DbContext.Infrastructure
         public virtual DbSet<Feature> Features { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
         public virtual DbSet<EventEntity> Events { get; set; }
-        public virtual DbSet<EventDay> EventDays { get; set; }
         public virtual DbSet<TicketPass> TicketPasses { get; set; }
         public virtual DbSet<Logging> Logging { get; set; }
 

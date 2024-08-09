@@ -3,27 +3,28 @@ import { MatDialog } from '@angular/material/dialog';
 
 
 // MODELS
+import { EventService } from 'app/api/services';
+import { EventModel } from 'app/api/models';
 import { ToastrService } from 'ngx-toastr';
+import { EventModal } from './components';
 import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs';
-import { EventDayService,EventService } from 'app/api/services';
-import { EventDayModel, EventModel } from 'app/api/models';
-import { EventDayModal } from './components';
 // COMP
 @Component({
-  selector: 'app-eventday-list',
-  templateUrl: './eventday-list.component.html',
-  styleUrls: ['./eventday-list.component.scss'],
+  selector: 'app-assignpass',
+  templateUrl: './assignpass.component.html',
+  styleUrls: ['./assignpass.component.scss'],
 
 })
-export class EventDayListComponent implements OnInit {
-  eventDayEvents : EventModel[] = [];
+export class AssignPassComponent implements OnInit {
+
   columns: MtxGridColumn[] = [
-    { header: 'Event Day Name', field: 'eventDayName'  },
+    { header: 'Eventname', field: 'name'  },
     { header: 'Start Date', field: 'startDate'  },
     { header: 'End Date', field: 'endDate'  },
-    { header: 'EventId', field: 'eventId'  },
+    { header: 'Address', field: 'venueAddress1'  },
+    { header: 'Active', field: 'isLive'  },
     {
       header: 'Operation',
       field: 'operation',
@@ -72,7 +73,6 @@ export class EventDayListComponent implements OnInit {
   }
 
   constructor(
-    private eventDayService: EventDayService,
     private eventService: EventService,
     private dialog: MatDialog,
     private toastr: ToastrService
@@ -82,20 +82,20 @@ export class EventDayListComponent implements OnInit {
     this.getList();
   }
 
-  async createNewEventDay() {
-    var event1 = {id:0,events : this.eventDayEvents};
+  async createNewEvent() {
+    var event1 : EventModel= {id:0};
     try {
-      const { success, eventdayData } = await this.openEventDayModal(event1);
+      const { success, eventData } = await this.openEventModal(event1);
       if (success) {
-        this.source.push(eventdayData);
+        this.source.push(eventData);
         this.getList();
         this.toastr.info(
-          `EventDay (${eventdayData?.name}) has been created successfully`
+          `Event (${eventData?.name}) has been created successfully`
         );
       }
       else{
-        if(eventdayData != undefined && eventdayData.errors.length > 0){
-          this.toastr.error(eventdayData.errors[0]);
+        if(eventData != undefined && eventData.errors.length > 0){
+          this.toastr.error(eventData.errors[0]);
         }
       }
     } catch (error: any) {
@@ -105,26 +105,26 @@ export class EventDayListComponent implements OnInit {
     }
   }
 
-  async update(event: EventDayModel) {
+  async update(event: EventModel) {
     try {
-      const { success, eventdayData } = await this.openEventDayModal(event);
+      const { success, eventData } = await this.openEventModal(event);
       if (success) {
-        console.log(eventdayData);
+        console.log(eventData);
         const eventIndex = this.source.findIndex(
           (usr) => usr?.id === event?.id
         );
         console.log(eventIndex);
         if (eventIndex >= 0) {
-          this.source[eventIndex] = eventdayData;
+          this.source[eventIndex] = eventData;
           this.getList();
           this.toastr.info(
-             `EventDay (${eventdayData?.name}) has been updated successfully`
+             `Event (${eventData?.name}) has been updated successfully`
            );
         }
       }
       else{
-        if(eventdayData != undefined && eventdayData.errors.length > 0){
-          this.toastr.error(eventdayData.errors[0]);
+        if(eventData != undefined && eventData.errors.length > 0){
+          this.toastr.error(eventData.errors[0]);
         }
       }
     } catch (error: any) {
@@ -134,24 +134,24 @@ export class EventDayListComponent implements OnInit {
     }
   }
 
-  async delete(eventdayData: EventDayModel) {
-    this.eventDayService
-    .apiEventDayDeleteEventEntityPut$Json$Response({id:eventdayData?.id})
+  async delete(eventData: EventModel) {
+    this.eventService
+    .apiEventDeleteEventEntityPut$Json$Response({id:eventData?.id})
     .subscribe(result =>{
       //this.source = result.body.result;
       var event = result.body;
 
         const eventIndex = this.source.findIndex(
-          (usr) => usr.id === eventdayData?.id
+          (usr) => usr.id === eventData?.id
         );
         if(result.body.isSuccess == true){
           this.source.splice(eventIndex, 1);
           this.getList();
           this.toastr.info(
-            `EventDay (${eventdayData?.eventDayName}) has been removed successfully`,
+            `Event (${eventData?.name}) has been removed successfully`,
           );
         }else{
-          if(eventdayData != undefined && event.isSuccess ==false){
+          if(eventData != undefined && event.isSuccess ==false){
             this.toastr.error(event.message);
           }
         }
@@ -160,8 +160,8 @@ export class EventDayListComponent implements OnInit {
   }
 
   // OPEN MODAL WITH SOME CONFIGRATION
-  private async openEventDayModal(event?: EventDayModel) {
-    const eventDialog = this.dialog.open(EventDayModal, {
+  private async openEventModal(event?: EventModel) {
+    const eventDialog = this.dialog.open(EventModal, {
       width: '450px',
       maxWidth: '100%',
       data: event,
@@ -173,8 +173,8 @@ export class EventDayListComponent implements OnInit {
   async getList() {
     this.isLoading = true;
 
-    this.eventDayService
-    .apiEventDayListEventDayGet$Json$Response()
+    this.eventService
+    .apiEventListEventEntitysGet$Json$Response()
     .pipe(
       finalize(() => {
         this.isLoading = false;
@@ -206,21 +206,5 @@ export class EventDayListComponent implements OnInit {
     this.query.per_page = 10;
     this.query.start = 1;
     this.getList();
-  }
-
-  async getEventList() {
-    this.isLoading = true;
-
-    this.eventService
-    .apiEventListEventEntitysGet$Json$Response()
-    .pipe(
-      finalize(() => {
-        this.isLoading = false;
-      })
-    )
-    .subscribe(result =>{
-      this.eventDayEvents = result.body.result;
-      this.isLoading = false;
-    });
   }
 }

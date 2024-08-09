@@ -5,10 +5,10 @@ import {
   FormGroup
 } from '@angular/forms';
 import { FormValidationService } from '@shared/services/form/form-validation.service';
+import { EventModel } from 'app/api/models/event-model';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import * as _moment from 'moment';
 import {default as _rollupMoment} from 'moment';
-import { EventDayModel } from 'app/api/models';
 
 // SERVICES
 
@@ -27,17 +27,17 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'eventday-form',
-  templateUrl: './eventday-form.component.html',
-  styleUrls: ['./eventday-form.component.scss'],
+  selector: 'event-form',
+  templateUrl: './event-form.component.html',
+  styleUrls: ['./event-form.component.scss'],
 })
-export class EventDayFormComponent implements OnInit {
-  @Input() eventdayData!: EventDayModel;
+export class EventFormComponent implements OnInit {
+  @Input() eventData!: EventModel;
 
   // SHOW AND HIDE PW FOR USER EXPERIENCE
   showPassword: boolean = false;
   // USER FORM GROUP
-  eventDayForm!: FormGroup;
+  eventForm!: FormGroup;
   constructor(
     private formValidationService: FormValidationService
   ) {
@@ -45,29 +45,30 @@ export class EventDayFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.eventDayForm = this.initeventForm;
+    this.eventForm = this.initeventForm;
   }
   // GET USER FORM DATA
   get getFormData() {
-    return { ...this.eventDayForm.value, event: this.eventDayForm.value?.event || 1 };
+    return { ...this.eventForm.value, event: this.eventForm.value?.event || 1 };
   }
   // USER FORM PROPERTIES
   private get initeventForm() {
 
     return new FormGroup(
       {
-        eventDayName: new FormControl(this.eventdayData?.eventDayName || '', [
+        name: new FormControl(this.eventData?.name || '', [
           Validators.required,
           Validators.maxLength(60),
         ]),
-        startDate: new FormControl(this.eventdayData.startDate ||  moment(),
+        startDate: new FormControl(this.eventData.startDate ||  moment(),
         [
         ]),
-        endDate: new FormControl(this.eventdayData.startDate || moment(),
+        endDate: new FormControl(this.eventData.startDate || moment(),
         [
         ]),
-
-        eventId: new FormControl(this.eventdayData?.eventId || 0, [
+        venueAddress1: new FormControl(this.eventData?.venueAddress1 || '', [
+        ]),
+        isLive: new FormControl(this.eventData?.isLive || false, [
         ]),
       },
 
@@ -78,11 +79,11 @@ export class EventDayFormComponent implements OnInit {
 
   // FIELD ERROR
   fieldHasError(fieldName: string): boolean {
-    return this.formValidationService.fieldHasError(fieldName, this.eventDayForm);
+    return this.formValidationService.fieldHasError(fieldName, this.eventForm);
   }
   // FIELD ERROR MESSAGE
   getErrorMessage(fieldName: string): string {
-    return this.formValidationService.getErrorMessage(fieldName, this.eventDayForm);
+    return this.formValidationService.getErrorMessage(fieldName, this.eventForm);
   }
 
 }

@@ -7,6 +7,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './sessions/login/login.component';
 import { RegisterComponent } from './sessions/register/register.component';
 import { authGuard } from '@core/authentication';
+import { CheckPassComponent } from './passes/checkpass/checkpass.component';
+import { AssignPassComponent } from './passes/assignpass/assignpass.component';
 
 const routes: Routes = [
   {
@@ -17,7 +19,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-
+      { path: 'assignpass', component: AssignPassComponent },
+      { path: 'checkpass', component: CheckPassComponent },
       {
         path: 'profile',
         loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),

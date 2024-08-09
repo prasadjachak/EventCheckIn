@@ -15,7 +15,7 @@ namespace EventCheckin.DbContext.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         
-        public int EventDayId { get; set; }
+        public int EventId { get; set; }
 
         public string TicketNo { get; set; }
 

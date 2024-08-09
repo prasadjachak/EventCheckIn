@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-import { EventDayModel } from '../models/event-day-model';
+import { EventModel } from '../models/event-model';
 import { UserModel } from '../models/user-model';
 export interface TicketPassModel {
   allowedGuest?: number;
@@ -8,7 +8,7 @@ export interface TicketPassModel {
   assignedBy?: number;
   assignedDateUtc?: string;
   eventDayId?: number;
-  eventDayModel?: EventDayModel;
+  eventModel?: EventModel;
   id?: number;
   passDay?: string | null;
   passFromTime?: string | null;

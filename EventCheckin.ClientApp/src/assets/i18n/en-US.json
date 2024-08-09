@@ -7,6 +7,8 @@
     "events": "Events Configuration",
     "events.evententity": "Event Configuration",
     "events.eventday": "Event Day Configuration",
+    "assignpass": "Assign Pass",
+    "checkpass": "Check Pass",
     "masters.employee": "Employees Configuration",
     "masters.team": "Team Configuration",
     "masters.shift": "Shift Configuration",

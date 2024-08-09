@@ -1,10 +1,10 @@
-<form [formGroup]="eventDayForm">
+<form [formGroup]="eventForm">
 
   <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
-    <mat-label>Event Day Name</mat-label>
-    <input formControlName="eventDayName" matInput placeholder="eventDayName" />
-    <mat-error *ngIf="fieldHasError('eventDayName')">
-      {{ getErrorMessage("eventDayName") }}
+    <mat-label>Name</mat-label>
+    <input formControlName="name" matInput placeholder="Name" />
+    <mat-error *ngIf="fieldHasError('name')">
+      {{ getErrorMessage("name") }}
     </mat-error>
   </mat-form-field>
 
@@ -22,12 +22,20 @@
     <input [mtxDatetimepicker]="endDate"  [disabled]="endDate"  matInput required  formControlName="endDate"   >
   </mat-form-field>
 
-
   <mat-form-field appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
-    <mat-label>Event Day Id</mat-label>
-    <input formControlName="eventId" matInput placeholder="eventId" />
-    <mat-error *ngIf="fieldHasError('eventId')">
-      {{ getErrorMessage("eventId") }}
+    <mat-label>Address</mat-label>
+    <input formControlName="venueAddress1" matInput placeholder="venueAddress1" />
+    <mat-error *ngIf="fieldHasError('venueAddress1')">
+      {{ getErrorMessage("venueAddress1") }}
     </mat-error>
   </mat-form-field>
+
+  <div appearance="outline" class="d-block mb-2" style="margin-top: 10px;">
+    <mat-label>Is Live</mat-label>
+    <mat-checkbox formControlName="isLive" placeholder="isLive" />
+    <mat-error *ngIf="fieldHasError('isLive')">
+      {{ getErrorMessage("isLive") }}
+    </mat-error>
+  </div>
+
 </form>

@@ -29,6 +29,6 @@ namespace EventCheckin.Api.Models.Events
 
         public UserModel UserModel { get; set; }
 
-        public EventDayModel EventDayModel { get; set; }
+        public EventModel EventModel { get; set; }
     }
 }
