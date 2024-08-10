@@ -19,11 +19,10 @@ export class UserModalComponent implements OnInit {
 
   async save(formData: any) {
     console.log(formData);
-    this.data.firstName = formData?.firstName;
-    this.data.lastName = formData?.lastName;
+    this.data.name = formData?.name;
     this.data.phoneNumber = formData?.phoneNumber;
     this.data.email = formData?.email;
-    this.data.roleId = formData?.roleId;
+    this.data.roleIds = formData?.roleIds;
 
      this.data.id > 0
       ? await this.userService.apiUserUpdateUserPut$Json$Response({

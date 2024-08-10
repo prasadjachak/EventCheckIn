@@ -63,7 +63,7 @@ namespace EventCheckin.Api.Controllers.Identity
         [HttpPost]
         //[ProducesResponseType(typeof(IEnumerable<IdentityUser>), 200)]
         [Route("ListUser")]
-        public ActionResult<CustomApiResponse> ListUser(UserSearchModel model) {
+        public async Task<ActionResult<CustomApiResponse>> ListUser(UserSearchModel model) {
             
             var users = _userManager.Users
               .Skip((model.PageNumber - 1) * model.PageSize)
@@ -73,38 +73,59 @@ namespace EventCheckin.Api.Controllers.Identity
                   Id= t.Id,
                   UserName = t.UserName,
                   PhoneNumber = t.PhoneNumber,
-                  FirstName = t.FirstName,
-                  LastName = t.LastName,
+                  Name = t.Name,
                   DeviceId = t.DeviceId,
               }).ToList();
 
             var userModels = new List<UserModel>();
-            foreach (var user in users)
+            foreach (var user1 in users)
             {
-                userModels.Add(_mapper.Map<UserModel>(user));
+                var user = await _userManager.FindByIdAsync(user1.Id.ToString());
+                var userModel = _mapper.Map<UserModel>(user);
+                var roleNames = await _userManager.GetRolesAsync(user);
+
+                foreach (var rolename in roleNames)
+                {
+                    var role = await _roleManager.FindByNameAsync(rolename);
+                    userModel.UserRoles.Add(_mapper.Map<RoleModel>(role));
+                    userModel.RoleIds.Add(role.Id);
+                }
+
+                userModels.Add(userModel);
             }
 
             return new CustomApiResponse(userModels);
         }
 
         [HttpGet("GetUser")]
-        public ActionResult<CustomApiResponse> GetUser(int id)
+        public async Task<ActionResult<CustomApiResponse>> GetUser(int id)
         {
             if (string.IsNullOrEmpty(id.ToString()))
                 return new CustomApiResponse(new string[] { "Empty parameter!" }, 200, false);
 
-            return new CustomApiResponse(_userManager.Users
+            var user =_userManager.Users
                 .Where(user => user.Id == id)
-                .Select(user => new
+                .Select(user => new ApplicationUser() 
                 {
-                    user.Id,
-                    user.Email,
-                    user.PhoneNumber,
-                    user.EmailConfirmed,
-                    user.LockoutEnabled,
-                    user.TwoFactorEnabled
+                    Id = user.Id,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    EmailConfirmed = user.EmailConfirmed,
+                    LockoutEnabled = user.LockoutEnabled,
+                    TwoFactorEnabled =user.TwoFactorEnabled
                 })
-                .FirstOrDefault());
+                .FirstOrDefault();
+            var userModel = _mapper.Map<UserModel>(user);
+            var roleNames = await _userManager.GetRolesAsync(user);
+
+            foreach(var rolename in roleNames)
+            {
+                var role = await _roleManager.FindByNameAsync(rolename);
+                userModel.UserRoles.Add(_mapper.Map<RoleModel>(role));
+                userModel.RoleIds.Add(role.Id);
+            }
+
+            return new CustomApiResponse(userModel);
         }
 
         [HttpPost("AddUser")]
@@ -117,11 +138,9 @@ namespace EventCheckin.Api.Controllers.Identity
             {
                 UserName = model.PhoneNumber,
                 PhoneNumber = model.PhoneNumber,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
+                Name = model.Name,
                 PhoneNumberConfirmed = false,
                 Email = model.PhoneNumber + "@abc123.com",
-                Title = "",
                 EmailConfirmed = true,
                 LockoutEnabled = false, 
                 TwoFactorEnabled = false
@@ -129,14 +148,30 @@ namespace EventCheckin.Api.Controllers.Identity
             model.Password = "Admin@32149870";
             model.ConfirmPassword = "Admin@32149870";
 
-            ApplicationRole role = await _roleManager.FindByIdAsync(model.RoleId).ConfigureAwait(false);
-            if (role == null)
-                return new CustomApiResponse(new string[] { "Could not find role!" }, 200, false);
-
             IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
             if (result.Succeeded)
             {
-                IdentityResult result2 = await _userManager.AddToRoleAsync(user, role.Name).ConfigureAwait(false);
+                var roles = _roleManager.Roles
+                        .Select(t => new ApplicationRole()
+                        {
+                            Id = t.Id,
+                            Name = t.Name
+                        });
+
+                var userRoleNames = await _userManager.GetRolesAsync(user);
+                var editUserRoles = new List<string>();
+
+                foreach (var userRoleId in model.RoleIds)
+                {
+                    var role = roles.Where(t => t.Id == userRoleId).Select(t => t.Name).FirstOrDefault();
+                    if (role != null)
+                        editUserRoles.Add(role);
+                }
+
+                await _userManager.RemoveFromRolesAsync(user, userRoleNames.ToArray());
+
+                IdentityResult result2 = await _userManager.AddToRolesAsync(user, editUserRoles);
+
                 if (result2.Succeeded)
                 {
                     return new CustomApiResponse(new UserModel
@@ -144,8 +179,7 @@ namespace EventCheckin.Api.Controllers.Identity
                         Id = user.Id,
                         PhoneNumber = user.PhoneNumber,
                         UserName = user.PhoneNumber,
-                        FirstName = model.FirstName,
-                        LastName = model.LastName
+                        Name = model.Name,
                     }, 200, true);
                 }
             }
@@ -163,16 +197,37 @@ namespace EventCheckin.Api.Controllers.Identity
                 return new CustomApiResponse(new[] { "Could not find user!" }, 200, false); 
 
             // Add more fields to update
-            user.Email = model.Email;
+            //user.Email = model.Email;
             user.PhoneNumber = model.PhoneNumber;
             user.UserName = model.PhoneNumber;
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
+            user.Name = model.Name;
+
+            var roles = _roleManager.Roles
+                          .Select(t => new ApplicationRole()
+                          {
+                              Id = t.Id,
+                              Name = t.Name
+                          });
+            
+            var userRoleNames = await _userManager.GetRolesAsync(user);
+            var editUserRoles = new List<string>();
+          
+            foreach (var userRoleId in model.RoleIds)
+            {
+                var role = roles.Where(t => t.Id == userRoleId).Select(t=> t.Name).FirstOrDefault();
+                if (role != null)
+                    editUserRoles.Add(role);
+            }
+
+            await _userManager.RemoveFromRolesAsync(user, userRoleNames.ToArray());
+
+            await _userManager.AddToRolesAsync(user, editUserRoles);
 
             IdentityResult result = await _userManager.UpdateAsync(user).ConfigureAwait(false);
             if (result.Succeeded)
             {
-                return Ok();
+                var userModel = _mapper.Map<UserModel>(user);
+                return new CustomApiResponse(userModel, 200, true);
             }
             return new CustomApiResponse(result.Errors.Select(x => x.Description), 200, false);
         }
@@ -225,14 +280,14 @@ namespace EventCheckin.Api.Controllers.Identity
             {
                 data.access_token = data.access_token.Replace("Bearer ", string.Empty).Replace("Bearer:", string.Empty);
             }
-            var roleIds = new List<int>();
+            var roleIds = new List<long>();
             //var roleIds = _roleManager.Roles.Select(i=>i.Id).ToList();
 
             var roleNames = _userManager.GetRolesAsync(user).Result;
 
             foreach(var roleName in roleNames)
             {
-               var id=  _roleManager.Roles.Where(t => t.Name.Equals(roleName)).Select(t=>t.Id).FirstOrDefault();
+               var id =  _roleManager.Roles.Where(t => t.Name.Equals(roleName)).Select(t=>t.Id).FirstOrDefault();
                 if(id != null)
                 {
                     roleIds.Add(id);
@@ -273,8 +328,6 @@ namespace EventCheckin.Api.Controllers.Identity
             }
             return Ok(JsonConvert.SerializeObject(menuResponseModel, settings));
         }
-
-
 
         [NonAction]
         public virtual string GetMenuFromMenuJsonAsync(string physicalPath)

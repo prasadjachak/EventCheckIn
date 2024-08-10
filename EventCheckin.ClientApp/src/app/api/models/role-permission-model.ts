@@ -5,5 +5,4 @@ export interface RolePermissionModel {
   featureId?: number;
   permission?: string | null;
   roleId?: number;
-  tenantId?: number;
 }

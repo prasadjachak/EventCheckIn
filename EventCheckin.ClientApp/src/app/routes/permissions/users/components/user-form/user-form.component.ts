@@ -41,7 +41,7 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     this.userForm = this.inituserForm;
     console.log(this.userData);
-    this.userForm.get('roleId').patchValue(this.userData.roleId, { onlySelf: true });
+    this.userForm.get('roleIds').patchValue(this.userData.roleIds, { onlySelf: true });
   }
 
   // GET USER FORM DATA
@@ -49,7 +49,7 @@ export class UserFormComponent implements OnInit {
     console.log(this.userData);
     console.log(this.userForm.value);
     console.log(this.userForm);
-    return { ...this.userForm.value, role: this.userForm.value?.roleId || 1 };
+    return { ...this.userForm.value, roleIds: this.userForm.value?.roleIds || 1 };
   }
 
   // USER FORM PROPERTIES
@@ -69,18 +69,13 @@ export class UserFormComponent implements OnInit {
 
     return new FormGroup(
       {
-        firstName: new FormControl(this.userData?.firstName || '', [
+        name: new FormControl(this.userData?.name || '', [
         ]),
-        lastName: new FormControl(this.userData?.lastName || '', [
-        ]),
-        roleId: new FormControl(this.userData.roleId || '', []),
+
+        roleIds: new FormControl(this.userData.roleIds || '', []),
         phoneNumber: new FormControl(this.userData?.phoneNumber || '',
           [
             Validators.required
-          ]
-        ),
-        deviceId: new FormControl(this.userData?.deviceId || '',
-          [
           ]
         )
 

@@ -13,19 +13,19 @@ namespace EventCheckin.DbContext.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets the permission record identifier
         /// </summary>
-        public int FeatureId { get; set; }
+        public long FeatureId { get; set; }
 
         /// <summary>
         /// Gets or sets the user role identifier
         /// </summary>
-        public int RoleId { get; set; }
-
-        public int TenantId { get; set; }
+        /// 
+        [ForeignKey("Role")]
+        public long RoleId { get; set; }
 
         public string Permission { get; set; }
 

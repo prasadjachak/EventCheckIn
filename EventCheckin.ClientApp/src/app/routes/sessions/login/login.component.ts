@@ -55,7 +55,7 @@ export class LoginComponent {
           const loginResponse = result.body.result!;
           this.otp = result.body.result!;
 
-          this.toast.error(result.body.message);
+          this.toast.error(result.body.result!);
           console.log(loginResponse);
           this.isSubmitting = false;
           // this._snackBar.error('Updated Successfully.');

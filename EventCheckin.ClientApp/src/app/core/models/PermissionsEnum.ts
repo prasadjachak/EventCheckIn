@@ -2,9 +2,9 @@
 export enum RolesEnum {
 	SUPER_ADMIN = 'SUPER_ADMIN',
 	ADMIN = 'ADMIN',
-	DATA_ENTRY = 'DATA_ENTRY',
-	EMPLOYEE = 'EMPLOYEE',
-	CANDIDATE = 'CANDIDATE',
+	SECURITY = 'SECURITY',
+	GUEST = 'SECURITY',
+	MEMBERS = 'MEMBERS',
 	MANAGER = 'MANAGER',
 	VIEWER = 'VIEWER',
 	INTERVIEWER = 'INTERVIEWER'
@@ -22,6 +22,9 @@ export enum PermissionsEnum {
 	users = 'Users',
   roles = 'Roles',
 	rolepermissions = 'Role Permissions',
+  securityusers = 'Security Users',
+  guests = 'Guest Users',
+  members = 'Member Users',
   settings = 'Settings',
   smtp = 'SMTP',
   logs = 'Logs',

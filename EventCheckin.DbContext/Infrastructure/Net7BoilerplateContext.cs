@@ -5,6 +5,7 @@ using EventCheckin.DbContext.Entities.Identity;
 using EventCheckin.DbContext.Interceptors;
 using EventCheckin.Infrastructure.Settings;
 using System.Diagnostics;
+using Microsoft.Extensions.Options;
 
 namespace EventCheckin.DbContext.Infrastructure
 {
@@ -12,6 +13,7 @@ namespace EventCheckin.DbContext.Infrastructure
     {
         public Net7BoilerplateContext(DbContextOptions<Net7BoilerplateContext> options) : base(options)
         {
+           
         }
 
         // This Constructor is going to be called every time to register out Context since 
@@ -19,6 +21,7 @@ namespace EventCheckin.DbContext.Infrastructure
         // I had no need for new class, as I already have my AppSettings initialization
         public Net7BoilerplateContext(DbContextOptions<Net7BoilerplateContext> options, AppSettings settings) : base(options)
         {
+           
             // Set global filter here
             // OrganizationType = (EOrganisationType)settings.OrganizationType;
         }
@@ -29,11 +32,11 @@ namespace EventCheckin.DbContext.Infrastructure
         {
             var optionsBuilder = new DbContextOptionsBuilder<Net7BoilerplateContext>();
             optionsBuilder.UseSqlServer(connection);
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             // optionsBuilder.AddInterceptors(Net7BoilerplateInterceptors.CreateInterceptors());
 
             // Setup our interceptors
             optionsBuilder.AddInterceptors(EventEntitygingInterceptors.CreateInterceptors());
-
             // Helps me with debugging stuff
             optionsBuilder.EnableDetailedErrors();
             optionsBuilder.EnableSensitiveDataLogging();
@@ -45,6 +48,7 @@ namespace EventCheckin.DbContext.Infrastructure
         public virtual DbSet<Feature> Features { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
         public virtual DbSet<EventEntity> Events { get; set; }
+        public virtual DbSet<EventMember> EventMembers { get; set; }
         public virtual DbSet<TicketPass> TicketPasses { get; set; }
         public virtual DbSet<Logging> Logging { get; set; }
 
@@ -53,7 +57,7 @@ namespace EventCheckin.DbContext.Infrastructure
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Server=.;Database=DBGARBAPASS;User Id=sa;Password:Sql@123;Encrypt=False;TrustServerCertificate=true;");
+                optionsBuilder.UseSqlServer("Server=.;Database=DBGARBAPASS1;User Id=sa;Password:Sql@123;Encrypt=False;TrustServerCertificate=true;");
 
                 // Setup our interceptors
                 optionsBuilder.AddInterceptors(EventEntitygingInterceptors.CreateInterceptors());

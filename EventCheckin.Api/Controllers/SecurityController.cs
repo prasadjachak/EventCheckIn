@@ -124,7 +124,7 @@ namespace Absolute.Web.Api.Controllers
                 {
                     var existingPermission = await (_permissionService.GetAllRolePermissions(feature.Id,rolePermission.RoleId));
 
-                    if(existingPermission == null)
+                    if(existingPermission.Count == 0)
                     {
                         await _permissionService.InsertRolePermissionAsync(new RolePermission
                         {
@@ -136,12 +136,14 @@ namespace Absolute.Web.Api.Controllers
                     }
                     else
                     {
-                        var existingPermission1 = existingPermission.FirstOrDefault();
-                        existingPermission1.Enabled = rolePermission.Enabled;
-                        existingPermission1.Permission = feature.Description;
-                        await _permissionService.UpdateRolePermissionAsync(existingPermission1);
+                        if(existingPermission.Count > 0)
+                        {
+                            var existingPermission1 = existingPermission.FirstOrDefault();
+                            existingPermission1.Enabled = rolePermission.Enabled;
+                            existingPermission1.Permission = feature.Description;
+                            await _permissionService.UpdateRolePermissionAsync(existingPermission1);
+                        }
                     }
-
                 }
                 else
                 {
@@ -155,17 +157,37 @@ namespace Absolute.Web.Api.Controllers
             return new CustomApiResponse(rolePermission);
         }
 
-        //[HttpPost("ListRolePermissions")]
-        //public virtual async Task<ActionResult<CustomApiResponse>> ListRolePermissions(RolePermissionSearchModel searchModel)
-        //{
-        //    //if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageUsers))
-        //    //    return await AccessDeniedDataTablesJson();
+        [HttpPost("ListRolePermissions")]
+        public virtual async Task<ActionResult<CustomApiResponse>> ListRolePermissions(RolePermissionSearchModel searchModel)
+        {
+            //if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageUsers))
+            //    return await AccessDeniedDataTablesJson();
 
-        //    //prepare model
-        //    var model = await _securityModelFactory.PrepareListRolePermissionsModelAsync(searchModel);
+            //prepare model
 
-        //    return new CustomApiResponse(model);
-        //}
+            var userRoles = await _permissionService.GetMappingByUserRoleIdAsync(searchModel.RoleId);
+
+            var items = new List<RolePermissionModel>();
+
+            // prepare list model
+
+            foreach (var userRole in userRoles)
+            {
+                RolePermissionModel rolePermission = null;
+                try
+                {
+                    rolePermission = _mapper.Map<RolePermissionModel>(userRole);
+                }
+                catch(Exception ex)
+                {
+
+                }
+                
+                items.Add(rolePermission);
+            }
+
+            return new CustomApiResponse(items);
+        }
         #endregion
     }
 }

@@ -9,32 +9,31 @@ namespace EventCheckin.Api.Models
 {
     public class UserModel
     {
-        public int Id { get; set; }
+        public UserModel() {
+            this.UserRoles = new List<RoleModel>();
+            this.RoleIds = new List<long>();
+        }
+        public long Id { get; set; }
 
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
-
-        public string Title { get; set; }
-
+        public string Name { get; set; }
+        
         public DateTime BirthDate { get; set; }
 
         public string DeviceId { get; set; }
 
         public string OTP { get; set; }
 
+        public virtual List<long> RoleIds { get; set; }
+
         public virtual ICollection<Logging> Loggings { get; set; }
-
-        [NotMapped]
-        public string FullName => $"{FirstName} {LastName}";
-
+ 
         public string Email { get; set; }
         
         public bool EmailConfirmed { get; set; }
         
         public bool LockoutEnabled { get; set; }
         
-        public IList<RoleModel> Roles { get; set; }
+        public IList<RoleModel> UserRoles { get; set; }
 
         public string UserId { get; set; }
         

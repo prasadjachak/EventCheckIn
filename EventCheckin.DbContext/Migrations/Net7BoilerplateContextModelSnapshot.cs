@@ -17,10 +17,10 @@ namespace EventCheckin.DbContext.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.32")
+                .HasAnnotation("ProductVersion", "7.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.HasSequence("LoggingSeq")
                 .StartsAt(2000000L)
@@ -28,11 +28,11 @@ namespace EventCheckin.DbContext.Migrations
 
             modelBuilder.Entity("EventCheckin.DbContext.Entities.EventEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -61,8 +61,8 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrganiserId")
-                        .HasColumnType("int");
+                    b.Property<long>("OrganiserId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
@@ -105,13 +105,62 @@ namespace EventCheckin.DbContext.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("EventCheckin.DbContext.Entities.Feature", b =>
+            modelBuilder.Entity("EventCheckin.DbContext.Entities.EventMember", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("EventId")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("GuestNo")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1, 1);
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("ParentUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ParkNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventMembers");
+                });
+
+            modelBuilder.Entity("EventCheckin.DbContext.Entities.Feature", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(max)");
@@ -128,8 +177,8 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FeatureId")
-                        .HasColumnType("int");
+                    b.Property<long?>("FeatureId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(max)");
@@ -174,11 +223,14 @@ namespace EventCheckin.DbContext.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSystemRole")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -204,7 +256,7 @@ namespace EventCheckin.DbContext.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -228,7 +280,7 @@ namespace EventCheckin.DbContext.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -243,6 +295,9 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<string>("DeviceId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DeviceOTP")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -250,17 +305,14 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("VARCHAR(250)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("VARCHAR(250)");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("VARCHAR(550)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -273,6 +325,9 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<string>("OTP")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("OTPTimeStamp")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -282,11 +337,11 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("SecurityStamp")
+                    b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("VARCHAR(100)");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -314,7 +369,7 @@ namespace EventCheckin.DbContext.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -361,6 +416,9 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<long>("RoleId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
@@ -389,8 +447,8 @@ namespace EventCheckin.DbContext.Migrations
 
             modelBuilder.Entity("EventCheckin.DbContext.Entities.Logging", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("LogDatum")
@@ -398,7 +456,7 @@ namespace EventCheckin.DbContext.Migrations
 
                     b.Property<string>("LogText")
                         .HasMaxLength(500)
-                        .HasColumnType("VARCHAR(500)");
+                        .HasColumnType("VARCHAR");
 
                     b.Property<int>("LogType")
                         .HasColumnType("int");
@@ -406,7 +464,7 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<string>("LogValue")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("VARCHAR(500)");
+                        .HasColumnType("VARCHAR");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -420,11 +478,11 @@ namespace EventCheckin.DbContext.Migrations
 
             modelBuilder.Entity("EventCheckin.DbContext.Entities.RolePermission", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -438,20 +496,14 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<bool?>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<int>("FeatureId")
-                        .HasColumnType("int");
+                    b.Property<long>("FeatureId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Permission")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("RoleId1")
+                    b.Property<long>("RoleId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -463,18 +515,18 @@ namespace EventCheckin.DbContext.Migrations
 
                     b.HasIndex("FeatureId");
 
-                    b.HasIndex("RoleId1");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("EventCheckin.DbContext.Entities.TicketPass", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("AllowedGuest")
                         .HasColumnType("int");
@@ -482,26 +534,26 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<int>("AllowedParkingCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("AssignedBy")
-                        .HasColumnType("int");
+                    b.Property<long>("AssignedBy")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("AssignedDateUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeletedBy")
-                        .HasColumnType("int");
+                    b.Property<long>("DeletedBy")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("DeletedDateUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
+                    b.Property<long>("EventId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("TicketNo")
                         .HasColumnType("nvarchar(max)");
@@ -509,11 +561,11 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<DateTime>("UpdateDateUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.Property<long>("UpdatedBy")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -599,7 +651,7 @@ namespace EventCheckin.DbContext.Migrations
 
                     b.HasOne("EventCheckin.DbContext.Entities.Identity.ApplicationRole", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId1")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

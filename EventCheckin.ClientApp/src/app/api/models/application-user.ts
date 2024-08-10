@@ -6,23 +6,23 @@ export interface ApplicationUser {
   birthDate?: string;
   concurrencyStamp?: string | null;
   deviceId?: string | null;
+  deviceOTP?: string | null;
   email?: string | null;
   emailConfirmed?: boolean;
-  firstName?: string | null;
-  fullName?: string | null;
   id?: number;
-  lastName?: string | null;
   lockoutEnabled?: boolean;
   lockoutEnd?: string | null;
   loggings?: Array<Logging> | null;
+  name?: string | null;
   normalizedEmail?: string | null;
   normalizedUserName?: string | null;
   otp?: string | null;
+  otpTimeStamp?: string | null;
   passwordHash?: string | null;
   phoneNumber?: string | null;
   phoneNumberConfirmed?: boolean;
+  remark?: string | null;
   securityStamp?: string | null;
-  title?: string | null;
   twoFactorEnabled?: boolean;
   userName?: string | null;
 }

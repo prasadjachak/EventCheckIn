@@ -22,9 +22,7 @@ export class UserListComponent implements OnInit {
 
   columns: MtxGridColumn[] = [
     { header: 'Mobile', field: 'phoneNumber'  },
-    { header: 'FirstName', field: 'firstName' },
-    { header: 'LastName', field: 'lastName' },
-    { header: 'Role', field: 'roleName'  },
+    { header: 'Name', field: 'name' },
     {
       header: 'Operation',
       field: 'operation',
@@ -85,7 +83,7 @@ export class UserListComponent implements OnInit {
   }
 
   async createNewUser() {
-    var user1 = {roles : this.userRoles};
+    var user1 = {userRoles : this.userRoles};
     try {
       const { success, userData } = await this.openUserModal(user1);
       console.log(userData);
@@ -167,7 +165,7 @@ export class UserListComponent implements OnInit {
 
   // OPEN MODAL WITH SOME CONFIGRATION
   private async openUserModal(user?: UserModel) {
-    user.roles = this.userRoles;
+    user.userRoles = this.userRoles;
     const userDialog = this.dialog.open(UserModal, {
       width: '450px',
       maxWidth: '100%',

@@ -14,7 +14,7 @@ namespace EventCheckin.Api.Models
 
         public UserSearchModel()
         {
-            SelectedRoleIds = new List<int>();
+            SelectedRoleIds = new List<long>();
             AvailableUserRoles = new List<SelectListItem>();
         }
 
@@ -22,7 +22,7 @@ namespace EventCheckin.Api.Models
 
         #region Properties
 
-        public IList<int> SelectedRoleIds { get; set; }
+        public IList<long> SelectedRoleIds { get; set; }
 
         public IList<SelectListItem> AvailableUserRoles { get; set; }
 

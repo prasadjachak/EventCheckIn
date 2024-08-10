@@ -5,9 +5,9 @@ namespace EventCheckin.Api.Models.Events
 {
     public class TicketPassModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public int EventDayId { get; set; }
+        public long EventDayId { get; set; }
 
         public string TicketNo { get; set; }
 
@@ -15,9 +15,9 @@ namespace EventCheckin.Api.Models.Events
 
         public int AllowedParkingCount { get; set; }
 
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
-        public int AssignedBy { get; set; }
+        public long AssignedBy { get; set; }
 
         public string PassDay { get; set; }
 

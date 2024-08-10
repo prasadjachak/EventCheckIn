@@ -13,6 +13,7 @@ export { RegisterViewModel } from './models/register-view-model';
 export { ResetPasswordViewModel } from './models/reset-password-view-model';
 export { RoleModel } from './models/role-model';
 export { RolePermissionModel } from './models/role-permission-model';
+export { RolePermissionSearchModel } from './models/role-permission-search-model';
 export { SelectListGroup } from './models/select-list-group';
 export { SelectListItem } from './models/select-list-item';
 export { TicketPassModel } from './models/ticket-pass-model';

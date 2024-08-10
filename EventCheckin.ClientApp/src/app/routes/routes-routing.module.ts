@@ -31,7 +31,7 @@ const routes: Routes = [
           import('./events/events.module').then(m => m.EventsModule),
       },
       {
-        path: 'permissions',
+        path: 'users',
         loadChildren: () =>
           import('./permissions/permissions.module').then(m => m.PermissionsModule),
       },
@@ -42,6 +42,7 @@ const routes: Routes = [
       },
     ],
   },
+
   {
     path: 'auth',
     component: AuthLayoutComponent,

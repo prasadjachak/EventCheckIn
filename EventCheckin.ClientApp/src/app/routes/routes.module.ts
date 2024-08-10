@@ -11,9 +11,14 @@ import { Error500Component } from './sessions/500.component';
 import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxGaugeModule } from 'ngx-gauge';
+import { AssignPassComponent } from './passes/assignpass/assignpass.component';
+import { CheckPassComponent } from './passes/checkpass/checkpass.component';
+import { UserFilterPipe } from '@core/pipes/UserFilterPipe';
 
 const COMPONENTS: any[] = [
   DashboardComponent,
+  AssignPassComponent,
+  CheckPassComponent,
   LoginComponent,
   RegisterComponent,
   Error403Component,
@@ -24,6 +29,9 @@ const COMPONENTS_DYNAMIC: any[] = [];
 
 @NgModule({
   imports: [SharedModule, RoutesRoutingModule,NgChartsModule,NgApexchartsModule,NgxGaugeModule],
-  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC],
+  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC,UserFilterPipe],
+  providers: [
+    UserFilterPipe,
+  ],
 })
 export class RoutesModule {}

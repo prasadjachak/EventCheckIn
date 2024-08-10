@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{ data ? "Edit User" : "Add New User" }}</h1>
+<div mat-dialog-content>
+  <member-from #memberForm [userData]="data"></member-from>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button type="button" color="warn" mat-dialog-close>Cancel</button>
+  <button
+    [disabled]="memberForm.memberForm.invalid"
+    mat-button
+    type="button"
+    color="primary"
+    (click)="save(memberForm.getFormData)"
+  >
+    {{ data.id > 0 ? "Update" : "Create" }}
+  </button>
+</div>

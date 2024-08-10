@@ -13,11 +13,11 @@ namespace EventCheckin.Services.Permission
 {
     public interface IPermissionService : IService
     {
-        Task<List<Feature>> GetAllPermissions(int roleId);
+        Task<List<Feature>> GetAllPermissions(long roleId);
 
         Task<List<Feature>> GetAllFeaturesAsync(string permission = null);
 
-        Task<List<RolePermission>> GetAllRolePermissions(int FeatureId, int roleId);
+        Task<List<RolePermission>> GetAllRolePermissions(long FeatureId, long roleId);
 
         Task<RolePermission> InsertRolePermissionAsync(RolePermission dto);
 
@@ -25,6 +25,7 @@ namespace EventCheckin.Services.Permission
 
         Task<RolePermission> DeleteRolePermissionAsync(RolePermission dto);
 
+        Task<IList<RolePermission>> GetMappingByUserRoleIdAsync(long roleId);
     }
 
     public class PermissionService : IPermissionService
@@ -37,7 +38,7 @@ namespace EventCheckin.Services.Permission
             _uow = uow;
         }
 
-        public async Task<List<Feature>> GetAllPermissions(int roleId)
+        public async Task<List<Feature>> GetAllPermissions(long roleId)
         {
             try
             {
@@ -54,7 +55,7 @@ namespace EventCheckin.Services.Permission
             }
         }
 
-        public async Task<List<RolePermission>> GetAllRolePermissions(int FeatureId, int roleId)
+        public async Task<List<RolePermission>> GetAllRolePermissions(long FeatureId, long roleId)
         {
             try
             {
@@ -131,6 +132,15 @@ namespace EventCheckin.Services.Permission
                 _logger.Error(e);
                 return null;
             }
+        }
+
+        public virtual async Task<IList<RolePermission>> GetMappingByUserRoleIdAsync(long roleId)
+        {
+            var query = _uow.Query<DbContext.Entities.RolePermission>();
+
+            query = query.Where(x => x.RoleId == roleId);
+
+            return query.ToList();
         }
 
     }

@@ -3,10 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 
 
 // MODELS
-import { EventService } from 'app/api/services';
-import { EventModel } from 'app/api/models';
+import { EventService, UserService } from 'app/api/services';
+import { EventModel, UserModel, UserSearchModel } from 'app/api/models';
 import { ToastrService } from 'ngx-toastr';
-import { EventModal } from './components';
 import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs';
@@ -54,9 +53,12 @@ export class AssignPassComponent implements OnInit {
   ];
 
   source: any[] = [];
+  users: UserModel[] = [];
+  selectedEvents : EventModel[] =  [];
+  selectedUsers : UserModel[] =  [];
   total = 0;
   isLoading = true;
-
+  userSearch = '';
   query = {
     q: 'event:nzbin',
     sort: 'stars',
@@ -74,30 +76,21 @@ export class AssignPassComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
+    private userService: UserService,
     private dialog: MatDialog,
     private toastr: ToastrService
   ) {}
 
   async ngOnInit() {
     this.getList();
+    this.getUserList();
   }
 
   async createNewEvent() {
     var event1 : EventModel= {id:0};
     try {
-      const { success, eventData } = await this.openEventModal(event1);
-      if (success) {
-        this.source.push(eventData);
-        this.getList();
-        this.toastr.info(
-          `Event (${eventData?.name}) has been created successfully`
-        );
-      }
-      else{
-        if(eventData != undefined && eventData.errors.length > 0){
-          this.toastr.error(eventData.errors[0]);
-        }
-      }
+
+
     } catch (error: any) {
       this.toastr.error(
          error?.message || 'An error occoured when creating new event',
@@ -107,26 +100,7 @@ export class AssignPassComponent implements OnInit {
 
   async update(event: EventModel) {
     try {
-      const { success, eventData } = await this.openEventModal(event);
-      if (success) {
-        console.log(eventData);
-        const eventIndex = this.source.findIndex(
-          (usr) => usr?.id === event?.id
-        );
-        console.log(eventIndex);
-        if (eventIndex >= 0) {
-          this.source[eventIndex] = eventData;
-          this.getList();
-          this.toastr.info(
-             `Event (${eventData?.name}) has been updated successfully`
-           );
-        }
-      }
-      else{
-        if(eventData != undefined && eventData.errors.length > 0){
-          this.toastr.error(eventData.errors[0]);
-        }
-      }
+
     } catch (error: any) {
       this.toastr.error(
          error?.message || 'An error occoured when updating  event'
@@ -157,17 +131,6 @@ export class AssignPassComponent implements OnInit {
         }
     });
 
-  }
-
-  // OPEN MODAL WITH SOME CONFIGRATION
-  private async openEventModal(event?: EventModel) {
-    const eventDialog = this.dialog.open(EventModal, {
-      width: '450px',
-      maxWidth: '100%',
-      data: event,
-      disableClose: true,
-    });
-    return await eventDialog.afterClosed().toPromise();
   }
 
   async getList() {
@@ -206,5 +169,24 @@ export class AssignPassComponent implements OnInit {
     this.query.per_page = 10;
     this.query.start = 1;
     this.getList();
+  }
+
+  async getUserList() {
+    this.isLoading = true;
+    const userSearchModel : UserSearchModel =
+    {pageSize:this.query.per_page , pageNumber:this.query.start};
+    this.userService
+    .apiUserListUserPost$Json$Response({body:userSearchModel})
+    .pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    )
+    .subscribe(result =>{
+      console.log(result);
+      this.users = result.body.result;
+     // this.total = result.body.result.total;
+      this.isLoading = false;
+    });
   }
 }

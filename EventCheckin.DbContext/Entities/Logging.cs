@@ -10,7 +10,7 @@ namespace EventCheckin.DbContext.Entities
     public partial class Logging : IEntity
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
         public DateTime LogDatum { get; set; }
         public ELogType LogType { get; set; }
         

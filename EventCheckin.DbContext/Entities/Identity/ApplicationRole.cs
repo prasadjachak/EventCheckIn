@@ -8,6 +8,6 @@ namespace EventCheckin.DbContext.Entities.Identity
         public ApplicationRole() { }
         public ApplicationRole(string name) { Name = name; }
 
-        public int Id {get; set;}
+        public bool IsSystemRole { get; set; }
     }
 }

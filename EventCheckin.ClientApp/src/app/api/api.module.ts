@@ -6,8 +6,11 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { AuthService } from './services/auth.service';
 import { EventService } from './services/event.service';
+import { GuestService } from './services/guest.service';
+import { MemberService } from './services/member.service';
 import { RolesService } from './services/roles.service';
 import { SecurityService } from './services/security.service';
+import { SecurityUserService } from './services/security-user.service';
 import { TicketPassService } from './services/ticket-pass.service';
 import { UserService } from './services/user.service';
 import { UserRolesService } from './services/user-roles.service';
@@ -22,8 +25,11 @@ import { UserRolesService } from './services/user-roles.service';
   providers: [
     AuthService,
     EventService,
+    GuestService,
+    MemberService,
     RolesService,
     SecurityService,
+    SecurityUserService,
     TicketPassService,
     UserService,
     UserRolesService,

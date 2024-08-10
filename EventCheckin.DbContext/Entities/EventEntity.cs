@@ -13,12 +13,12 @@ namespace EventCheckin.DbContext.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int OrganiserId { get; set; }
+        public long OrganiserId { get; set; }
         public string VenueName { get; set; }
         public string VenueAddress1 { get; set; }
         public string VenueAddress2 { get; set; }

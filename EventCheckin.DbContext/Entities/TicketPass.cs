@@ -13,9 +13,9 @@ namespace EventCheckin.DbContext.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
         
-        public int EventId { get; set; }
+        public long EventId { get; set; }
 
         public string TicketNo { get; set; }
 
@@ -23,21 +23,21 @@ namespace EventCheckin.DbContext.Entities
 
         public int AllowedParkingCount { get; set; }
 
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
-        public int AssignedBy { get; set; }
+        public long AssignedBy { get; set; }
 
         public DateTime AssignedDateUtc { get; set; }
 
-        public int CreatedBy { get; set; }
+        public long CreatedBy { get; set; }
 
         public DateTime CreatedDateUtc { get; set; }
 
-        public int UpdatedBy { get; set; }
+        public long UpdatedBy { get; set; }
 
         public DateTime UpdateDateUtc { get; set; }
 
-        public int DeletedBy { get; set; }
+        public long DeletedBy { get; set; }
 
         public DateTime DeletedDateUtc { get; set; }
 

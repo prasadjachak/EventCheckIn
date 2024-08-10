@@ -1,0 +1,21 @@
+<form [formGroup]="guestForm">
+
+  <mat-form-field appearance="outline" class="d-block mb-2">
+    <mat-label>Mobile</mat-label>
+    <input formControlName="phoneNumber" matInput placeholder="Mobile" />
+    <mat-error *ngIf="fieldHasError('phoneNumber')">
+      {{ getErrorMessage("phoneNumber") }}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="d-block mb-2">
+    <mat-label>Name</mat-label>
+    <input formControlName="name" matInput placeholder="name" />
+    <mat-error *ngIf="fieldHasError('name')">
+      {{ getErrorMessage("name") }}
+    </mat-error>
+  </mat-form-field>
+
+
+
+
+</form>

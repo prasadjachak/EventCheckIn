@@ -4,9 +4,7 @@ export interface RegisterViewModel {
   birthDate?: string;
   confirmPassword?: string | null;
   email: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   password: string;
-  title: string;
   userName?: string | null;
 }

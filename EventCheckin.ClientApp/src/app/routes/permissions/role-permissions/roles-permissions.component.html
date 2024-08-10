@@ -1,0 +1,152 @@
+<page-header class="bg-blue-600"></page-header>
+<mat-card>
+	<mat-card-header>
+		<h4>
+			<span class="menu-setting">{{ 'Menu Settings' }}/</span>
+			{{ 'Roles Permissions' }}
+		</h4>
+	</mat-card-header>
+	<mat-card-content>
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+					<mat-form-field>
+
+						<input
+							#input
+							[formControl]="formControl"
+							(input)="onInputChange()"
+							matInput
+							fullWidth
+							[placeholder]="'Role'"
+							[matAutocomplete]="autocomplete"
+						/>
+						<button nbSuffix matButton ghost
+            style="position: absolute;right: 0; top: 3px;height: 24px;width: 24px;">
+							<mat-icon
+              style="position: absolute; right: 0;top: -1px;height: 24px;width: 24px;left: -1px;"fontIcon="close"
+								pack="eva"
+								(click)="formControl.reset(rolesEnum.ADMIN)"></mat-icon>
+						</button>
+					</mat-form-field>
+					<mat-autocomplete
+						#autocomplete
+						(optionSelected)="onSelectionChange($event)"
+					>
+						<mat-option
+							*ngFor="let role of roles$ | async"
+							[value]="role.name"
+							[class]="role.name === input.value ? 'active' : ''"
+						>
+							{{ role.name }}
+						</mat-option>
+					</mat-autocomplete>
+				</div>
+			</div>
+			<div
+				class="col-6"
+				*ngxPermissionsOnly="['CHANGE_ROLES_PERMISSIONS']"
+			>
+				<ng-container *ngIf="isWantToCreate">
+					<div class="actions create">
+						<button
+            matButton
+							status="success"
+							(click)="createRole()"
+							size="small"
+							[matTooltip]="'BUTTONS.CREATE'"
+						>
+							<mat-icon icon="plus-outline"></mat-icon>
+						</button>
+						{{ input.value}}
+					</div>
+				</ng-container>
+				<ng-container
+					*ngIf="role && role.isSystem === false && !isWantToCreate"
+				>
+					<div class="actions delete">
+						<button
+            matButton
+							status="basic"
+							class="action"
+							(click)="deleteRole()"
+							size="small"
+							matTooltip="'BUTTONS.DELETE'"
+						>
+							<mat-icon
+								status="danger"
+								icon="trash-2-outline"
+							></mat-icon>
+						</button>
+						{{role.name}}
+					</div>
+				</ng-container>
+			</div>
+		</div>
+		<div class="row content" mat-spinner="loading" nbSpinnerSize="large">
+			<div class="col-12 col-xl-6">
+				<mat-card>
+					<mat-card-header>
+
+					</mat-card-header>
+					<mat-card-content class="permission-items-col">
+            <div class="row">
+              <mat-slide-toggle class="col-sm-4"
+                *ngFor="let permission of permissionGroups.GENERAL"
+                [(checked)]="enabledPermissions[permission]"
+                (change)="
+                  permissionChanged(
+                    permission,
+                    $event.checked,
+                    !isDisabledGeneralPermissions()
+                  )"
+                labelPosition="start"
+                status="basic"
+                [disabled]="isDisabledGeneralPermissions()">
+                <div class="custom-permission-view">
+                    <strong>{{permission}}</strong>
+                </div>
+              </mat-slide-toggle>
+            </div>
+					</mat-card-content>
+				</mat-card>
+			</div>
+      <div class="col-12 col-xl-6">
+				<mat-card>
+					<mat-card-header>
+            {{'ADMINISTRATION'}}
+						<mat-icon
+							matTooltip="'Only Admin'"
+							icon="question-mark-circle-outline"
+							size="tiny">
+						</mat-icon>
+					</mat-card-header>
+					<mat-card-content class="permission-items-col">
+						<div class="row">
+              <mat-slide-toggle class="col-sm-4"
+                *ngFor="
+                  let permission of getAdministrationPermissions()
+                "
+                [(checked)]="enabledPermissions[permission]"
+                (change)="
+                  permissionChanged(
+                    permission,
+                    $event.checked,
+                    !isDisabledAdministrationPermissions()
+                  )
+                "
+                labelPosition="start"
+                status="basic"
+                [disabled]="isDisabledAdministrationPermissions()"
+              >
+                <div class="custom-permission-view">
+                  <strong>{{permission}}</strong>
+                </div>
+              </mat-slide-toggle>
+            </div>
+					</mat-card-content>
+				</mat-card>
+			</div>
+		</div>
+	</mat-card-content>
+</mat-card>

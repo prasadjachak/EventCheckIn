@@ -42,13 +42,7 @@ namespace EventCheckin.Api.Models
 
         // My custom fields
         [Required]
-        public string FirstName { get; set; }
-
-        [Required]
-        public string LastName { get; set; }
-
-        [Required]
-        public string Title { get; set; }
+        public string Name { get; set; }
 
         public DateTime BirthDate { get; set; }
 

@@ -13,7 +13,7 @@
     {
       "route": "assignpass",
       "name": "assignpass",
-      "type": "sub",
+      "type": "link",
       "icon": "format_line_spacing",
       "permissions": {
         "except": "GUEST"
@@ -22,7 +22,7 @@
     {
       "route": "checkpass",
       "name": "checkpass",
-      "type": "sub",
+      "type": "link",
       "icon": "format_line_spacing",
       "permissions": {
         "except": "GUEST"
@@ -51,14 +51,29 @@
     },
 
     {
-      "route": "permissions",
-      "name": "permissions",
+      "route": "users",
+      "name": "users",
       "type": "sub",
       "icon": "lock",
       "children": [
         {
-          "route": "users",
-          "name": "users",
+          "route": "guestusers",
+          "name": "guestusers",
+          "type": "link"
+        },
+        {
+          "route": "memberusers",
+          "name": "memberusers",
+          "type": "link"
+        },
+        {
+          "route": "securityusers",
+          "name": "securityusers",
+          "type": "link"
+        },
+        {
+          "route": "adminusers",
+          "name": "adminusers",
           "type": "link"
         },
         {
