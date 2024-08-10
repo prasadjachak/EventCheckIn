@@ -4,6 +4,7 @@ using EventCheckin.DbContext.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventCheckin.DbContext.Migrations
 {
     [DbContext(typeof(Net7BoilerplateContext))]
-    partial class Net7BoilerplateContextModelSnapshot : ModelSnapshot
+    [Migration("20240810111618_migrtion13")]
+    partial class migrtion13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -537,19 +540,19 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<long>("AssignedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("AssignedDateUtc")
+                    b.Property<DateTime>("AssignedDateUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedDateUtc")
+                    b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("DeletedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("DeletedDateUtc")
+                    b.Property<DateTime>("DeletedDateUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EntryOTP")
@@ -582,7 +585,7 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<string>("TicketNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdateDateUtc")
+                    b.Property<DateTime>("UpdateDateUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("UpdatedBy")

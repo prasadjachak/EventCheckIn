@@ -4,6 +4,7 @@ export { ApplicationUser } from './models/application-user';
 export { ConfirmEmailViewModel } from './models/confirm-email-view-model';
 export { CustomApiResponse } from './models/custom-api-response';
 export { ELogType } from './models/e-log-type';
+export { EventMemberModel } from './models/event-member-model';
 export { EventModel } from './models/event-model';
 export { ForgotPasswordViewModel } from './models/forgot-password-view-model';
 export { Logging } from './models/logging';

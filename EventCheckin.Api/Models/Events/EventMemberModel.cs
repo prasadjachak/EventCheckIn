@@ -12,5 +12,9 @@ namespace EventCheckin.Api.Models.Events
         public int ParkNo { get; set; }
         public long? ParentUserId { get; set; }
         public bool IsPublished { get; set; }
+
+        public UserModel User { get; set; }
+
+        
     }
 }

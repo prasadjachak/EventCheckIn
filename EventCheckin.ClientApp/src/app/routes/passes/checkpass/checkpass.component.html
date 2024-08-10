@@ -2,19 +2,71 @@
 
 <div class="row">
   <div class="col-md-12">
-    <button class="pull-right" mat-raised-button color="primary"  >
-      Create
+    <button class="pull-right" mat-raised-button color="primary" (click)="createNewEvent()">
+      Save
     </button>
   </div>
 </div>
-<mtx-grid [data]="source"
-          [columns]="columns"
-          [length]="total"
-          [loading]="isLoading"
-          [pageOnFront]="false"
-          [pageIndex]="query.page"
-          [pageSize]="query.per_page"
-          [pageSizeOptions]="[5,10,20]"
-          (page)="getNextPage($event)">
 
- </mtx-grid>
+<div class="row">
+  <div class="col-md-4 col-lg-4 col-xxxl-4">
+    <div class="row">
+      <div class="col-md-12 col-lg-12 col-xxxl-12">
+        <mat-card>
+          <mat-card-header color="accent">
+            <mat-card-title>
+             Events
+            </mat-card-title>
+          </mat-card-header>
+            <mat-card-content class="card-body" >
+              <mat-selection-list [(ngModel)]="selectedEvents" [multiple]="true" style="margin: 0;padding:0" class="custom-scroll-bar">
+                <ng-container *ngFor="let item of source">
+                <mat-list-option
+                [value]="item.id">
+                  {{item.name}}
+                </mat-list-option>
+              </ng-container>
+            </mat-selection-list>
+            </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-6 col-xxxl-6">
+    <div class="row">
+      <div class="col-md-12 col-lg-12 col-xxxl-12">
+        <mat-card>
+          <mat-card-header color="accent">
+            <mat-card-title>
+             Search Guests
+            </mat-card-title>
+          </mat-card-header>
+            <mat-card-content class="card-body" >
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6" >
+                    <input matInput [(ngModel)]="userSearch" placeholder="Search"/>
+                    <button  mat-button color="primary" class="pull-right" > Clear</button>
+                  </div>
+                </div>
+                <div  *ngFor="let item of users | userFilter:userSearch"
+                  [(ngModel)]="selectedUsers" ngDefaultControl   style="margin: 0;padding:0"
+                  class="row custom-scroll-bar">
+                  <div class="col-md-6" >
+                    {{item.firstName}} - {{item.phoneNumber}}
+                  </div>
+                  <div class="col-md-3" >
+                    <input matInput style="margin-top: 0;width: 100%;" value="1"  placeholder="Guest Count" >
+                  </div>
+                  <div class="col-md-3" >
+                    <input matInput style="margin-top: 0;width: 100%;" value="1"  placeholder="Parking Count" >
+                  </div>
+                </div>
+            </div>
+
+            </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{ data ? "Edit Member" : "Add New Member" }}</h1>
+<div mat-dialog-content>
+  <member-event #memberEventForm [memberEventData]="data"></member-event>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button type="button" color="warn" mat-dialog-close>Cancel</button>
+  <button
+    [disabled]="memberEventForm.memberEventForm.invalid"
+    mat-button
+    type="button"
+    color="primary"
+    (click)="save(memberEventForm.getFormData)"
+  >
+    {{ data ? "Update" : "Create" }}
+  </button>
+</div>

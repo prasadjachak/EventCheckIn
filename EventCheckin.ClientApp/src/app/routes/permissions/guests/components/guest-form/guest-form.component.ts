@@ -80,7 +80,6 @@ export class GuestFormComponent implements OnInit {
           [
           ]
         )
-
       }
       // TODO CAN ACTIVATE FOR BETTER PERFORMANCE
       // { updateOn: 'blur' }

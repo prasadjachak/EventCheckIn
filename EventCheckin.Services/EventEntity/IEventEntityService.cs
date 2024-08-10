@@ -15,11 +15,22 @@ namespace EventCheckin.Services
     public interface IEventEntityService : IService
     {
         Task<List<EventEntity>> GetEventEntitys();
+        
         Task<EventEntity> GetEventEntity(long eventEntityId);
+        
         Task<EventEntity> AddEventEntity(EventEntity dto);
+        
         Task<bool> UpdateEventEntity(EventEntity dto);
 
         Task<bool> DeleteEventDay(EventEntity dto);
+
+        Task<List<EventMember>> GetEventMembers(long eventEntityId);
+
+        Task<EventMember> GetEventMemberByIdAsync(long eventEntityId);
+        
+        Task<EventMember> AddEventMemberAsync(EventMember dto);
+
+        Task<bool> DeleteEventMemberAsync(long eventMemberId);
     }
 
     public class EventEntityService : IEventEntityService
@@ -130,5 +141,83 @@ namespace EventCheckin.Services
                 return false;
             }
         }
+
+        public async Task<List<EventMember>> GetEventMembers(long eventEntityId)
+        {
+            try
+            {
+                var eventEntitys = await _uow.Query<DbContext.Entities.EventMember>().Where(t=>t.EventId)
+                                      .AsNoTracking()
+                                      .ToListAsync();
+                if (!eventEntitys.Any())
+                    return null;
+
+                return eventEntitys.ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public async Task<EventMember> GetEventMemberByIdAsync(long eventEntityId)
+        {
+            try
+            {
+                var eventEntity = _uow.Query<DbContext.Entities.EventMember>(s => s.Id == eventEntityId)
+                               .AsNoTracking()
+                               .FirstOrDefault();
+                if (eventEntity == null)
+                    return null;
+
+                return eventEntity;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public async Task<EventMember> AddEventMemberAsync(EventMember dto)
+        {
+            try
+            {
+                await _uow.Context.Set<DbContext.Entities.EventMember>().AddAsync(dto);
+                await _logsService.SaveLogNoCommit(DateTime.Now, 1, ELogType.EventEntityAdded, $"New eventEntity with url {dto.Id}."); // save log of this action
+                await _uow.CommitAsync();
+
+                return dto;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public async Task<bool> DeleteEventMemberAsync(long eventMemberId)
+        {
+            try
+            {
+                var dbEventDay = _uow.Query<DbContext.Entities.EventMember>(s => s.Id == eventMemberId).FirstOrDefault();
+
+                if (dbEventDay == null)
+                    return false;
+
+                _uow.Context.Set<DbContext.Entities.EventMember>().Remove(dbEventDay);
+                _uow.Commit();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return false;
+            }
+        }
+
+
     }
 }

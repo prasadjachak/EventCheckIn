@@ -23,6 +23,7 @@ export class GuestListComponent implements OnInit {
   columns: MtxGridColumn[] = [
     { header: 'Mobile', field: 'phoneNumber'  },
     { header: 'Name', field: 'name' },
+    { header: 'DeviceId', field: 'deviceId' },
     {
       header: 'Operation',
       field: 'operation',

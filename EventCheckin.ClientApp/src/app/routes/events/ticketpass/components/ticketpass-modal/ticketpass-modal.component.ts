@@ -22,7 +22,7 @@ export class TicketPassModalComponent implements OnInit {
     this.data.ticketNo = formData?.ticketNo;
     this.data.allowedGuest = formData?.allowedGuest;
     this.data.allowedParkingCount = formData?.allowedParkingCount;
-    this.data.eventDayId = formData?.eventDayId;
+    this.data.eventId = formData?.eventId;
     this.data.userId = formData?.userId;
      this.data.id > 0
       ? await this.ticketpassService.apiTicketPassUpdateTicketPassPut$Json$Response({

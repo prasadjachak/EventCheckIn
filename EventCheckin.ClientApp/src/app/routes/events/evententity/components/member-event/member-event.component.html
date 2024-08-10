@@ -1,0 +1,50 @@
+<form [formGroup]="memberEventForm">
+  <ng-container>
+    <mat-form-field appearance="outline" class="d-block mb-2">
+      <mat-label>Members</mat-label>
+      <mat-select formControlName="userId" placeholder="Member">
+        <mat-option *ngFor="let emp of employees" [value]="emp.id">
+          {{ emp.name }}-{{emp.phoneNumber}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="fieldHasError('userId')">
+        {{ getErrorMessage("userId") }}
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+  <mat-form-field appearance="outline" class="d-block mb-4 col-md-6" style="margin-top: 10px;">
+    <mat-label>Total Guest No</mat-label>
+    <input formControlName="guestNo" matInput placeholder="Total Guest No" />
+    <mat-error *ngIf="fieldHasError('guestNo')">
+      {{ getErrorMessage("guestNo") }}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="d-block mb-4 col-md-6" style="margin-top: 10px;">
+    <mat-label>Total Park No</mat-label>
+    <input formControlName="parkNo" matInput placeholder="Total Park No" />
+    <mat-error *ngIf="fieldHasError('parkNo')">
+      {{ getErrorMessage("parkNo") }}
+    </mat-error>
+  </mat-form-field>
+  <button
+  [disabled]="memberEventForm.invalid"
+  mat-button
+  type="button"
+  color="primary"
+  (click)="save()"
+>
+Save
+</button>
+</form>
+
+
+<mtx-grid [data]="source"
+[columns]="columns"
+[length]="total"
+[loading]="isLoading"
+[pageOnFront]="false"
+[pageIndex]="query.page"
+[pageSize]="query.per_page"
+[pageSizeOptions]="[5,10,20]"
+>
+</mtx-grid>

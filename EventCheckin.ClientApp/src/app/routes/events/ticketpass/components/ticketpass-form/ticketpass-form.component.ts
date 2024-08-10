@@ -66,7 +66,7 @@ export class TicketPassFormComponent implements OnInit {
         allowedParkingCount: new FormControl(this.ticketpassData.allowedParkingCount ||  0,
         [
         ]),
-        eventDayId: new FormControl(this.ticketpassData?.eventDayId || 0, [
+        eventId: new FormControl(this.ticketpassData?.eventId || 0, [
         ]),
         userId: new FormControl(this.ticketpassData?.userId || 0, [
         ]),

@@ -634,6 +634,151 @@
         }
       }
     },
+    "/api/Event/geteventmemberlist": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "parameters": [
+          {
+            "name": "eventEntityId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Event/createeventmember": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventMemberModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventMemberModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventMemberModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventMemberModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Event/deleteteamemployee": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventMemberModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventMemberModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventMemberModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventMemberModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Guest/ListUser": {
       "post": {
         "tags": [
@@ -2465,6 +2610,42 @@
         "type": "integer",
         "format": "int32"
       },
+      "EventMemberModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "eventId": {
+            "type": "boolean"
+          },
+          "guestNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parkNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parentUserId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "isPublished": {
+            "type": "boolean"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserModel"
+          }
+        },
+        "additionalProperties": false
+      },
       "EventModel": {
         "required": [
           "id"
@@ -2803,7 +2984,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "eventDayId": {
+          "eventId": {
             "type": "integer",
             "format": "int64"
           },
@@ -2815,17 +2996,56 @@
             "type": "integer",
             "format": "int32"
           },
-          "allowedParkingCount": {
-            "type": "integer",
-            "format": "int32"
-          },
           "userId": {
             "type": "integer",
             "format": "int64"
           },
+          "entryOTP": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryOTPTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "entrySecurity": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "allowedParkingCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parkingOTP": {
+            "type": "string",
+            "nullable": true
+          },
+          "parkingOTPTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "parkSecurity": {
+            "type": "string",
+            "nullable": true
+          },
+          "parkStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
           "assignedBy": {
             "type": "integer",
             "format": "int64"
+          },
+          "assignedDateUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           },
           "passDay": {
             "type": "string",
@@ -2838,10 +3058,6 @@
           "passToTime": {
             "type": "string",
             "nullable": true
-          },
-          "assignedDateUtc": {
-            "type": "string",
-            "format": "date-time"
           },
           "userModel": {
             "$ref": "#/components/schemas/UserModel"

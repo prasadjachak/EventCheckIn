@@ -7,6 +7,8 @@ import { EventModalComponent } from './evententity/components/event-modal/event-
 import { TicketPassListComponent } from './ticketpass/ticketpass-list.component';
 import { TicketPassFormComponent } from './ticketpass/components/ticketpass-form/ticketpass-form.component';
 import { TicketPassModalComponent } from './ticketpass/components/ticketpass-modal/ticketpass-modal.component';
+import { MemberEventComponent } from './evententity/components/member-event/member-event.component';
+import { MemberEventModalComponent } from './evententity/components/member-event-modal/member-event-modal.component';
 
 const COMPONENTS: any[] = [
   EventListComponent,
@@ -14,7 +16,9 @@ const COMPONENTS: any[] = [
   EventModalComponent,
   TicketPassListComponent,
   TicketPassFormComponent,
-  TicketPassModalComponent
+  TicketPassModalComponent,
+  MemberEventComponent,
+  MemberEventModalComponent
 ];
 const COMPONENTS_DYNAMIC: any[] = [];
 

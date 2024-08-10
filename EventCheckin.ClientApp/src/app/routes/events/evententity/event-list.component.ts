@@ -4,12 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 
 // MODELS
 import { EventService } from 'app/api/services';
-import { EventModel } from 'app/api/models';
+import { EventModel, UserModel } from 'app/api/models';
 import { ToastrService } from 'ngx-toastr';
 import { EventModal } from './components';
 import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs';
+import { MemberEventModalComponent } from './components/member-event-modal/member-event-modal.component';
 // COMP
 @Component({
   selector: 'app-event-list',
@@ -48,6 +49,13 @@ export class EventListComponent implements OnInit {
           color: 'warn',
           pop: 'Confirm delete?',
           click: (data: any) => this.delete(data),
+        },
+        {
+          type: 'icon',
+          text: 'add/edit Members',
+          icon: 'add',
+          tooltip: 'Add',
+          click: (data: any) => this.addmember(data),
         },
       ],
     },
@@ -207,4 +215,38 @@ export class EventListComponent implements OnInit {
     this.query.start = 1;
     this.getList();
   }
+
+
+  async addmember(eventModel: EventModel) {
+    try {
+      const { success, memberData } = await this.openMemberModal(eventModel);
+      if (success) {
+        const teamIndex = this.source.findIndex(
+          (usr) => usr?.id === eventModel?.id
+        );
+        if (teamIndex >= 0) {
+          this.source[teamIndex] = memberData;
+          this.getList();
+          this.toastr.info(
+             `Member (${memberData?.name}) has been updated successfully`
+           );
+        }
+      }
+    } catch (error: any) {
+      this.toastr.error(
+         error?.message || 'An error occoured when updating  team'
+       );
+    }
+  }
+
+      // OPEN MODAL WITH SOME CONFIGRATION
+      private async openMemberModal(team?: UserModel) {
+        const teamDialog = this.dialog.open(MemberEventModalComponent, {
+          width: '450px',
+          maxWidth: '100%',
+          data: team,
+          disableClose: true,
+        });
+        return await teamDialog.afterClosed().toPromise();
+      }
 }
