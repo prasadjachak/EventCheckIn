@@ -11,6 +11,8 @@ using AutoMapper;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using EventCheckin.DbContext.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace EventCheckin.Api.Controllers
 {
@@ -21,13 +23,16 @@ namespace EventCheckin.Api.Controllers
     {
         private readonly ITicketPassService _ticketPassService;
         private readonly IEventEntityService _eventService;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
         public TicketPassController(ITicketPassService eventEntityService,
             IEventEntityService eventService,
+            UserManager<ApplicationUser> userManager,
             IMapper mapper)
         {
             _ticketPassService = eventEntityService;
             _eventService = eventService;
+            _userManager = userManager;
             _mapper = mapper;
         }
 
@@ -84,7 +89,6 @@ namespace EventCheckin.Api.Controllers
             return addStatus ? new CustomApiResponse(dto, 200,true) :  new CustomApiResponse(500, false);
         }
 
-
         [HttpGet("GetPasses")]
         public async Task<CustomApiResponse> GetPasses()
         {
@@ -127,6 +131,50 @@ namespace EventCheckin.Api.Controllers
                 apiResponse.StatusCode = 400;
                 return apiResponse;
             }
+        }
+
+        [HttpPost("GetTicketOtp")]
+        public async Task<CustomApiResponse> GetTicketOtp([FromBody] TicketPassModel model)
+        {
+            var apiResponse = new CustomApiResponse();
+            ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString()).ConfigureAwait(false);
+            if (user == null)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "Invalid credentials.";
+                return apiResponse;
+            }
+
+            var eventEntity = await _eventService.GetEventEntity(model.UserId);
+            if (eventEntity == null)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "Event not found.";
+                return apiResponse;
+            }
+
+            var ticket = await _ticketPassService.GetTicketPass(model.Id);
+            ticket.EntryOTP = GenerateRandomNo().ToString();
+            ticket.EntryOTPTime = DateTime.Now.AddMinutes(15);
+
+            await _ticketPassService.UpdateTicketPass(ticket);
+
+            var ticketModel = _mapper.Map<TicketPassModel>(ticket);
+            apiResponse.Result = ticketModel;
+            apiResponse.StatusCode = 200;
+            apiResponse.IsSuccess = true;
+            return apiResponse;
+        }
+
+
+
+        [NonAction]
+        public int GenerateRandomNo()
+        {
+            int _min = 1000;
+            int _max = 9999;
+            Random _rdm = new Random();
+            return _rdm.Next(_min, _max);
         }
     }
 }

@@ -5,6 +5,7 @@
     <button class="pull-right" mat-raised-button color="primary" (click)="createNewEvent()">
       Save
     </button>
+
   </div>
 </div>
 
@@ -53,7 +54,7 @@
                   [(ngModel)]="selectedUsers" ngDefaultControl   style="margin: 0;padding:0"
                   class="row custom-scroll-bar">
                   <div class="col-md-6" >
-                    {{item.firstName}} - {{item.phoneNumber}}
+                    {{item.name}} - {{item.phoneNumber}}
                   </div>
                   <div class="col-md-3" >
                     <input matInput style="margin-top: 0;width: 100%;" value="1"  placeholder="Guest Count" >

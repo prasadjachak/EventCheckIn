@@ -12,14 +12,14 @@
       </mat-error>
     </mat-form-field>
   </ng-container>
-  <mat-form-field appearance="outline" class="d-block mb-4 col-md-6" style="margin-top: 10px;">
+  <mat-form-field *ngIf="roleName !== 'MEMBERS'" appearance="outline" class="d-block mb-4 col-md-6" style="margin-top: 10px;">
     <mat-label>Total Guest No</mat-label>
     <input formControlName="guestNo" matInput placeholder="Total Guest No" />
     <mat-error *ngIf="fieldHasError('guestNo')">
       {{ getErrorMessage("guestNo") }}
     </mat-error>
   </mat-form-field>
-  <mat-form-field appearance="outline" class="d-block mb-4 col-md-6" style="margin-top: 10px;">
+  <mat-form-field appearance="outline" *ngIf="roleName !== 'MEMBERS'" class="d-block mb-4 col-md-6" style="margin-top: 10px;">
     <mat-label>Total Park No</mat-label>
     <input formControlName="parkNo" matInput placeholder="Total Park No" />
     <mat-error *ngIf="fieldHasError('parkNo')">

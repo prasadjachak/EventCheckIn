@@ -44,6 +44,15 @@
             </div>
           </div>
         </div>
+        <button class="m-y-16" mat-raised-button color="primary"
+      [loading]="isSubmitting"
+    (click)="getOtp(item)">{{'Get OTP' | translate}}</button>
+
+    <p *ngIf="item.entryOTP != null" class="ticket__fine-print">{{item.entryOTP}}</p>
+    <p *ngIf="item.entryOTP != null" class="ticket__fine-print">Valid Till : {{item.entryOTPTime
+        }}</p>
     </div>
+
+
   </div>
 

@@ -17,9 +17,7 @@ import {
 
 } from 'app/api/models';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-
-} from 'app/api/services';
+import { EventService } from 'app/api/services';
 import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js/auto';
 import { BaseChartDirective } from 'ng2-charts';
 import { DatePipe } from '@angular/common';
@@ -45,6 +43,8 @@ import { ApexChartOptions, BarApexChartOptions, ColumnApexChartOptions, GHGLineA
 import { tr } from 'date-fns/locale';
 import { TicketPassService } from 'app/api/services';
 import { TicketPassModel } from 'app/api/models';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -55,7 +55,7 @@ import { TicketPassModel } from 'app/api/models';
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
-
+  isSubmitting = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -63,6 +63,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private ngZone: NgZone,
     private settings: SettingsService,
     private ticketPassService: TicketPassService,
+    private eventService: EventService,
+    private toast: ToastrService
   ) {}
 
   ngOnInit() {
@@ -110,6 +112,21 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+  getOtp(item) {
+    this.isSubmitting = true;
+    this.ticketPassService
+        .apiTicketPassGetTicketOtpPost$Json$Response({body:item})
+        .subscribe(result =>{
+          //this.oeeEventModel = result.body.result!;
+          console.log(result);
+          const loginResponse = result.body.result!;
+          item= result.body.result!;
 
+          this.toast.error(result.body.message);
+          console.log(loginResponse);
+          this.isSubmitting = false;
+          // this._snackBar.error('Updated Successfully.');
+        });
+  }
 
 }

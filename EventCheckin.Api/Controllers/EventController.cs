@@ -22,14 +22,17 @@ namespace EventCheckin.Api.Controllers
     public class EventController : BaseController
     {
         private readonly IEventEntityService _eventEntityService;
+        private readonly ITicketPassService _ticketPassService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
         public EventController(IEventEntityService eventEntityService,
             UserManager<ApplicationUser> userManager,
+            ITicketPassService ticketPassService,
             IMapper mapper)
         {
             _eventEntityService = eventEntityService;
             _userManager = userManager;
+            _ticketPassService = ticketPassService;
             _mapper = mapper;
         }
 
@@ -153,5 +156,8 @@ namespace EventCheckin.Api.Controllers
 
             return new CustomApiResponse(model);
         }
+
+       
+
     }
 }

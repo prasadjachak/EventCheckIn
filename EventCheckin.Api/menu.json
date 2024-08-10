@@ -105,16 +105,6 @@
           "type": "link"
         },
         {
-          "route": "messagetemplate",
-          "name": "messagetemplate",
-          "type": "link"
-        },
-        {
-          "route": "smtp",
-          "name": "smtp",
-          "type": "link"
-        },
-        {
           "route": "activitylogs",
           "name": "activitylogs",
           "type": "link"
@@ -125,50 +115,6 @@
           "type": "link"
         }
       ]
-    },
-    {
-      "route": "profile",
-      "name": "profile",
-      "type": "sub",
-      "icon": "person",
-      "children": [
-        {
-          "route": "overview",
-          "name": "overview",
-          "type": "link"
-        },
-        {
-          "route": "settings",
-          "name": "settings",
-          "type": "link"
-        }
-      ]
-    },
-    {
-      "route": "/",
-      "name": "sessions",
-      "type": "sub",
-      "icon": "question_answer",
-      "children": [
-        {
-          "route": "403",
-          "name": "403",
-          "type": "link"
-        },
-        {
-          "route": "404",
-          "name": "404",
-          "type": "link"
-        },
-        {
-          "route": "500",
-          "name": "500",
-          "type": "link"
-        }
-      ],
-      "permissions": {
-        "only": "ADMIN"
-      }
     }
   ]
 }

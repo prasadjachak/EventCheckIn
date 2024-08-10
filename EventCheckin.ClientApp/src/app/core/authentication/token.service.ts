@@ -48,6 +48,7 @@ export class TokenService implements OnDestroy {
     return this;
   }
 
+
   clear(): void {
     console.log('t');
     this.save();
@@ -70,6 +71,7 @@ export class TokenService implements OnDestroy {
   }
 
   private save(token?: Token): void {
+    console.log(token);
     this._token = undefined;
 
     if (!token) {
@@ -81,6 +83,7 @@ export class TokenService implements OnDestroy {
       });
       console.log(token);
       this.store.set(this.key, filterObject(value));
+      this.store.set('rolename', token.rolename);
     }
 
     this.change$.next(this.token);

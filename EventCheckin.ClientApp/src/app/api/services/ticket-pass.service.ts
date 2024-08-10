@@ -21,6 +21,10 @@ import { apiTicketPassGetPassesGet$Json } from '../fn/ticket-pass/api-ticket-pas
 import { ApiTicketPassGetPassesGet$Json$Params } from '../fn/ticket-pass/api-ticket-pass-get-passes-get-json';
 import { apiTicketPassGetPassesGet$Plain } from '../fn/ticket-pass/api-ticket-pass-get-passes-get-plain';
 import { ApiTicketPassGetPassesGet$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-get-passes-get-plain';
+import { apiTicketPassGetTicketOtpPost$Json } from '../fn/ticket-pass/api-ticket-pass-get-ticket-otp-post-json';
+import { ApiTicketPassGetTicketOtpPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-get-ticket-otp-post-json';
+import { apiTicketPassGetTicketOtpPost$Plain } from '../fn/ticket-pass/api-ticket-pass-get-ticket-otp-post-plain';
+import { ApiTicketPassGetTicketOtpPost$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-get-ticket-otp-post-plain';
 import { apiTicketPassGetTicketPassGet$Json } from '../fn/ticket-pass/api-ticket-pass-get-ticket-pass-get-json';
 import { ApiTicketPassGetTicketPassGet$Json$Params } from '../fn/ticket-pass/api-ticket-pass-get-ticket-pass-get-json';
 import { apiTicketPassGetTicketPassGet$Plain } from '../fn/ticket-pass/api-ticket-pass-get-ticket-pass-get-plain';
@@ -319,6 +323,53 @@ export class TicketPassService extends BaseService {
    */
   apiTicketPassGetPassesGet$Json(params?: ApiTicketPassGetPassesGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
     return this.apiTicketPassGetPassesGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiTicketPassGetTicketOtpPost()` */
+  static readonly ApiTicketPassGetTicketOtpPostPath = '/api/TicketPass/GetTicketOtp';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassGetTicketOtpPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassGetTicketOtpPost$Plain$Response(params?: ApiTicketPassGetTicketOtpPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassGetTicketOtpPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassGetTicketOtpPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassGetTicketOtpPost$Plain(params?: ApiTicketPassGetTicketOtpPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassGetTicketOtpPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassGetTicketOtpPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassGetTicketOtpPost$Json$Response(params?: ApiTicketPassGetTicketOtpPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassGetTicketOtpPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassGetTicketOtpPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassGetTicketOtpPost$Json(params?: ApiTicketPassGetTicketOtpPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassGetTicketOtpPost$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

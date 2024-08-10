@@ -294,7 +294,9 @@ namespace EventCheckin.Api.Controllers.Identity
                 }
             }
 
-            foreach (var roleId in roleIds)
+            if(roleIds.Count > 0)
+            {
+                foreach (var roleId in roleIds)
             {
                 var features = await _permissionService.GetAllPermissions(roleId);
                 var index = 0;
@@ -326,7 +328,13 @@ namespace EventCheckin.Api.Controllers.Identity
                     }
                 }
             }
-            return Ok(JsonConvert.SerializeObject(menuResponseModel, settings));
+                return Ok(JsonConvert.SerializeObject(menuResponseModel, settings));
+            }
+            else
+            {
+                return Ok();
+            }
+            
         }
 
         [NonAction]

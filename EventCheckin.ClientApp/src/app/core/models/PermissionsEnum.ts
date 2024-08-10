@@ -17,7 +17,7 @@ export enum PermissionsEnum {
   assignpass = 'Assign Pass',
   events = 'Events',
   passes = 'Event Pass',
-  evententity = 'Event Entity Configuration',
+  evententity = 'Event Configuration',
   permissions = 'Permissions',
 	users = 'Users',
   roles = 'Roles',

@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { MtxGridColumn } from '@ng-matero/extensions/grid';
+import { LocalStorageService } from '@shared';
 import { FormValidationService } from '@shared/services/form/form-validation.service';
 import { EventMemberModel, EventModel, UserModel, UserSearchModel } from 'app/api/models';
 import { MemberService, EventService } from 'app/api/services';
@@ -78,10 +79,13 @@ export class MemberEventComponent implements OnInit {
     private formValidationService: FormValidationService,
     public eventService: EventService,
     public memberService: MemberService,
+    private store: LocalStorageService,
     private toastr: ToastrService
   ) {
     // INIT USER FORM
   }
+
+  roleName = this.store.get('rolename');
 
   ngOnInit(): void {
     this.memberEventForm = this.initmemberEventForm;

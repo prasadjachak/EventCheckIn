@@ -17,6 +17,7 @@ using EventCheckin.Utility.Helpers;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography.Xml;
+using Microsoft.OpenApi.Extensions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -159,8 +160,21 @@ namespace EventCheckin.Api.Controllers.Identity
                     tokenModel.TFAEnabled = false;
                     tokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
+                    var roles = await _userManager.GetRolesAsync(user);
+                    string roleName = "GUEST";
+
+                    if (roles.ToList().Where(t => t == "SECURITY").Any())
+                        roleName = "SECURITY";
+
+                    if (roles.ToList().Where(t => t == "MEMBERS").Any())
+                        roleName = "MEMBERS";
+
+                    if (roles.ToList().Where(t => t == "ADMIN").Any())
+                        roleName = "ADMIN";
+
                     var authResponse = new
                     {
+                        rolename = roleName,
                         refresh_token = tokenModel.Token,
                         access_token = tokenModel.Token,
                         expires_in = DateTime.Now.AddDays(1),
@@ -256,12 +270,25 @@ namespace EventCheckin.Api.Controllers.Identity
           
             try
             {
+                var roles = await _userManager.GetRolesAsync(user);
+                string roleName = "GUEST";
+
+                if (roles.ToList().Where(t => t == "SECURITY").Any())
+                    roleName = "SECURITY";
+
+                if (roles.ToList().Where(t => t == "MEMBERS").Any())
+                    roleName = "MEMBERS";
+
+                if (roles.ToList().Where(t => t == "ADMIN").Any())
+                    roleName = "ADMIN";
+
                 JwtSecurityToken jwtSecurityToken = await CreateJwtToken(user, model.RememberMe).ConfigureAwait(false);
                 tokenModel.TFAEnabled = false;
                 tokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
                 var authResponse = new
                 {
+                    rolename = roleName,
                     refresh_token = tokenModel.Token,
                     access_token = tokenModel.Token,
                     expires_in = DateTime.Now.AddDays(100),
