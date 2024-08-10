@@ -22,9 +22,10 @@ export enum PermissionsEnum {
 	users = 'Users',
   roles = 'Roles',
 	rolepermissions = 'Role Permissions',
+  adminusers = 'Admin Users',
   securityusers = 'Security Users',
-  guests = 'Guest Users',
-  members = 'Member Users',
+  guestusers = 'Guest Users',
+  memberusers = 'Member Users',
   settings = 'Settings',
   smtp = 'SMTP',
   logs = 'Logs',
@@ -43,24 +44,18 @@ export const PermissionGroups = {
     PermissionsEnum.evententity,
     PermissionsEnum.events,
     PermissionsEnum.passes,
-    PermissionsEnum.permissions,
     PermissionsEnum.users,
+    PermissionsEnum.adminusers,
+    PermissionsEnum.memberusers,
+    PermissionsEnum.securityusers,
+    PermissionsEnum.guestusers,
 		PermissionsEnum.roles,
     PermissionsEnum.rolepermissions,
-    PermissionsEnum.settings,
-    PermissionsEnum.smtp,
-    PermissionsEnum.logs,
-    PermissionsEnum.activitylogs,
-    PermissionsEnum.systemlogs,
-    PermissionsEnum.import,
-    PermissionsEnum.export,
 	],
 
 	//Readonly permissions, are only enabled for Super Admin/Admin role
 	ADMINISTRATION: [
-		PermissionsEnum.users,
     PermissionsEnum.roles,
 		PermissionsEnum.rolepermissions,
-    PermissionsEnum.systemlogs
 	]
 };

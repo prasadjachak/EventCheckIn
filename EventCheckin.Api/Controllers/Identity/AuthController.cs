@@ -174,6 +174,7 @@ namespace EventCheckin.Api.Controllers.Identity
 
                     var authResponse = new
                     {
+                        ischild = user.ParentId > 0,
                         rolename = roleName,
                         refresh_token = tokenModel.Token,
                         access_token = tokenModel.Token,
@@ -288,6 +289,7 @@ namespace EventCheckin.Api.Controllers.Identity
 
                 var authResponse = new
                 {
+                    ischild = user.ParentId > 0,
                     rolename = roleName,
                     refresh_token = tokenModel.Token,
                     access_token = tokenModel.Token,

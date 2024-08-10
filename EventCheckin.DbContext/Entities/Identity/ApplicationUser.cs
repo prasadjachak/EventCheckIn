@@ -28,5 +28,7 @@ namespace EventCheckin.DbContext.Entities.Identity
 
         public string Remark { get; set; }
 
+        public long ParentId { get; set; }
+
     }
 }

@@ -13,6 +13,7 @@ export interface UserModel {
   loggings?: Array<Logging> | null;
   name?: string | null;
   otp?: string | null;
+  parentId?: number;
   password?: string | null;
   phoneNumber?: string | null;
   roleId?: string | null;

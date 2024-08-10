@@ -25,10 +25,6 @@ import { apiMemberListUserPost$Json } from '../fn/member/api-member-list-user-po
 import { ApiMemberListUserPost$Json$Params } from '../fn/member/api-member-list-user-post-json';
 import { apiMemberListUserPost$Plain } from '../fn/member/api-member-list-user-post-plain';
 import { ApiMemberListUserPost$Plain$Params } from '../fn/member/api-member-list-user-post-plain';
-import { apiMemberMymenuGet$Json } from '../fn/member/api-member-mymenu-get-json';
-import { ApiMemberMymenuGet$Json$Params } from '../fn/member/api-member-mymenu-get-json';
-import { apiMemberMymenuGet$Plain } from '../fn/member/api-member-mymenu-get-plain';
-import { ApiMemberMymenuGet$Plain$Params } from '../fn/member/api-member-mymenu-get-plain';
 import { apiMemberUpdateUserPut$Json } from '../fn/member/api-member-update-user-put-json';
 import { ApiMemberUpdateUserPut$Json$Params } from '../fn/member/api-member-update-user-put-json';
 import { apiMemberUpdateUserPut$Plain } from '../fn/member/api-member-update-user-put-plain';
@@ -272,53 +268,6 @@ export class MemberService extends BaseService {
    */
   apiMemberDeleteUserDelete$Json(params?: ApiMemberDeleteUserDelete$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
     return this.apiMemberDeleteUserDelete$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
-    );
-  }
-
-  /** Path part for operation `apiMemberMymenuGet()` */
-  static readonly ApiMemberMymenuGetPath = '/api/Member/mymenu';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiMemberMymenuGet$Plain()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiMemberMymenuGet$Plain$Response(params?: ApiMemberMymenuGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiMemberMymenuGet$Plain(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiMemberMymenuGet$Plain$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiMemberMymenuGet$Plain(params?: ApiMemberMymenuGet$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiMemberMymenuGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiMemberMymenuGet$Json()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiMemberMymenuGet$Json$Response(params?: ApiMemberMymenuGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiMemberMymenuGet$Json(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiMemberMymenuGet$Json$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiMemberMymenuGet$Json(params?: ApiMemberMymenuGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiMemberMymenuGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

@@ -84,6 +84,7 @@ export class TokenService implements OnDestroy {
       console.log(token);
       this.store.set(this.key, filterObject(value));
       this.store.set('rolename', token.rolename);
+      this.store.set('ischild', token.ischild);
     }
 
     this.change$.next(this.token);

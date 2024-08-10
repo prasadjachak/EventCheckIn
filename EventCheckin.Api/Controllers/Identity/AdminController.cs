@@ -30,7 +30,7 @@ namespace EventCheckin.Api.Controllers.Identity
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class MemberController : BaseController
+    public class AdminController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
@@ -41,7 +41,7 @@ namespace EventCheckin.Api.Controllers.Identity
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
-        public MemberController(
+        public AdminController(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
             IPermissionService permissionService,
@@ -67,7 +67,11 @@ namespace EventCheckin.Api.Controllers.Identity
         [Route("ListUser")]
         public async Task<ActionResult<CustomApiResponse>> ListUser(UserSearchModel model)
         {
-            var users = await _userService.GetUsers("MEMBERS");
+            var users = await _userService.GetUsers("ADMIN");
+
+            var users1 = await _userService.GetUsers("SUPERADMIN");
+            users.AddRange(users1);
+
             var userModels = new List<UserModel>();
             foreach (var user1 in users)
             {
@@ -126,15 +130,6 @@ namespace EventCheckin.Api.Controllers.Identity
                 return new CustomApiResponse(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage), 200, false);
 
             ApplicationUser user = await _userManager.FindByNameAsync(model.PhoneNumber);
-
-            ApplicationUser CurrentUser = await _userManager.FindByIdAsync(CurrentUserId.ToString());
-
-            var roles =await _userManager.GetRolesAsync(CurrentUser);
-
-            long parentId = 0;
-
-            if (roles.Where(t => t == "MEMBERS").Any())
-                parentId = CurrentUser.Id;
             try
             {
                 if (user == null)
@@ -149,14 +144,13 @@ namespace EventCheckin.Api.Controllers.Identity
                         EmailConfirmed = true,
                         LockoutEnabled = false,
                         TwoFactorEnabled = false,
-                        ParentId = parentId
                     };
                     model.Password = "Admin@32149870";
                     model.ConfirmPassword = "Admin@32149870";
                     IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
                 }
                 user.Name = model.Name;
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
+                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "ADMIN" });
                 user.LockoutEnabled = false;
                 IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
                 //if (result2.Succeeded)
@@ -173,7 +167,7 @@ namespace EventCheckin.Api.Controllers.Identity
             }
             catch (Exception ex)
             {
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
+                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "ADMIN" });
             }
 
             return new CustomApiResponse("Erro", 200, false);
@@ -195,7 +189,7 @@ namespace EventCheckin.Api.Controllers.Identity
             user.UserName = model.PhoneNumber;
             user.Name = model.Name;
 
-            await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
+            await _userManager.AddToRolesAsync(user, new List<string>() { "ADMIN" });
 
             IdentityResult result = await _userManager.UpdateAsync(user).ConfigureAwait(false);
             if (result.Succeeded)

@@ -47,5 +47,7 @@ namespace EventCheckin.Api.Models
 
         public string ConfirmPassword { get; set; }
 
+        public long ParentId { get; set; }
+
     }
 }

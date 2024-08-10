@@ -7,13 +7,16 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
+import { UserModel } from '../../models/user-model';
 
-export interface ApiMemberMymenuGet$Json$Params {
+export interface ApiAdminAddMemberUserPost$Json$Params {
+      body?: UserModel
 }
 
-export function apiMemberMymenuGet$Json(http: HttpClient, rootUrl: string, params?: ApiMemberMymenuGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiMemberMymenuGet$Json.PATH, 'get');
+export function apiAdminAddMemberUserPost$Json(http: HttpClient, rootUrl: string, params?: ApiAdminAddMemberUserPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiAdminAddMemberUserPost$Json.PATH, 'post');
   if (params) {
+    rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
@@ -26,4 +29,4 @@ export function apiMemberMymenuGet$Json(http: HttpClient, rootUrl: string, param
   );
 }
 
-apiMemberMymenuGet$Json.PATH = '/api/Member/mymenu';
+apiAdminAddMemberUserPost$Json.PATH = '/api/Admin/AddMemberUser';

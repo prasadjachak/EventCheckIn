@@ -25,10 +25,6 @@ import { apiSecurityUserListUserPost$Json } from '../fn/security-user/api-securi
 import { ApiSecurityUserListUserPost$Json$Params } from '../fn/security-user/api-security-user-list-user-post-json';
 import { apiSecurityUserListUserPost$Plain } from '../fn/security-user/api-security-user-list-user-post-plain';
 import { ApiSecurityUserListUserPost$Plain$Params } from '../fn/security-user/api-security-user-list-user-post-plain';
-import { apiSecurityUserMymenuGet$Json } from '../fn/security-user/api-security-user-mymenu-get-json';
-import { ApiSecurityUserMymenuGet$Json$Params } from '../fn/security-user/api-security-user-mymenu-get-json';
-import { apiSecurityUserMymenuGet$Plain } from '../fn/security-user/api-security-user-mymenu-get-plain';
-import { ApiSecurityUserMymenuGet$Plain$Params } from '../fn/security-user/api-security-user-mymenu-get-plain';
 import { apiSecurityUserUpdateUserPut$Json } from '../fn/security-user/api-security-user-update-user-put-json';
 import { ApiSecurityUserUpdateUserPut$Json$Params } from '../fn/security-user/api-security-user-update-user-put-json';
 import { apiSecurityUserUpdateUserPut$Plain } from '../fn/security-user/api-security-user-update-user-put-plain';
@@ -272,53 +268,6 @@ export class SecurityUserService extends BaseService {
    */
   apiSecurityUserDeleteUserDelete$Json(params?: ApiSecurityUserDeleteUserDelete$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
     return this.apiSecurityUserDeleteUserDelete$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
-    );
-  }
-
-  /** Path part for operation `apiSecurityUserMymenuGet()` */
-  static readonly ApiSecurityUserMymenuGetPath = '/api/SecurityUser/mymenu';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiSecurityUserMymenuGet$Plain()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiSecurityUserMymenuGet$Plain$Response(params?: ApiSecurityUserMymenuGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiSecurityUserMymenuGet$Plain(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiSecurityUserMymenuGet$Plain$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiSecurityUserMymenuGet$Plain(params?: ApiSecurityUserMymenuGet$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiSecurityUserMymenuGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiSecurityUserMymenuGet$Json()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiSecurityUserMymenuGet$Json$Response(params?: ApiSecurityUserMymenuGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiSecurityUserMymenuGet$Json(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiSecurityUserMymenuGet$Json$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiSecurityUserMymenuGet$Json(params?: ApiSecurityUserMymenuGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiSecurityUserMymenuGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

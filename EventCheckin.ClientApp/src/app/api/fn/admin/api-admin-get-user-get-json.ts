@@ -8,16 +8,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
 
-export interface ApiGuestMymenuGet$Plain$Params {
+export interface ApiAdminGetUserGet$Json$Params {
+  id?: number;
 }
 
-export function apiGuestMymenuGet$Plain(http: HttpClient, rootUrl: string, params?: ApiGuestMymenuGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiGuestMymenuGet$Plain.PATH, 'get');
+export function apiAdminGetUserGet$Json(http: HttpClient, rootUrl: string, params?: ApiAdminGetUserGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiAdminGetUserGet$Json.PATH, 'get');
   if (params) {
+    rb.query('id', params.id, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -26,4 +28,4 @@ export function apiGuestMymenuGet$Plain(http: HttpClient, rootUrl: string, param
   );
 }
 
-apiGuestMymenuGet$Plain.PATH = '/api/Guest/mymenu';
+apiAdminGetUserGet$Json.PATH = '/api/Admin/GetUser';

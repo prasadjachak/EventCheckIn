@@ -41,7 +41,6 @@ export class MemberFormComponent implements OnInit {
   ngOnInit(): void {
     this.memberForm = this.initmemberForm;
     console.log(this.userData);
-    this.memberForm.get('roleIds').patchValue(this.userData.roleIds, { onlySelf: true });
   }
 
   // GET USER FORM DATA
@@ -76,12 +75,7 @@ export class MemberFormComponent implements OnInit {
           [
             Validators.required
           ]
-        ),
-        deviceId: new FormControl(this.userData?.deviceId || '',
-          [
-          ]
         )
-
       }
       // TODO CAN ACTIVATE FOR BETTER PERFORMANCE
       // { updateOn: 'blur' }

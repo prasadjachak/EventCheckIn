@@ -167,6 +167,40 @@ namespace EventCheckin.Api.Controllers
         }
 
 
+        [HttpPost("GetParkingTicketOtp")]
+        public async Task<CustomApiResponse> GetParkingTicketOtp([FromBody] TicketPassModel model)
+        {
+            var apiResponse = new CustomApiResponse();
+            ApplicationUser user = await _userManager.FindByIdAsync(model.UserId.ToString()).ConfigureAwait(false);
+            if (user == null)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "Invalid credentials.";
+                return apiResponse;
+            }
+
+            var eventEntity = await _eventService.GetEventEntity(model.UserId);
+            if (eventEntity == null)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "Event not found.";
+                return apiResponse;
+            }
+
+            var ticket = await _ticketPassService.GetTicketPass(model.Id);
+            ticket.ParkingOTP = GenerateRandomNo().ToString();
+            ticket.ParkingOTPTime = DateTime.Now.AddMinutes(15);
+
+            await _ticketPassService.UpdateTicketPass(ticket);
+
+            var ticketModel = _mapper.Map<TicketPassModel>(ticket);
+            apiResponse.Result = ticketModel;
+            apiResponse.StatusCode = 200;
+            apiResponse.IsSuccess = true;
+            return apiResponse;
+        }
+
+
 
         [NonAction]
         public int GenerateRandomNo()

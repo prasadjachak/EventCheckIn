@@ -21,9 +21,8 @@ export class LoginComponent {
     password: ['', [Validators.required]],
   });
 
-
-
   otp:string;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -55,7 +54,10 @@ export class LoginComponent {
           const loginResponse = result.body.result!;
           this.otp = result.body.result!;
 
-          this.toast.error(result.body.result!);
+          if(result.body.isSuccess)
+            this.toast.error(result.body.result!);
+          else
+            this.toast.error(result.body.message!);
           console.log(loginResponse);
           this.isSubmitting = false;
           // this._snackBar.error('Updated Successfully.');

@@ -4,6 +4,7 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { AdminService } from './services/admin.service';
 import { AuthService } from './services/auth.service';
 import { EventService } from './services/event.service';
 import { GuestService } from './services/guest.service';
@@ -23,6 +24,7 @@ import { UserRolesService } from './services/user-roles.service';
   exports: [],
   declarations: [],
   providers: [
+    AdminService,
     AuthService,
     EventService,
     GuestService,

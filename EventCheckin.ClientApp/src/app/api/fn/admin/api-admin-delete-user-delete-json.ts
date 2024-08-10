@@ -8,16 +8,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
 
-export interface ApiSecurityUserMymenuGet$Plain$Params {
+export interface ApiAdminDeleteUserDelete$Json$Params {
+  id?: number;
 }
 
-export function apiSecurityUserMymenuGet$Plain(http: HttpClient, rootUrl: string, params?: ApiSecurityUserMymenuGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiSecurityUserMymenuGet$Plain.PATH, 'get');
+export function apiAdminDeleteUserDelete$Json(http: HttpClient, rootUrl: string, params?: ApiAdminDeleteUserDelete$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiAdminDeleteUserDelete$Json.PATH, 'delete');
   if (params) {
+    rb.query('id', params.id, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -26,4 +28,4 @@ export function apiSecurityUserMymenuGet$Plain(http: HttpClient, rootUrl: string
   );
 }
 
-apiSecurityUserMymenuGet$Plain.PATH = '/api/SecurityUser/mymenu';
+apiAdminDeleteUserDelete$Json.PATH = '/api/Admin/DeleteUser';

@@ -18,6 +18,7 @@ export interface ApplicationUser {
   normalizedUserName?: string | null;
   otp?: string | null;
   otpTimeStamp?: string | null;
+  parentId?: number;
   passwordHash?: string | null;
   phoneNumber?: string | null;
   phoneNumberConfirmed?: boolean;

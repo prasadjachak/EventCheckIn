@@ -7,17 +7,20 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
+import { UserModel } from '../../models/user-model';
 
-export interface ApiSecurityUserMymenuGet$Json$Params {
+export interface ApiAdminUpdateUserPut$Plain$Params {
+      body?: UserModel
 }
 
-export function apiSecurityUserMymenuGet$Json(http: HttpClient, rootUrl: string, params?: ApiSecurityUserMymenuGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiSecurityUserMymenuGet$Json.PATH, 'get');
+export function apiAdminUpdateUserPut$Plain(http: HttpClient, rootUrl: string, params?: ApiAdminUpdateUserPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiAdminUpdateUserPut$Plain.PATH, 'put');
   if (params) {
+    rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -26,4 +29,4 @@ export function apiSecurityUserMymenuGet$Json(http: HttpClient, rootUrl: string,
   );
 }
 
-apiSecurityUserMymenuGet$Json.PATH = '/api/SecurityUser/mymenu';
+apiAdminUpdateUserPut$Plain.PATH = '/api/Admin/UpdateUser';

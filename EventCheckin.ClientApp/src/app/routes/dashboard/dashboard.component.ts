@@ -129,4 +129,21 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         });
   }
 
+  getParkingOtp(item) {
+    this.isSubmitting = true;
+    this.ticketPassService
+        .apiTicketPassGetParkingTicketOtpPost$Json$Response({body:item})
+        .subscribe(result =>{
+          //this.oeeEventModel = result.body.result!;
+          console.log(result);
+          const loginResponse = result.body.result!;
+          item= result.body.result!;
+
+          this.toast.error(result.body.message);
+          console.log(loginResponse);
+          this.isSubmitting = false;
+          // this._snackBar.error('Updated Successfully.');
+        });
+  }
+
 }

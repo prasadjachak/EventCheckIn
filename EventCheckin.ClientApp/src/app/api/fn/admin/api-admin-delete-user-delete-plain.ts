@@ -8,12 +8,14 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
 
-export interface ApiMemberMymenuGet$Plain$Params {
+export interface ApiAdminDeleteUserDelete$Plain$Params {
+  id?: number;
 }
 
-export function apiMemberMymenuGet$Plain(http: HttpClient, rootUrl: string, params?: ApiMemberMymenuGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiMemberMymenuGet$Plain.PATH, 'get');
+export function apiAdminDeleteUserDelete$Plain(http: HttpClient, rootUrl: string, params?: ApiAdminDeleteUserDelete$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiAdminDeleteUserDelete$Plain.PATH, 'delete');
   if (params) {
+    rb.query('id', params.id, {});
   }
 
   return http.request(
@@ -26,4 +28,4 @@ export function apiMemberMymenuGet$Plain(http: HttpClient, rootUrl: string, para
   );
 }
 
-apiMemberMymenuGet$Plain.PATH = '/api/Member/mymenu';
+apiAdminDeleteUserDelete$Plain.PATH = '/api/Admin/DeleteUser';

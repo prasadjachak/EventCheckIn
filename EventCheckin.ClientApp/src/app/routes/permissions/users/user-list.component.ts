@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 
 // MODELS
-import { RolesService, UserService } from 'app/api/services';
+import { AdminService, RolesService, UserService } from 'app/api/services';
 import { RoleModel, UserModel, UserSearchModel } from 'app/api/models';
 import { ToastrService } from 'ngx-toastr';
 import { UserModal } from './components';
@@ -71,6 +71,7 @@ export class UserListComponent implements OnInit {
   }
 
   constructor(
+    private adminService: AdminService,
     private userService: UserService,
     private dialog: MatDialog,
     private toastr: ToastrService,
@@ -179,8 +180,8 @@ export class UserListComponent implements OnInit {
     this.isLoading = true;
     const userSearchModel : UserSearchModel =
     {pageSize:this.query.per_page , pageNumber:this.query.start};
-    this.userService
-    .apiUserListUserPost$Json$Response({body:userSearchModel})
+    this.adminService
+    .apiAdminListUserPost$Json$Response({body:userSearchModel})
     .pipe(
       finalize(() => {
         this.isLoading = false;

@@ -10,6 +10,7 @@ import { MemberModal } from './components';
 import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs';
+import { LocalStorageService } from '@shared';
 // COMP
 @Component({
   selector: 'app-member-list',
@@ -71,41 +72,51 @@ export class MemberListComponent implements OnInit {
   }
 
   constructor(
+    private store: LocalStorageService,
     private userService: MemberService,
     private dialog: MatDialog,
     private toastr: ToastrService,
     private roleService: RolesService
   ) {}
 
+  roleName = this.store.get("roleName");
+  ischild = this.store.get("ischild");
   async ngOnInit() {
     this.getList();
     this.getRoleList();
   }
 
   async createNewUser() {
-    var user1 = {userRoles : this.userRoles};
-    try {
-      const { success, userData } = await this.openUserModal(user1);
-      console.log(userData);
-      console.log(success);
-      if (success) {
-        this.source.push(userData);
-        this.getList();
-        this.toastr.info(
-          `User (${userData?.fullName}) has been created successfully`
+    console.log(this.ischild);
+    if(!(this.ischild == true)){
+        var user1 = {userRoles : this.userRoles};
+        try {
+          const { success, userData } = await this.openUserModal(user1);
+          console.log(userData);
+          console.log(success);
+          if (success) {
+            this.source.push(userData);
+            this.getList();
+            this.toastr.info(
+              `User (${userData?.fullName}) has been created successfully`
+            );
+          }
+          else{
+            console.log(userData);
+            if(userData !=undefined && userData.length > 0){
+              this.toastr.error(userData[0]);
+            }
+          }
+        } catch (error: any) {
+          this.toastr.error(
+            error?.message || 'An error occoured when creating new user',
+          );
+        }
+      }else{
+        this.toastr.error(
+          'You dont have permission to add new members',
         );
       }
-      else{
-        console.log(userData);
-        if(userData !=undefined && userData.length > 0){
-          this.toastr.error(userData[0]);
-        }
-      }
-    } catch (error: any) {
-      this.toastr.error(
-         error?.message || 'An error occoured when creating new user',
-       );
-    }
   }
 
   async update(user: UserModel) {

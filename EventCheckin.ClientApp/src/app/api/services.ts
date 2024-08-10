@@ -1,3 +1,4 @@
+export { AdminService } from './services/admin.service';
 export { AuthService } from './services/auth.service';
 export { EventService } from './services/event.service';
 export { GuestService } from './services/guest.service';
