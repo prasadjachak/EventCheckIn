@@ -11,7 +11,9 @@ namespace EventCheckin.Api.Models.Events
 
         public string TicketNo { get; set; }
 
-        public int AllowedGuest { get; set; }
+        public bool IsActive { get; set; }
+
+        public int AllowedGuestCount { get; set; }
 
         public long UserId { get; set; }
 
@@ -22,6 +24,8 @@ namespace EventCheckin.Api.Models.Events
         public string EntrySecurity { get; set; }
 
         public int EntryStatus { get; set; }
+
+        public bool IsParkingAllowed { get; set; }
 
         public int AllowedParkingCount { get; set; }
 
@@ -43,8 +47,16 @@ namespace EventCheckin.Api.Models.Events
 
         public string PassToTime { get; set; }
 
+        public string PhoneNumber { get; set; }
+
+        public string Name { get; set; }
+
         public UserModel UserModel { get; set; }
 
         public EventModel EventModel { get; set; }
+
+        public bool IsInviteSelected { get; set; }
+
+        public bool IsParkingSelected { get; set; }
     }
 }

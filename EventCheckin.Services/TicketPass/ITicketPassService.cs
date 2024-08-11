@@ -12,6 +12,7 @@ namespace EventCheckin.Services
     public interface ITicketPassService : IService
     {
         Task<List<TicketPass>> GetTicketPasss();
+        Task<List<TicketPass>> GetTicketPassesByEventId(long eventId);
         Task<TicketPass> GetTicketPass(long eventDayId);
         Task<TicketPass> AddTicketPass(TicketPass dto);
         Task<bool> UpdateTicketPass(TicketPass dto);
@@ -47,11 +48,31 @@ namespace EventCheckin.Services
             }
         }
 
-        public async Task<TicketPass> GetTicketPass(long eventDayId)
+        public async Task<List<TicketPass>> GetTicketPassesByEventId(long eventId)
         {
             try
             {
-                var dbTicketPass = _uow.Query<DbContext.Entities.TicketPass>(s => s.Id == eventDayId).FirstOrDefault();
+                if(eventId > 0)
+                {
+                    var dbTicketPass = _uow.Query<DbContext.Entities.TicketPass>(s => s.EventId == eventId);
+                    if (dbTicketPass == null)
+                        return new List<TicketPass>();
+                    return dbTicketPass.ToList();
+                }
+                return new List<TicketPass>();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public async Task<TicketPass> GetTicketPass(long eventId)
+        {
+            try
+            {
+                var dbTicketPass = _uow.Query<DbContext.Entities.TicketPass>(s => s.EventId == eventId).FirstOrDefault();
                 if (dbTicketPass == null)
                     return null;
 
@@ -118,7 +139,6 @@ namespace EventCheckin.Services
                 return false;
             }
         }
-
 
         public async Task<List<TicketPass>> GetTicketPassForUser(long userId)
         {

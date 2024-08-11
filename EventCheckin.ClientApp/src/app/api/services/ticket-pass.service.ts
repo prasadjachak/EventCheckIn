@@ -9,6 +9,14 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { apiTicketPassAddDeleteTicketPassesPost$Json } from '../fn/ticket-pass/api-ticket-pass-add-delete-ticket-passes-post-json';
+import { ApiTicketPassAddDeleteTicketPassesPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-add-delete-ticket-passes-post-json';
+import { apiTicketPassAddDeleteTicketPassesPost$Plain } from '../fn/ticket-pass/api-ticket-pass-add-delete-ticket-passes-post-plain';
+import { ApiTicketPassAddDeleteTicketPassesPost$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-add-delete-ticket-passes-post-plain';
+import { apiTicketPassAddMultipleTicketPassesPost$Json } from '../fn/ticket-pass/api-ticket-pass-add-multiple-ticket-passes-post-json';
+import { ApiTicketPassAddMultipleTicketPassesPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-add-multiple-ticket-passes-post-json';
+import { apiTicketPassAddMultipleTicketPassesPost$Plain } from '../fn/ticket-pass/api-ticket-pass-add-multiple-ticket-passes-post-plain';
+import { ApiTicketPassAddMultipleTicketPassesPost$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-add-multiple-ticket-passes-post-plain';
 import { apiTicketPassAddTicketPassPost$Json } from '../fn/ticket-pass/api-ticket-pass-add-ticket-pass-post-json';
 import { ApiTicketPassAddTicketPassPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-add-ticket-pass-post-json';
 import { apiTicketPassAddTicketPassPost$Plain } from '../fn/ticket-pass/api-ticket-pass-add-ticket-pass-post-plain';
@@ -17,6 +25,10 @@ import { apiTicketPassDeleteTicketPassPut$Json } from '../fn/ticket-pass/api-tic
 import { ApiTicketPassDeleteTicketPassPut$Json$Params } from '../fn/ticket-pass/api-ticket-pass-delete-ticket-pass-put-json';
 import { apiTicketPassDeleteTicketPassPut$Plain } from '../fn/ticket-pass/api-ticket-pass-delete-ticket-pass-put-plain';
 import { ApiTicketPassDeleteTicketPassPut$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-delete-ticket-pass-put-plain';
+import { apiTicketPassGetAssignTicketPassesPost$Json } from '../fn/ticket-pass/api-ticket-pass-get-assign-ticket-passes-post-json';
+import { ApiTicketPassGetAssignTicketPassesPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-get-assign-ticket-passes-post-json';
+import { apiTicketPassGetAssignTicketPassesPost$Plain } from '../fn/ticket-pass/api-ticket-pass-get-assign-ticket-passes-post-plain';
+import { ApiTicketPassGetAssignTicketPassesPost$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-get-assign-ticket-passes-post-plain';
 import { apiTicketPassGetParkingTicketOtpPost$Json } from '../fn/ticket-pass/api-ticket-pass-get-parking-ticket-otp-post-json';
 import { ApiTicketPassGetParkingTicketOtpPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-get-parking-ticket-otp-post-json';
 import { apiTicketPassGetParkingTicketOtpPost$Plain } from '../fn/ticket-pass/api-ticket-pass-get-parking-ticket-otp-post-plain';
@@ -37,6 +49,10 @@ import { apiTicketPassListTicketPasssGet$Json } from '../fn/ticket-pass/api-tick
 import { ApiTicketPassListTicketPasssGet$Json$Params } from '../fn/ticket-pass/api-ticket-pass-list-ticket-passs-get-json';
 import { apiTicketPassListTicketPasssGet$Plain } from '../fn/ticket-pass/api-ticket-pass-list-ticket-passs-get-plain';
 import { ApiTicketPassListTicketPasssGet$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-list-ticket-passs-get-plain';
+import { apiTicketPassListUserPost$Json } from '../fn/ticket-pass/api-ticket-pass-list-user-post-json';
+import { ApiTicketPassListUserPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-list-user-post-json';
+import { apiTicketPassListUserPost$Plain } from '../fn/ticket-pass/api-ticket-pass-list-user-post-plain';
+import { ApiTicketPassListUserPost$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-list-user-post-plain';
 import { apiTicketPassUpdateTicketPassPut$Json } from '../fn/ticket-pass/api-ticket-pass-update-ticket-pass-put-json';
 import { ApiTicketPassUpdateTicketPassPut$Json$Params } from '../fn/ticket-pass/api-ticket-pass-update-ticket-pass-put-json';
 import { apiTicketPassUpdateTicketPassPut$Plain } from '../fn/ticket-pass/api-ticket-pass-update-ticket-pass-put-plain';
@@ -421,6 +437,194 @@ export class TicketPassService extends BaseService {
    */
   apiTicketPassGetParkingTicketOtpPost$Json(params?: ApiTicketPassGetParkingTicketOtpPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
     return this.apiTicketPassGetParkingTicketOtpPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiTicketPassListUserPost()` */
+  static readonly ApiTicketPassListUserPostPath = '/api/TicketPass/ListUser';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassListUserPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassListUserPost$Plain$Response(params?: ApiTicketPassListUserPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassListUserPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassListUserPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassListUserPost$Plain(params?: ApiTicketPassListUserPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassListUserPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassListUserPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassListUserPost$Json$Response(params?: ApiTicketPassListUserPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassListUserPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassListUserPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassListUserPost$Json(params?: ApiTicketPassListUserPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassListUserPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiTicketPassAddMultipleTicketPassesPost()` */
+  static readonly ApiTicketPassAddMultipleTicketPassesPostPath = '/api/TicketPass/AddMultipleTicketPasses';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassAddMultipleTicketPassesPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassAddMultipleTicketPassesPost$Plain$Response(params?: ApiTicketPassAddMultipleTicketPassesPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassAddMultipleTicketPassesPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassAddMultipleTicketPassesPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassAddMultipleTicketPassesPost$Plain(params?: ApiTicketPassAddMultipleTicketPassesPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassAddMultipleTicketPassesPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassAddMultipleTicketPassesPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassAddMultipleTicketPassesPost$Json$Response(params?: ApiTicketPassAddMultipleTicketPassesPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassAddMultipleTicketPassesPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassAddMultipleTicketPassesPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassAddMultipleTicketPassesPost$Json(params?: ApiTicketPassAddMultipleTicketPassesPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassAddMultipleTicketPassesPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiTicketPassAddDeleteTicketPassesPost()` */
+  static readonly ApiTicketPassAddDeleteTicketPassesPostPath = '/api/TicketPass/AddDeleteTicketPasses';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassAddDeleteTicketPassesPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassAddDeleteTicketPassesPost$Plain$Response(params?: ApiTicketPassAddDeleteTicketPassesPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassAddDeleteTicketPassesPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassAddDeleteTicketPassesPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassAddDeleteTicketPassesPost$Plain(params?: ApiTicketPassAddDeleteTicketPassesPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassAddDeleteTicketPassesPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassAddDeleteTicketPassesPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassAddDeleteTicketPassesPost$Json$Response(params?: ApiTicketPassAddDeleteTicketPassesPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassAddDeleteTicketPassesPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassAddDeleteTicketPassesPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassAddDeleteTicketPassesPost$Json(params?: ApiTicketPassAddDeleteTicketPassesPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassAddDeleteTicketPassesPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiTicketPassGetAssignTicketPassesPost()` */
+  static readonly ApiTicketPassGetAssignTicketPassesPostPath = '/api/TicketPass/GetAssignTicketPasses';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassGetAssignTicketPassesPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassGetAssignTicketPassesPost$Plain$Response(params?: ApiTicketPassGetAssignTicketPassesPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassGetAssignTicketPassesPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassGetAssignTicketPassesPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassGetAssignTicketPassesPost$Plain(params?: ApiTicketPassGetAssignTicketPassesPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassGetAssignTicketPassesPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassGetAssignTicketPassesPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassGetAssignTicketPassesPost$Json$Response(params?: ApiTicketPassGetAssignTicketPassesPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassGetAssignTicketPassesPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassGetAssignTicketPassesPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassGetAssignTicketPassesPost$Json(params?: ApiTicketPassGetAssignTicketPassesPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassGetAssignTicketPassesPost$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

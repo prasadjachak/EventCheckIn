@@ -4,6 +4,7 @@ using EventCheckin.DbContext.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventCheckin.DbContext.Migrations
 {
     [DbContext(typeof(Net7BoilerplateContext))]
-    partial class Net7BoilerplateContextModelSnapshot : ModelSnapshot
+    [Migration("20240811161245_migration16")]
+    partial class migration16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -531,10 +534,10 @@ namespace EventCheckin.DbContext.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("AllowedGuestCount")
+                    b.Property<int>("AllowedGuest")
                         .HasColumnType("int");
 
-                    b.Property<int>("AllowedParkingCount")
+                    b.Property<int>("AllowedParking")
                         .HasColumnType("int");
 
                     b.Property<long>("AssignedBy")
@@ -569,12 +572,6 @@ namespace EventCheckin.DbContext.Migrations
 
                     b.Property<long>("EventId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsParkingAllowed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("ParkSecurity")
                         .HasColumnType("nvarchar(max)");

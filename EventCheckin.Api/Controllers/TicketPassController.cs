@@ -36,6 +36,31 @@ namespace EventCheckin.Api.Controllers
             _mapper = mapper;
         }
 
+        [NonAction]
+        public TicketPassModel GetModelToEntity(TicketPass ticketPass, List<EventModel> eventModels)
+        {
+           var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+
+            ticketPassModel.EventModel = eventModels.Where(t => t.Id == ticketPass.EventId).FirstOrDefault();
+
+            var user = _userManager.Users
+                .Where(user => user.Id == ticketPass.UserId)
+                .Select(user => new ApplicationUser()
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    EmailConfirmed = user.EmailConfirmed,
+                    LockoutEnabled = user.LockoutEnabled,
+                    TwoFactorEnabled = user.TwoFactorEnabled
+                })
+                .FirstOrDefault();
+
+            ticketPassModel.UserModel = _mapper.Map<UserModel>(user);
+
+            return ticketPassModel;
+        }
+
         [HttpGet, Route("ListTicketPasss")]
         public async Task<ActionResult<CustomApiResponse>> GetTicketPasss()
         {
@@ -166,7 +191,6 @@ namespace EventCheckin.Api.Controllers
             return apiResponse;
         }
 
-
         [HttpPost("GetParkingTicketOtp")]
         public async Task<CustomApiResponse> GetParkingTicketOtp([FromBody] TicketPassModel model)
         {
@@ -200,7 +224,149 @@ namespace EventCheckin.Api.Controllers
             return apiResponse;
         }
 
+        [HttpPost]
+        //[ProducesResponseType(typeof(IEnumerable<IdentityUser>), 200)]
+        [Route("ListUser")]
+        public async Task<ActionResult<CustomApiResponse>> ListUser(UserSearchModel model)
+        {
+            var users = _userManager.Users
+              .Skip((model.PageNumber - 1) * model.PageSize)
+              .Take(model.PageSize)
+              .Select(t => new TicketPassModel()
+              {
+                  UserId = t.Id,
+                  PhoneNumber = t.PhoneNumber,
+                  Name = t.Name
+              }).ToList();
 
+            var userModels = new List<UserModel>();
+            foreach (var user1 in users)
+            {
+                var user = await _userManager.FindByIdAsync(user1.Id.ToString());
+                var userModel = _mapper.Map<UserModel>(user);
+
+                userModels.Add(userModel);
+            }
+
+            return new CustomApiResponse(userModels);
+        }
+
+
+        [HttpPost, Route("AddMultipleTicketPasses")]
+        public async Task<ActionResult<CustomApiResponse>> AddMultipleTicketPasses(List<TicketPassModel> models)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelStateExtensions.GetErrorMessage(ModelState));
+
+            var ticketPassModels = new List<TicketPassModel>();
+
+            var returnModels = new List<TicketPassModel>();
+
+            foreach (var model in models) 
+            {
+                TicketPass dto = _mapper.Map<TicketPass>(model);
+                var addStatus = await _ticketPassService.AddTicketPass(dto);
+            }
+
+            var ticketPasses = await _ticketPassService.GetTicketPasss();
+            foreach (var ticketPass in ticketPasses)
+            {
+                ticketPassModels.Add(_mapper.Map<TicketPassModel>(ticketPass));
+            }
+
+            return  new CustomApiResponse(ticketPassModels, 200, true);
+        }
+
+        [HttpPost, Route("AddDeleteTicketPasses")]
+        public async Task<ActionResult<CustomApiResponse>> AddDeleteTicketPasses(TicketPassModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelStateExtensions.GetErrorMessage(ModelState));
+
+            TicketPass dto = _mapper.Map<TicketPass>(model);
+            if(dto.Id== 0) 
+            {
+                dto.AllowedGuestCount = 1;
+                if(dto.IsParkingAllowed)
+                    dto.AllowedParkingCount = 1;
+                var ticketPass = await _ticketPassService.AddTicketPass(dto);
+                var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+                return new CustomApiResponse(ticketPassModel, 200, true);
+            }
+            else
+            {
+                if(dto.IsActive == false)
+                {
+                    var ticketPass = await _ticketPassService.DeleteTicketPass(dto);
+                    var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+                    return new CustomApiResponse(ticketPassModel, 200, true);
+                }
+                if (dto.IsActive == true)
+                {
+                    dto.AllowedGuestCount = 1;
+                    if (dto.IsParkingAllowed)
+                        dto.AllowedParkingCount = 1;
+                    var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
+                }
+                return new CustomApiResponse(model, 200, true);
+            }
+        }
+
+
+        [HttpPost, Route("GetAssignTicketPasses")]
+        public async Task<ActionResult<CustomApiResponse>> GetAssignTicketPasses(AssignPassModel assignPassModel)
+        {
+            var userTicketModels = _userManager.Users
+                        .Select(t => new TicketPassModel()
+                        {
+                            UserId = t.Id,
+                            PhoneNumber = t.PhoneNumber,
+                            Name = t.Name
+                        }).ToList();
+
+            var eventEntitys = await _eventService.GetEventEntitys();
+
+            var eventModels = new List<EventModel>();
+
+            var ticketPasses = await _ticketPassService.GetTicketPassesByEventId(assignPassModel.EventId);
+
+            foreach (var eventEntity in eventEntitys)
+            {
+                eventModels.Add(_mapper.Map<EventModel>(eventEntity));
+            }
+
+            var ticketPassModels = new List<TicketPassModel>();
+            foreach (var userPassModel in userTicketModels)
+            {
+                var userticketPasses = ticketPasses.Where(t=>t.UserId == userPassModel.UserId).ToList();
+               
+                if(userticketPasses.Count > 0)
+                {
+                    foreach (var ticketPass in userticketPasses)
+                    {
+                        var ticketPassModel = new TicketPassModel();
+                        ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+                        ticketPassModel.PhoneNumber = userPassModel.PhoneNumber;
+                        ticketPassModel.Name = userPassModel.Name;
+                        ticketPassModel.EventId = ticketPassModel.EventId;
+                        ticketPassModel.Id = ticketPassModel.Id;
+                        ticketPassModel.IsActive = ticketPassModel.IsActive;
+                        ticketPassModel.IsParkingAllowed = ticketPassModel.IsParkingAllowed;
+                        ticketPassModels.Add(ticketPassModel);
+                    }
+                }
+                else
+                {
+                    ticketPassModels.Add(userPassModel);
+                }
+            }
+
+            assignPassModel.Events = eventModels;
+
+            assignPassModel.TicketPasses = ticketPassModels;
+
+            return new CustomApiResponse(assignPassModel, 200, true);
+        }
 
         [NonAction]
         public int GenerateRandomNo()

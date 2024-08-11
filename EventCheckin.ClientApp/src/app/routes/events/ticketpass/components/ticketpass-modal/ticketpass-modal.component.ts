@@ -20,7 +20,7 @@ export class TicketPassModalComponent implements OnInit {
   async save(formData: any) {
     console.log(this.data);
     this.data.ticketNo = formData?.ticketNo;
-    this.data.allowedGuest = formData?.allowedGuest;
+    this.data.allowedGuestCount = formData?.allowedGuestCount;
     this.data.allowedParkingCount = formData?.allowedParkingCount;
     this.data.eventId = formData?.eventId;
     this.data.userId = formData?.userId;

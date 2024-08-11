@@ -43,6 +43,13 @@ namespace EventCheckin.Api.Controllers
             return eventEntitys != null ? new CustomApiResponse(eventEntitys, 200, true) : new CustomApiResponse(500, false);
         }
 
+        [HttpGet, Route("GetEventEntitiesByMemberId")]
+        public async Task<ActionResult<CustomApiResponse>> GetEventEntitiesByMemberId(int memberId)
+        {
+            var eventEntitys = await _eventEntityService.GetEventEntitys();
+            return eventEntitys != null ? new CustomApiResponse(eventEntitys, 200, true) : new CustomApiResponse(500, false);
+        }
+
         [HttpGet, Route("GetEventEntity")]
         public async Task<ActionResult<CustomApiResponse>> GetEventEntity(long eventEntityId)
         {
@@ -156,8 +163,6 @@ namespace EventCheckin.Api.Controllers
 
             return new CustomApiResponse(model);
         }
-
-       
 
     }
 }

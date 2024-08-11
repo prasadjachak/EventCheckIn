@@ -19,7 +19,9 @@ namespace EventCheckin.DbContext.Entities
 
         public string TicketNo { get; set; }
 
-        public int AllowedGuest { get; set; }
+        public bool IsActive { get; set; }
+
+        public int AllowedGuestCount { get; set; }
 
         public long UserId { get; set; }
 
@@ -30,6 +32,8 @@ namespace EventCheckin.DbContext.Entities
         public string EntrySecurity { get; set; }
 
         public int EntryStatus { get; set; }
+
+        public bool IsParkingAllowed { get; set; }
 
         public int AllowedParkingCount { get; set; }
 

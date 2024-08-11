@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ApplicationUser } from './models/application-user';
+export { AssignPassModel } from './models/assign-pass-model';
 export { ConfirmEmailViewModel } from './models/confirm-email-view-model';
 export { CustomApiResponse } from './models/custom-api-response';
 export { ELogType } from './models/e-log-type';

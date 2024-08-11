@@ -25,6 +25,10 @@ import { apiEventDeleteteamemployeePost$Json } from '../fn/event/api-event-delet
 import { ApiEventDeleteteamemployeePost$Json$Params } from '../fn/event/api-event-deleteteamemployee-post-json';
 import { apiEventDeleteteamemployeePost$Plain } from '../fn/event/api-event-deleteteamemployee-post-plain';
 import { ApiEventDeleteteamemployeePost$Plain$Params } from '../fn/event/api-event-deleteteamemployee-post-plain';
+import { apiEventGetEventEntitiesByMemberIdGet$Json } from '../fn/event/api-event-get-event-entities-by-member-id-get-json';
+import { ApiEventGetEventEntitiesByMemberIdGet$Json$Params } from '../fn/event/api-event-get-event-entities-by-member-id-get-json';
+import { apiEventGetEventEntitiesByMemberIdGet$Plain } from '../fn/event/api-event-get-event-entities-by-member-id-get-plain';
+import { ApiEventGetEventEntitiesByMemberIdGet$Plain$Params } from '../fn/event/api-event-get-event-entities-by-member-id-get-plain';
 import { apiEventGetEventEntityGet$Json } from '../fn/event/api-event-get-event-entity-get-json';
 import { ApiEventGetEventEntityGet$Json$Params } from '../fn/event/api-event-get-event-entity-get-json';
 import { apiEventGetEventEntityGet$Plain } from '../fn/event/api-event-get-event-entity-get-plain';
@@ -92,6 +96,53 @@ export class EventService extends BaseService {
    */
   apiEventListEventEntitysGet$Json(params?: ApiEventListEventEntitysGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
     return this.apiEventListEventEntitysGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiEventGetEventEntitiesByMemberIdGet()` */
+  static readonly ApiEventGetEventEntitiesByMemberIdGetPath = '/api/Event/GetEventEntitiesByMemberId';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiEventGetEventEntitiesByMemberIdGet$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventGetEventEntitiesByMemberIdGet$Plain$Response(params?: ApiEventGetEventEntitiesByMemberIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventGetEventEntitiesByMemberIdGet$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiEventGetEventEntitiesByMemberIdGet$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventGetEventEntitiesByMemberIdGet$Plain(params?: ApiEventGetEventEntitiesByMemberIdGet$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventGetEventEntitiesByMemberIdGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiEventGetEventEntitiesByMemberIdGet$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventGetEventEntitiesByMemberIdGet$Json$Response(params?: ApiEventGetEventEntitiesByMemberIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventGetEventEntitiesByMemberIdGet$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiEventGetEventEntitiesByMemberIdGet$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiEventGetEventEntitiesByMemberIdGet$Json(params?: ApiEventGetEventEntitiesByMemberIdGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventGetEventEntitiesByMemberIdGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

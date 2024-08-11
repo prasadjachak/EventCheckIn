@@ -60,7 +60,7 @@ export class TicketPassFormComponent implements OnInit {
           Validators.required,
           Validators.maxLength(60),
         ]),
-        allowedGuest: new FormControl(this.ticketpassData.allowedGuest ||  0,
+        allowedGuestCount: new FormControl(this.ticketpassData.allowedGuestCount ||  0,
         [
         ]),
         allowedParkingCount: new FormControl(this.ticketpassData.allowedParkingCount ||  0,

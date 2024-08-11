@@ -12,7 +12,8 @@ export class UserFilterPipe implements PipeTransform {
         }
         // filter items array, items which match and return true will be
         // kept, false will be filtered out
-        return items.filter(item => item.phoneNumber && item.phoneNumber.toLowerCase().indexOf(filter) !== -1
-        || item.firstName.indexOf(filter) !== -1 );
+        console.log(items);
+        return items.filter(item => (item.phoneNumber && item.phoneNumber.toLowerCase().indexOf(filter) !== -1)
+        || (item.name && item.name.indexOf(filter) !== -1 ));
     }
 }

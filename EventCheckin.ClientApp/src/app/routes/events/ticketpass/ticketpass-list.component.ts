@@ -21,7 +21,7 @@ export class TicketPassListComponent implements OnInit {
 
   columns: MtxGridColumn[] = [
     { header: 'Pass No', field: 'ticketNo'  },
-    { header: 'Allowed Guest', field: 'allowedGuest'  },
+    { header: 'Allowed Guest', field: 'allowedGuestCount'  },
     { header: 'Allowed Parking', field: 'allowedParkingCount'  },
     { header: 'Event Day Id', field: 'eventDayId'  },
     {

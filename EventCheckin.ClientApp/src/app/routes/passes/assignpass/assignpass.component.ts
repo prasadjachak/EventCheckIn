@@ -3,12 +3,13 @@ import { MatDialog } from '@angular/material/dialog';
 
 
 // MODELS
-import { EventService, UserService } from 'app/api/services';
-import { EventModel, UserModel, UserSearchModel } from 'app/api/models';
+import { EventService, TicketPassService, UserService } from 'app/api/services';
+import { AssignPassModel, EventModel, UserModel, UserSearchModel } from 'app/api/models';
 import { ToastrService } from 'ngx-toastr';
 import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs';
+import { TicketPassModal } from 'app/routes/events/ticketpass/components';
 // COMP
 @Component({
   selector: 'app-assignpass',
@@ -52,6 +53,9 @@ export class AssignPassComponent implements OnInit {
     },
   ];
 
+  assignModel: AssignPassModel = {};
+
+  selectedEventIds : [0];
   source: any[] = [];
   users: UserModel[] = [];
   selectedEvents : EventModel[] =  [];
@@ -76,6 +80,7 @@ export class AssignPassComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
+    private ticketPassService: TicketPassService,
     private userService: UserService,
     private dialog: MatDialog,
     private toastr: ToastrService
@@ -134,20 +139,22 @@ export class AssignPassComponent implements OnInit {
   }
 
   async getList() {
+    if(this.selectedEventIds === undefined)
+      this.selectedEventIds = [0];
     this.isLoading = true;
-
-    this.eventService
-    .apiEventListEventEntitysGet$Json$Response()
+    this.assignModel.eventId = this.selectedEventIds[0];
+    this.ticketPassService
+    .apiTicketPassGetAssignTicketPassesPost$Json$Response({body:this.assignModel})
     .pipe(
       finalize(() => {
         this.isLoading = false;
       })
     )
     .subscribe(result =>{
-      this.source = result.body.result;
+      this.assignModel = result.body.result;
      // this.total = result.body.result.total;
       this.isLoading = false;
-      console.log(result);
+      console.log(this.assignModel);
     });
   }
 
@@ -188,5 +195,40 @@ export class AssignPassComponent implements OnInit {
      // this.total = result.body.result.total;
       this.isLoading = false;
     });
+  }
+
+  async onSelectionEvent() {
+    console.log();
+    this.isLoading = true;
+    if(this.selectedEventIds === undefined)
+      this.selectedEventIds = [0];
+    this.assignModel.eventId = this.selectedEventIds[0];
+    this.ticketPassService
+    .apiTicketPassGetAssignTicketPassesPost$Json$Response({body:this.assignModel})
+    .pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    )
+    .subscribe(result =>{
+      this.assignModel = result.body.result;
+     // this.total = result.body.result.total;
+      this.isLoading = false;
+      console.log(this.assignModel);
+    });
+  }
+
+  async savePass(ticketPassModal: any) {
+    console.log(ticketPassModal);
+    ticketPassModal.eventId = this.selectedEventIds[0];
+    await this.ticketPassService.apiTicketPassAddDeleteTicketPassesPost$Json$Response({
+      body:ticketPassModal
+    }).subscribe(result =>{
+      console.log(result.body);
+      var ticketpass = result.body.result
+      this.toastr.info(
+        `TicketPass (${result.body?.message}) has been created successfully`
+      );
+    }) ;
   }
 }
