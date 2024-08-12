@@ -19,11 +19,11 @@ export class MemberEventModalComponent implements OnInit {
 
   async save(formData: any) {
     console.log(formData);
-    this.data.teamId = formData?.teamId;
-    this.data.employeeId = formData?.employeeId;
+    this.data.eventId = formData?.eventId;
+    this.data.userId = formData?.userId;
 
     await this.eventService.apiEventCreateeventmemberPost$Json$Response({
-      body:formData
+      body:this.data
     }).subscribe(result =>{
       var team = result.body.result
       //this.dialogRef.close({ success: true, teamData: team });

@@ -2,34 +2,40 @@
 
 <div class="row">
   <div class="col-md-12">
-    <button class="pull-right" mat-raised-button color="primary" (click)="createNewEvent()">
-      Save
-    </button>
+
+    <mat-label>Total Invited : 0 </mat-label>
+    <mat-label>Pending Invitation : 0 </mat-label>
 
   </div>
 </div>
 
 <div class="row">
-
-  <div class="col-md-12 col-lg-12 col-xxxl-6">
+  <div class="col-md-4 col-lg-4 col-xxxl-4">
     <div class="row">
-      <div class="col-md-4 col-lg-4  col-xxxl-4 ">
+      <div class="col-md-12 col-lg-12 col-xxxl-12">
         <mat-card>
           <mat-card-header color="accent">
             <mat-card-title>
-             Events
+             Event Entry
             </mat-card-title>
           </mat-card-header>
             <mat-card-content class="card-body" >
-              <mat-select [(ngModel)]="selectedEvents" multiple="true">
-                <mat-option *ngFor="let item of source" [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-              </mat-select>
+              <mat-selection-list [(ngModel)]="selectedEventIds"
+              [multiple]="false"
+              style="margin: 0;padding:0" class="custom-scroll-bar">
+                <ng-container *ngFor="let item of assignModel.events">
+                <mat-list-option (click)="getList()"
+                [value]="item.id">
+                  {{item.name}}
+                </mat-list-option>
+              </ng-container>
+            </mat-selection-list>
             </mat-card-content>
         </mat-card>
       </div>
     </div>
+  </div>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
     <div class="row">
       <div class="col-md-12 col-lg-12 col-xxxl-12">
         <mat-card>
@@ -46,18 +52,39 @@
                     <button  mat-button color="primary" class="pull-right" > Clear</button>
                   </div>
                 </div>
+                <mat-list>
+                    <ng-container *ngFor="let item of assignModel.ticketPasses| userFilter:userSearch"
+                    [(ngModel)]="selectedUsers" ngDefaultControl>
+                      <mat-list-item >
+                      <div class="row">
+                          <div class="col-md-4" >
+                            {{item.name}} - {{item.phoneNumber}}
+                          </div>
+                          <div class="col-md-1" >
+                            {{item.entryOTP}}
+                          </div>
+                          <div class="col-md-3" >
+                            {{item.entryOTPTime}}
+                          </div>
+                          <div class="col-md-2" >
+                            {{item.entryStatusName}}
+                          </div>
+                          <div class="col-md-2" >
+                            <button class="pull-right" mat-raised-button color="primary" (click)="savePass(item)">
+                              Accept
+                            </button>
+                          </div>
+                        </div>
+                    </mat-list-item>
+                    <mat-divider ></mat-divider>
+                  </ng-container>
+
+
+                </mat-list>
                 <div  *ngFor="let item of users | userFilter:userSearch"
                   [(ngModel)]="selectedUsers" ngDefaultControl   style="margin: 0;padding:0"
                   class="row custom-scroll-bar">
-                  <div class="col-md-6" >
-                    {{item.name}} - {{item.phoneNumber}}
-                  </div>
-                  <div class="col-md-3" >
-                    <input matInput style="margin-top: 0;width: 100%;" value="1"  placeholder="Guest Count" >
-                  </div>
-                  <div class="col-md-3" >
-                    <input matInput style="margin-top: 0;width: 100%;" value="1"  placeholder="Parking Count" >
-                  </div>
+
                 </div>
             </div>
 

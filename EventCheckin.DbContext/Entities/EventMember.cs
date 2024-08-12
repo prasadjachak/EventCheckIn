@@ -15,11 +15,13 @@ namespace EventCheckin.DbContext.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public long UserId { get; set; }
-        public bool EventId { get; set; }
+        public long EventId { get; set; }
         public int GuestNo { get; set; }
         public int ParkNo { get; set; }
         public long? ParentUserId { get; set; }
         public bool IsPublished { get; set; }
+        public int AddedGuestNo { get; set; }
+        public int AddedParkNo { get; set; }
         public DateTime? CreatedOnUtc { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }

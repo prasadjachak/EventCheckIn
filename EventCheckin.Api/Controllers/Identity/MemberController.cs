@@ -68,21 +68,33 @@ namespace EventCheckin.Api.Controllers.Identity
         public async Task<ActionResult<CustomApiResponse>> ListUser(UserSearchModel model)
         {
             var users = await _userService.GetUsers("MEMBERS");
+            var currentUser = await _userManager.FindByIdAsync(CurrentUserId.ToString());
+            var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
+            var isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "ADMIN");
+
             var userModels = new List<UserModel>();
             foreach (var user1 in users)
             {
-                var user = await _userManager.FindByIdAsync(user1.Id.ToString());
-                var userModel = _mapper.Map<UserModel>(user);
-                var roleNames = await _userManager.GetRolesAsync(user);
-
-                foreach (var rolename in roleNames)
+                if (isSuperAdmin)
                 {
-                    var role = await _roleManager.FindByNameAsync(rolename);
-                    userModel.UserRoles.Add(_mapper.Map<RoleModel>(role));
-                    userModel.RoleIds.Add(role.Id);
+                    var isSuperadmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
+                    if (isSuperadmin == true)
+                    {
+                        var user = await _userManager.FindByIdAsync(user1.Id.ToString());
+                        var userModel = _mapper.Map<UserModel>(user);
+                        userModels.Add(userModel);
+                    }
                 }
-
-                userModels.Add(userModel);
+                else if (isMember)
+                {
+                    var user = await _userManager.FindByIdAsync(user1.Id.ToString());
+                    if (user.ParentId == currentUser.Id || user.Id == currentUser.Id || user.Id == currentUser.ParentId)
+                    {
+                        var userModel = _mapper.Map<UserModel>(user);
+                        userModels.Add(userModel);
+                    }
+                }
             }
 
             return new CustomApiResponse(userModels);

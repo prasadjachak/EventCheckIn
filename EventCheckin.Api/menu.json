@@ -29,6 +29,15 @@
       }
     },
     {
+      "route": "checkparking",
+      "name": "checkparking",
+      "type": "link",
+      "icon": "format_line_spacing",
+      "permissions": {
+        "except": "GUEST"
+      }
+    },
+    {
       "route": "events",
       "name": "events",
       "type": "sub",

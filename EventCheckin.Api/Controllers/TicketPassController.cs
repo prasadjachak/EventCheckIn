@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EventCheckin.Api.Infrastructure;
@@ -13,6 +13,9 @@ using System;
 using System.Linq;
 using EventCheckin.DbContext.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
+using EventCheckin.DbContext.Enums;
+using System.Runtime.Intrinsics.X86;
+using EventCheckin.Services.Permission;
 
 namespace EventCheckin.Api.Controllers
 {
@@ -24,15 +27,18 @@ namespace EventCheckin.Api.Controllers
         private readonly ITicketPassService _ticketPassService;
         private readonly IEventEntityService _eventService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         public TicketPassController(ITicketPassService eventEntityService,
             IEventEntityService eventService,
             UserManager<ApplicationUser> userManager,
+            IUserService userService,
             IMapper mapper)
         {
             _ticketPassService = eventEntityService;
             _eventService = eventService;
             _userManager = userManager;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -129,11 +135,14 @@ namespace EventCheckin.Api.Controllers
                         var ticketPassModel = new TicketPassModel();
                         ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
                         var evententity = await _eventService.GetEventEntity(ticketPass.EventId);
-                        var eventModel = _mapper.Map<EventModel>(evententity);
-                        ticketPassModel.EventModel = eventModel;
-                        ticketPassModel.PassDay = eventModel.StartDate.Value.ToString("MMM dd");
-                        ticketPassModel.PassFromTime = eventModel.StartDate.Value.ToString("hh:mm tt");
-                        ticketPassModel.PassToTime = eventModel.EndDate.Value.ToString("hh:mm tt");
+                        if(evententity != null) 
+                        { 
+                            var eventModel = _mapper.Map<EventModel>(evententity);
+                            ticketPassModel.EventModel = eventModel;
+                            ticketPassModel.PassDay = eventModel.StartDate.Value.ToString("MMM dd");
+                            ticketPassModel.PassFromTime = eventModel.StartDate.Value.ToString("hh:mm tt");
+                            ticketPassModel.PassToTime = eventModel.EndDate.Value.ToString("hh:mm tt");
+                        }
                         ticketPassModels.Add(ticketPassModel);
                     }
                     apiResponse.Result = ticketPassModels;
@@ -179,6 +188,7 @@ namespace EventCheckin.Api.Controllers
             }
 
             var ticket = await _ticketPassService.GetTicketPass(model.Id);
+            ticket.EntryStatus = (int)EntryStatusEnum.Active;
             ticket.EntryOTP = GenerateRandomNo().ToString();
             ticket.EntryOTPTime = DateTime.Now.AddMinutes(15);
 
@@ -212,6 +222,7 @@ namespace EventCheckin.Api.Controllers
             }
 
             var ticket = await _ticketPassService.GetTicketPass(model.Id);
+            ticket.ParkStatus = (int)ParkingStatusEnum.Active;
             ticket.ParkingOTP = GenerateRandomNo().ToString();
             ticket.ParkingOTPTime = DateTime.Now.AddMinutes(15);
 
@@ -283,14 +294,40 @@ namespace EventCheckin.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelStateExtensions.GetErrorMessage(ModelState));
 
+            var currentUser = await _userManager.FindByIdAsync(CurrentUserId.ToString());
+            var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
+         
+            long userId = 0;
+            if (currentUser.ParentId > 0)
+                userId = (await _userManager.FindByIdAsync(currentUser.ParentId.ToString())).Id;
+            else
+                userId = CurrentUserId;
+
+            var eventMember = await _eventService.GetEventMemberByEventIdAndUserIdAsync(model.EventId, userId);
+          
+
             TicketPass dto = _mapper.Map<TicketPass>(model);
-            if(dto.Id== 0) 
+            if(dto.Id== 0)
             {
                 dto.AllowedGuestCount = 1;
                 if(dto.IsParkingAllowed)
                     dto.AllowedParkingCount = 1;
                 var ticketPass = await _ticketPassService.AddTicketPass(dto);
                 var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+
+                if (eventMember != null)
+                {
+                    eventMember.AddedGuestNo += 1; 
+                    if (dto.IsParkingAllowed)
+                    {
+                        eventMember.AddedParkNo += 1;
+                    }
+                    await _eventService.UpdateEventMemberAsync(eventMember);
+                }
+                
+                if (dto.IsParkingAllowed)
+                    dto.AllowedParkingCount = 1;
+
                 return new CustomApiResponse(ticketPassModel, 200, true);
             }
             else
@@ -298,11 +335,31 @@ namespace EventCheckin.Api.Controllers
                 if(dto.IsActive == false)
                 {
                     var ticketPass = await _ticketPassService.DeleteTicketPass(dto);
+                    if (eventMember != null)
+                    {
+                        if (dto.AllowedParkingCount > 0)
+                            eventMember.AddedParkNo -= 1;
+                        dto.AllowedGuestCount = 0;
+                        dto.AllowedParkingCount = 0;
+                        eventMember.AddedGuestNo -= 1;
+                        await _eventService.UpdateEventMemberAsync(eventMember);
+                    }
+              
                     var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
                     return new CustomApiResponse(ticketPassModel, 200, true);
                 }
                 if (dto.IsActive == true)
                 {
+                    if (eventMember != null)
+                    {
+                        if (dto.IsParkingAllowed)
+                        {
+                            eventMember.AddedParkNo += 1;
+                        }
+                        eventMember.AddedGuestNo += 1;
+                        await _eventService.UpdateEventMemberAsync(eventMember);
+                    }
+                       
                     dto.AllowedGuestCount = 1;
                     if (dto.IsParkingAllowed)
                         dto.AllowedParkingCount = 1;
@@ -316,13 +373,39 @@ namespace EventCheckin.Api.Controllers
         [HttpPost, Route("GetAssignTicketPasses")]
         public async Task<ActionResult<CustomApiResponse>> GetAssignTicketPasses(AssignPassModel assignPassModel)
         {
-            var userTicketModels = _userManager.Users
-                        .Select(t => new TicketPassModel()
-                        {
-                            UserId = t.Id,
-                            PhoneNumber = t.PhoneNumber,
-                            Name = t.Name
-                        }).ToList();
+            var currentUser = await _userManager.FindByIdAsync(CurrentUserId.ToString());
+            var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
+
+            long userId = 0;
+            if (currentUser.ParentId > 0)
+                userId = (await _userManager.FindByIdAsync(currentUser.ParentId.ToString())).Id;
+            else
+                userId = CurrentUserId;
+
+            var userTicketModels = new List<UserModel>();
+            var members = new List<ApplicationUser>();
+
+            if (currentUser.ParentId == 0)
+            {
+                members = await _userService.GetUserByMemberId(currentUser.Id, "MEMBERS");
+                members.Add(currentUser);
+            }
+            else
+            {
+                var parentmember = (await _userManager.FindByIdAsync(currentUser.ParentId.ToString()));
+                members = await _userService.GetUserByMemberId(parentmember.Id, "MEMBERS");
+                members.Add(parentmember);
+            }
+            foreach (var member in members)
+            {
+                var guests = await _userService.GetUserByMemberId(member.Id, "GUEST");
+                foreach (var guest in guests)
+                {
+                    var userModel = _mapper.Map<UserModel>(guest);
+                    userTicketModels.Add(userModel);
+                }
+            }
+           
 
             var eventEntitys = await _eventService.GetEventEntitys();
 
@@ -332,15 +415,27 @@ namespace EventCheckin.Api.Controllers
 
             foreach (var eventEntity in eventEntitys)
             {
-                eventModels.Add(_mapper.Map<EventModel>(eventEntity));
+                var eventMember = await _eventService.GetEventMemberByEventIdAndUserIdAsync(eventEntity.Id, userId);
+
+                var eventModel = _mapper.Map<EventModel>(eventEntity);
+                if(eventMember != null) { 
+                    eventModel.EventMember =  _mapper.Map<EventMemberModel>(eventMember);
+                    eventModel.EventMember.PendingGuestNo = eventModel.EventMember.GuestNo - eventModel.EventMember.AddedGuestNo;
+                    eventModel.EventMember.PendingParkNo = eventModel.EventMember.ParkNo - eventModel.EventMember.AddedParkNo;
+                    eventModels.Add(eventModel);
+                }
             }
 
             var ticketPassModels = new List<TicketPassModel>();
             foreach (var userPassModel in userTicketModels)
             {
+                var userTicketPassModel = new TicketPassModel();
                 var userticketPasses = ticketPasses.Where(t=>t.UserId == userPassModel.UserId).ToList();
-               
-                if(userticketPasses.Count > 0)
+                userTicketPassModel.PhoneNumber = userPassModel.PhoneNumber;
+                userTicketPassModel.Name = userPassModel.Name;
+                userTicketPassModel.EventId = assignPassModel.EventId;
+
+                if (userticketPasses.Count > 0)
                 {
                     foreach (var ticketPass in userticketPasses)
                     {
@@ -357,7 +452,7 @@ namespace EventCheckin.Api.Controllers
                 }
                 else
                 {
-                    ticketPassModels.Add(userPassModel);
+                    ticketPassModels.Add(userTicketPassModel);
                 }
             }
 
@@ -366,6 +461,153 @@ namespace EventCheckin.Api.Controllers
             assignPassModel.TicketPasses = ticketPassModels;
 
             return new CustomApiResponse(assignPassModel, 200, true);
+        }
+
+
+        [HttpPost, Route("GetCheckTicketPasses")]
+        public async Task<ActionResult<CustomApiResponse>> GetCheckTicketPasses(AssignPassModel assignPassModel)
+        {
+            var userTicketModels = _userManager.Users
+                        .Select(t => new UserModel()
+                        {
+                            Id = t.Id,
+                            PhoneNumber = t.PhoneNumber,
+                            Name = t.Name
+                        }).ToList();
+
+            var eventEntitys = await _eventService.GetEventEntitys();
+
+            var eventModels = new List<EventModel>();
+
+            var ticketPasses = await _ticketPassService.GetCheckSecurityEntryPassesByEventId(assignPassModel.EventId);
+
+            foreach (var eventEntity in eventEntitys)
+            {
+                eventModels.Add(_mapper.Map<EventModel>(eventEntity));
+            }
+
+            var ticketPassModels = new List<TicketPassModel>();
+           
+            foreach (var ticketPass in ticketPasses)
+            {
+                var userModel = userTicketModels.Where(t => t.Id == ticketPass.UserId).FirstOrDefault();
+
+                var ticketPassModel = new TicketPassModel();
+                ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+                ticketPassModel.PhoneNumber = userModel.PhoneNumber;
+                ticketPassModel.Name = userModel.Name;
+                ticketPassModel.EventId = ticketPassModel.EventId;
+                ticketPassModel.Id = ticketPassModel.Id;
+                ticketPassModel.IsActive = ticketPassModel.IsActive;
+                ticketPassModel.IsParkingAllowed = ticketPassModel.IsParkingAllowed;
+                ticketPassModel.EntryOTP = ticketPassModel.EntryOTP;
+                ticketPassModel.EntryOTPTime = ticketPassModel.EntryOTPTime;
+                ticketPassModel.EntryStatus = ticketPassModel.EntryStatus;
+                ticketPassModel.ParkingOTP = ticketPassModel.ParkingOTP;
+                ticketPassModel.ParkingOTPTime = ticketPassModel.ParkingOTPTime;
+                ticketPassModel.ParkStatus = ticketPassModel.ParkStatus;
+                ticketPassModel.EntryStatusName = Enum.GetName(typeof(EntryStatusEnum), ticketPassModel.EntryStatus).ToString();
+                ticketPassModel.ParkStatusName = Enum.GetName(typeof(ParkingStatusEnum), ticketPassModel.ParkStatus).ToString();
+                ticketPassModels.Add(ticketPassModel);
+            }
+
+            assignPassModel.Events = eventModels;
+            assignPassModel.TicketPasses = ticketPassModels;
+            return new CustomApiResponse(assignPassModel, 200, true);
+        }
+
+
+        [HttpPost, Route("AddSecurityEntryPassStatus")]
+        public async Task<ActionResult<CustomApiResponse>> AddSecurityEntryPassStatus(TicketPassModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelStateExtensions.GetErrorMessage(ModelState));
+
+            TicketPass dto = _mapper.Map<TicketPass>(model);
+            if (dto.Id > 0)
+            {
+                if (dto.IsActive == true)
+                {
+                    dto.EntryStatus = (int)EntryStatusEnum.Close;
+                    var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
+                }
+                return new CustomApiResponse(model, 200, true);
+            }
+
+            return new CustomApiResponse("Record not found.", 400, true);
+        }
+
+
+        [HttpPost, Route("GetCheckParkingPasses")]
+        public async Task<ActionResult<CustomApiResponse>> GetCheckParkingPasses(AssignPassModel assignPassModel)
+        {
+            var userTicketModels = _userManager.Users
+                        .Select(t => new UserModel()
+                        {
+                            Id = t.Id,
+                            PhoneNumber = t.PhoneNumber,
+                            Name = t.Name
+                        }).ToList();
+
+            var eventEntitys = await _eventService.GetEventEntitys();
+
+            var eventModels = new List<EventModel>();
+
+            var ticketPasses = await _ticketPassService.GetCheckSecurityParkingPassesByEventId(assignPassModel.EventId);
+
+            foreach (var eventEntity in eventEntitys)
+            {
+                eventModels.Add(_mapper.Map<EventModel>(eventEntity));
+            }
+
+            var ticketPassModels = new List<TicketPassModel>();
+
+            foreach (var ticketPass in ticketPasses)
+            {
+                var userModel = userTicketModels.Where(t => t.Id == ticketPass.UserId).FirstOrDefault();
+
+                var ticketPassModel = new TicketPassModel();
+                ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+                ticketPassModel.PhoneNumber = userModel.PhoneNumber;
+                ticketPassModel.Name = userModel.Name;
+                ticketPassModel.EventId = ticketPassModel.EventId;
+                ticketPassModel.Id = ticketPassModel.Id;
+                ticketPassModel.IsActive = ticketPassModel.IsActive;
+                ticketPassModel.IsParkingAllowed = ticketPassModel.IsParkingAllowed;
+                ticketPassModel.EntryOTP = ticketPassModel.EntryOTP;
+                ticketPassModel.EntryOTPTime = ticketPassModel.EntryOTPTime;
+                ticketPassModel.EntryStatus = ticketPassModel.EntryStatus;
+                ticketPassModel.ParkingOTP = ticketPassModel.ParkingOTP;
+                ticketPassModel.ParkingOTPTime = ticketPassModel.ParkingOTPTime;
+                ticketPassModel.ParkStatus = ticketPassModel.ParkStatus;
+                ticketPassModel.EntryStatusName = Enum.GetName(typeof(EntryStatusEnum), ticketPassModel.EntryStatus).ToString();
+                ticketPassModel.ParkStatusName = Enum.GetName(typeof(ParkingStatusEnum), ticketPassModel.ParkStatus).ToString();
+                ticketPassModels.Add(ticketPassModel);
+            }
+
+            assignPassModel.Events = eventModels;
+            assignPassModel.TicketPasses = ticketPassModels;
+            return new CustomApiResponse(assignPassModel, 200, true);
+        }
+
+        [HttpPost, Route("AddSecurityParkingPassStatus")]
+        public async Task<ActionResult<CustomApiResponse>> AddSecurityParkingPassStatus(TicketPassModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelStateExtensions.GetErrorMessage(ModelState));
+
+            TicketPass dto = _mapper.Map<TicketPass>(model);
+            if (dto.Id > 0)
+            {
+                if (dto.IsActive == true)
+                {
+                    dto.ParkStatus = (int)ParkingStatusEnum.Close;
+                    var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
+                }
+                return new CustomApiResponse(model, 200, true);
+            }
+
+            return new CustomApiResponse("Record not found.", 400, true);
         }
 
         [NonAction]

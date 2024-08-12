@@ -14,11 +14,13 @@ import { NgxGaugeModule } from 'ngx-gauge';
 import { AssignPassComponent } from './passes/assignpass/assignpass.component';
 import { CheckPassComponent } from './passes/checkpass/checkpass.component';
 import { UserFilterPipe } from '@core/pipes/UserFilterPipe';
+import { CheckParkingEntryComponent } from './passes/checkparkingentry/checkparkingentry.component';
 
 const COMPONENTS: any[] = [
   DashboardComponent,
   AssignPassComponent,
   CheckPassComponent,
+  CheckParkingEntryComponent,
   LoginComponent,
   RegisterComponent,
   Error403Component,

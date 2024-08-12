@@ -215,13 +215,14 @@ export class MemberEventComponent implements OnInit {
   async save() {
     var formData = this.getMemberEventFormData();
     console.log(this.memberEventData);
-    this.memberEventData.eventId = formData?.id;
+    console.log(formData);
+    this.memberEventData.eventId = formData?.eventId;
     this.memberEventData.userId = formData?.userId;
     this.memberEventData.guestNo = formData?.guestNo;
     this.memberEventData.parkNo = formData?.parkNo;
 
     await this.eventService.apiEventCreateeventmemberPost$Json$Response({
-        body:this.memberEventData
+        body:formData
       }).subscribe(result =>{
         console.log(result.body);
         var ticketpass = result.body.result;

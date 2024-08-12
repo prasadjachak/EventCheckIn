@@ -16,9 +16,9 @@ export interface UserModel {
   parentId?: number;
   password?: string | null;
   phoneNumber?: string | null;
-  roleId?: string | null;
+  roleId?: number;
   roleIds?: Array<number> | null;
-  userId?: string | null;
+  userId?: number;
   userName?: string | null;
   userRoles?: Array<RoleModel> | null;
 }

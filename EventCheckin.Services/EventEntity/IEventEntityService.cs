@@ -27,8 +27,12 @@ namespace EventCheckin.Services
         Task<List<EventMember>> GetEventMembers(long eventEntityId);
 
         Task<EventMember> GetEventMemberByIdAsync(long eventEntityId);
-        
+
+        Task<EventMember> GetEventMemberByEventIdAndUserIdAsync(long eventEntityId,long userId);
+
         Task<EventMember> AddEventMemberAsync(EventMember dto);
+
+        Task<EventMember> UpdateEventMemberAsync(EventMember dto);
 
         Task<bool> DeleteEventMemberAsync(long eventMemberId);
     }
@@ -146,11 +150,11 @@ namespace EventCheckin.Services
         {
             try
             {
-                var eventEntitys = await _uow.Query<DbContext.Entities.EventMember>().Where(t=>t.EventId)
+                var eventEntitys = await _uow.Query<DbContext.Entities.EventMember>().Where(t=>t.EventId == eventEntityId)
                                       .AsNoTracking()
                                       .ToListAsync();
                 if (!eventEntitys.Any())
-                    return null;
+                    return new  List<EventMember>();
 
                 return eventEntitys.ToList();
             }
@@ -172,6 +176,23 @@ namespace EventCheckin.Services
                     return null;
 
                 return eventEntity;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public async Task<EventMember> UpdateEventMemberAsync(EventMember dto)
+        {
+            try
+            {
+                _uow.Context.Set<DbContext.Entities.EventMember>().Update(dto);
+                await _logsService.SaveLogNoCommit(DateTime.Now, 1, ELogType.EventEntityAdded, $"New eventEntity with url {dto.Id}."); // save log of this action
+                await _uow.CommitAsync();
+
+                return dto;
             }
             catch (Exception e)
             {
@@ -218,6 +239,23 @@ namespace EventCheckin.Services
             }
         }
 
+        public async Task<EventMember> GetEventMemberByEventIdAndUserIdAsync(long eventEntityId, long userId)
+        {
+            try
+            {
+                var eventEntity = _uow.Query<DbContext.Entities.EventMember>(s => s.EventId == eventEntityId && s.UserId == userId)
+                               .AsNoTracking()
+                               .FirstOrDefault();
+                if (eventEntity == null)
+                    return null;
 
+                return eventEntity;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
     }
 }

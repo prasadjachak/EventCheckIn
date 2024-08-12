@@ -68,26 +68,48 @@ namespace EventCheckin.Api.Controllers.Identity
         [Route("ListUser")]
         public async Task<ActionResult<CustomApiResponse>> ListUser(UserSearchModel model) {
             
-            var users = await _userService.GetUsers("GUEST");
+            var currentUser = await _userManager.FindByIdAsync(CurrentUserId.ToString());
+            var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "ADMIN");
+            var isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
 
             var userModels = new List<UserModel>();
-            foreach (var user1 in users)
+
+            if (isSuperAdmin)
             {
-                var user = await _userManager.FindByIdAsync(user1.Id.ToString());
-                var userModel = _mapper.Map<UserModel>(user);
-                var roleNames = await _userManager.GetRolesAsync(user);
-
-                foreach (var rolename in roleNames)
+                var users1 = await _userService.GetUsers("GUEST");
+                foreach (var user1 in users1)
                 {
-                    var role = await _roleManager.FindByNameAsync(rolename);
-                    userModel.UserRoles.Add(_mapper.Map<RoleModel>(role));
-                    userModel.RoleIds.Add(role.Id);
+                    var user = await _userManager.FindByIdAsync(user1.Id.ToString());
+                    var userModel = _mapper.Map<UserModel>(user);
+                    userModels.Add(userModel); 
                 }
-
-                userModels.Add(userModel);
             }
-
-            return new CustomApiResponse(userModels);
+            else if (isMember && !isAdmin)
+            {
+                var members = new List<ApplicationUser>();
+                if (currentUser.ParentId == 0)
+                {
+                    members = await _userService.GetUserByMemberId(currentUser.Id, "MEMBERS");
+                    members.Add(currentUser);
+                }
+                else 
+                { 
+                    var parentmember = (await _userManager.FindByIdAsync(currentUser.ParentId.ToString()));
+                    members = await _userService.GetUserByMemberId(parentmember.Id, "MEMBERS");
+                    members.Add(parentmember);
+                }
+                foreach (var member in members)
+                {
+                    var guests = await _userService.GetUserByMemberId(member.Id, "GUEST");
+                    foreach (var guest in guests)
+                    {
+                        var userModel = _mapper.Map<UserModel>(guest);
+                        userModels.Add(userModel);
+                    }
+                }
+            }
+            return new CustomApiResponse(userModels.Distinct().ToList());
         }
 
         [HttpGet("GetUser")]
@@ -126,7 +148,6 @@ namespace EventCheckin.Api.Controllers.Identity
         {
             if (!ModelState.IsValid)
                 return new CustomApiResponse(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage), 200, false);
-
             
             ApplicationUser user = await _userManager.FindByNameAsync(model.PhoneNumber); 
             try
@@ -143,6 +164,7 @@ namespace EventCheckin.Api.Controllers.Identity
                         EmailConfirmed = true,
                         LockoutEnabled = false,
                         TwoFactorEnabled = false,
+                        ParentId = CurrentUserId
                     };
                     model.Password = "Admin@32149870";
                     model.ConfirmPassword = "Admin@32149870";

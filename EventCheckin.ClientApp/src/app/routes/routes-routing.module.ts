@@ -9,6 +9,7 @@ import { RegisterComponent } from './sessions/register/register.component';
 import { authGuard } from '@core/authentication';
 import { CheckPassComponent } from './passes/checkpass/checkpass.component';
 import { AssignPassComponent } from './passes/assignpass/assignpass.component';
+import { CheckParkingEntryComponent } from './passes/checkparkingentry/checkparkingentry.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'assignpass', component: AssignPassComponent },
       { path: 'checkpass', component: CheckPassComponent },
+      { path: 'checkparking', component: CheckParkingEntryComponent },
       {
         path: 'profile',
         loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),

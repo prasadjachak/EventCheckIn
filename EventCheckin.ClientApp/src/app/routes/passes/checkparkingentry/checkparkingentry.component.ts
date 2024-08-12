@@ -12,12 +12,12 @@ import { finalize } from 'rxjs';
 // COMP
 // COMP
 @Component({
-  selector: 'app-checkpass',
-  templateUrl: './checkpass.component.html',
-  styleUrls: ['./checkpass.component.scss'],
+  selector: 'app-checkparkingentry',
+  templateUrl: './checkparkingentry.component.html',
+  styleUrls: ['./checkparkingentry.component.scss'],
 
 })
-export class CheckPassComponent implements OnInit {
+export class CheckParkingEntryComponent implements OnInit {
 
 
   columns: MtxGridColumn[] = [
@@ -145,7 +145,7 @@ export class CheckPassComponent implements OnInit {
     this.isLoading = true;
     this.assignModel.eventId = this.selectedEventIds[0];
     this.ticketPassService
-    .apiTicketPassGetCheckTicketPassesPost$Json$Response({body:this.assignModel})
+    .apiTicketPassGetCheckParkingPassesPost$Json$Response({body:this.assignModel})
     .pipe(
       finalize(() => {
         this.isLoading = false;
@@ -223,7 +223,7 @@ export class CheckPassComponent implements OnInit {
   async savePass(ticketPassModal: any) {
     console.log(ticketPassModal);
     ticketPassModal.eventId = this.selectedEventIds[0];
-    await this.ticketPassService.apiTicketPassAddSecurityEntryPassStatusPost$Json$Response({
+    await this.ticketPassService.apiTicketPassAddSecurityParkingPassStatusPost$Json$Response({
       body:ticketPassModal
     }).subscribe(result =>{
       console.log(result.body);

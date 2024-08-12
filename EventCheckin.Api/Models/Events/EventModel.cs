@@ -23,5 +23,10 @@ namespace EventCheckin.Api.Models.Events
         public int VenueLattitude { get; set; }
         public bool IsLive { get; set; }
         public bool IsPublished { get; set; }
+        public EventMemberModel EventMember { get; set; }
+        public int AddedGuestNo { get; set; }
+        public int AddedParkNo { get; set; }
+        public int PendingGuestNo { get; set; }
+        public int PendingParkNo { get; set; }
     }
 }

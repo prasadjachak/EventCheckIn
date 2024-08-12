@@ -13,6 +13,8 @@ namespace EventCheckin.Services
     {
         Task<List<TicketPass>> GetTicketPasss();
         Task<List<TicketPass>> GetTicketPassesByEventId(long eventId);
+        Task<List<TicketPass>> GetCheckSecurityEntryPassesByEventId(long eventId);
+        Task<List<TicketPass>> GetCheckSecurityParkingPassesByEventId(long eventId);
         Task<TicketPass> GetTicketPass(long eventDayId);
         Task<TicketPass> AddTicketPass(TicketPass dto);
         Task<bool> UpdateTicketPass(TicketPass dto);
@@ -68,11 +70,53 @@ namespace EventCheckin.Services
             }
         }
 
+        public async Task<List<TicketPass>> GetCheckSecurityEntryPassesByEventId(long eventId)
+        {
+            try
+            {
+                if (eventId > 0)
+                {
+                    var dbTicketPass = _uow.Query<DbContext.Entities.TicketPass>(s => s.EventId == eventId && s.EntryOTP != null 
+                    && (s.EntryStatus  == 1 || s.EntryStatus == 2));
+                    if (dbTicketPass == null)
+                        return new List<TicketPass>();
+                    return dbTicketPass.ToList();
+                }
+                return new List<TicketPass>();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public async Task<List<TicketPass>> GetCheckSecurityParkingPassesByEventId(long eventId)
+        {
+            try
+            {
+                if (eventId > 0)
+                {
+                    var dbTicketPass = _uow.Query<DbContext.Entities.TicketPass>(s => s.EventId == eventId && s.ParkingOTP != null
+                    && (s.ParkStatus == 1 || s.ParkStatus == 2) && s.IsParkingAllowed == true);
+                    if (dbTicketPass == null)
+                        return new List<TicketPass>();
+                    return dbTicketPass.ToList();
+                }
+                return new List<TicketPass>();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
         public async Task<TicketPass> GetTicketPass(long eventId)
         {
             try
             {
-                var dbTicketPass = _uow.Query<DbContext.Entities.TicketPass>(s => s.EventId == eventId).FirstOrDefault();
+                var dbTicketPass = _uow.Query<DbContext.Entities.TicketPass>(s => s.Id == eventId).FirstOrDefault();
                 if (dbTicketPass == null)
                     return null;
 
@@ -156,5 +200,7 @@ namespace EventCheckin.Services
                 return null;
             }
         }
+
+        
     }
 }

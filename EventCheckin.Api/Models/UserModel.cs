@@ -35,9 +35,9 @@ namespace EventCheckin.Api.Models
         
         public IList<RoleModel> UserRoles { get; set; }
 
-        public string UserId { get; set; }
+        public long UserId { get; set; }
         
-        public string RoleId { get; set; }
+        public long RoleId { get; set; }
         
         public string PhoneNumber { get; set; }
         

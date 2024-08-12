@@ -105,26 +105,27 @@ namespace EventCheckin.Api.Controllers
             // prepare model
             var eventMembers = new List<EventMemberModel>();
             var eventEntitys = await _eventEntityService.GetEventMembers(eventEntityId);
-            foreach(var eventEntity in eventEntitys)
-            {
-                var eventMemberModel = _mapper.Map<EventMemberModel>(eventEntity);
-                var user = _userManager.Users
-                .Where(user => user.Id == eventEntity.UserId)
-                .Select(user => new ApplicationUser()
+            if(eventEntitys != null) { 
+                foreach(var eventEntity in eventEntitys)
                 {
-                    Id = user.Id,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
-                    EmailConfirmed = user.EmailConfirmed,
-                    LockoutEnabled = user.LockoutEnabled,
-                    TwoFactorEnabled = user.TwoFactorEnabled
-                })
-                .FirstOrDefault();
-                eventMemberModel.User = _mapper.Map<UserModel>(user);
+                    var eventMemberModel = _mapper.Map<EventMemberModel>(eventEntity);
+                    var user = _userManager.Users
+                    .Where(user => user.Id == eventEntity.UserId)
+                    .Select(user => new ApplicationUser()
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber,
+                        EmailConfirmed = user.EmailConfirmed,
+                        LockoutEnabled = user.LockoutEnabled,
+                        TwoFactorEnabled = user.TwoFactorEnabled
+                    })
+                    .FirstOrDefault();
+                    eventMemberModel.User = _mapper.Map<UserModel>(user);
 
-                eventMembers.Add(eventMemberModel);
+                    eventMembers.Add(eventMemberModel);
+                }
             }
-
             return new CustomApiResponse(eventMembers);
         }
 

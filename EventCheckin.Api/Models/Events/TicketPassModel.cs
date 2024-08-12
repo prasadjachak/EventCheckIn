@@ -25,6 +25,8 @@ namespace EventCheckin.Api.Models.Events
 
         public int EntryStatus { get; set; }
 
+        public string EntryStatusName { get; set; }
+
         public bool IsParkingAllowed { get; set; }
 
         public int AllowedParkingCount { get; set; }
@@ -36,6 +38,8 @@ namespace EventCheckin.Api.Models.Events
         public string ParkSecurity { get; set; }
 
         public int ParkStatus { get; set; }
+
+        public string ParkStatusName { get; set; }
 
         public long AssignedBy { get; set; }
 

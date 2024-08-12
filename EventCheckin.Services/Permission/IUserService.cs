@@ -18,6 +18,9 @@ namespace EventCheckin.Services.Permission
         Task<List<ApplicationUser>> GetUsers(string role);
 
         Task<ApplicationUser> GetUser(string phoneNumber);
+
+        Task<List<ApplicationUser>> GetUserByMemberId(long memberId, string roleName);
+
     }
 
     public class UserService : IUserService
@@ -41,6 +44,32 @@ namespace EventCheckin.Services.Permission
                            join role in _uow.Query<DbContext.Entities.Identity.ApplicationRole>()
                            on userRole.RoleId equals role.Id
                            where role.Name == roleName
+                           select user).AsNoTracking()
+                                 .ToListAsync();
+                _uow.Commit();
+
+                return users.ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public async Task<List<ApplicationUser>> GetUserByMemberId(long memberId,string roleName)
+        {
+            try
+            {
+                var users =
+                    await (from user in _uow.Query<DbContext.Entities.Identity.ApplicationUser>()
+                         
+                           join userRole in _uow.Query<DbContext.Entities.Identity.ApplicationUserRole>()
+                             on user.Id equals userRole.UserId
+                           join role in _uow.Query<DbContext.Entities.Identity.ApplicationRole>()
+                           on userRole.RoleId equals role.Id
+                           where role.Name == roleName
+                           && user.ParentId == memberId
                            select user).AsNoTracking()
                                  .ToListAsync();
                 _uow.Commit();

@@ -4,6 +4,7 @@ using EventCheckin.DbContext.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventCheckin.DbContext.Migrations
 {
     [DbContext(typeof(Net7BoilerplateContext))]
-    partial class Net7BoilerplateContextModelSnapshot : ModelSnapshot
+    [Migration("20240812174143_migration18")]
+    partial class migration18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,8 +134,8 @@ namespace EventCheckin.DbContext.Migrations
                     b.Property<DateTime?>("DeletedOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("EventId")
-                        .HasColumnType("bigint");
+                    b.Property<bool>("EventId")
+                        .HasColumnType("bit");
 
                     b.Property<int>("GuestNo")
                         .HasColumnType("int");

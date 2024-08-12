@@ -2618,6 +2618,218 @@
         }
       }
     },
+    "/api/TicketPass/GetCheckTicketPasses": {
+      "post": {
+        "tags": [
+          "TicketPass"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPassModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPassModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPassModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPassModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TicketPass/AddSecurityEntryPassStatus": {
+      "post": {
+        "tags": [
+          "TicketPass"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TicketPass/GetCheckParkingPasses": {
+      "post": {
+        "tags": [
+          "TicketPass"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPassModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPassModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPassModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPassModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TicketPass/AddSecurityParkingPassStatus": {
+      "post": {
+        "tags": [
+          "TicketPass"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/User/ListUser": {
       "post": {
         "tags": [
@@ -3169,7 +3381,8 @@
             "format": "int64"
           },
           "eventId": {
-            "type": "boolean"
+            "type": "integer",
+            "format": "int64"
           },
           "guestNo": {
             "type": "integer",
@@ -3186,6 +3399,22 @@
           },
           "isPublished": {
             "type": "boolean"
+          },
+          "addedGuestNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "addedParkNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pendingGuestNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pendingParkNo": {
+            "type": "integer",
+            "format": "int32"
           },
           "user": {
             "$ref": "#/components/schemas/UserModel"
@@ -3266,6 +3495,25 @@
           },
           "isPublished": {
             "type": "boolean"
+          },
+          "eventMember": {
+            "$ref": "#/components/schemas/EventMemberModel"
+          },
+          "addedGuestNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "addedParkNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pendingGuestNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pendingParkNo": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -3567,6 +3815,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "entryStatusName": {
+            "type": "string",
+            "nullable": true
+          },
           "isParkingAllowed": {
             "type": "boolean"
           },
@@ -3590,6 +3842,10 @@
           "parkStatus": {
             "type": "integer",
             "format": "int32"
+          },
+          "parkStatusName": {
+            "type": "string",
+            "nullable": true
           },
           "assignedBy": {
             "type": "integer",
@@ -3691,12 +3947,12 @@
             "nullable": true
           },
           "userId": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int64"
           },
           "roleId": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int64"
           },
           "phoneNumber": {
             "type": "string",

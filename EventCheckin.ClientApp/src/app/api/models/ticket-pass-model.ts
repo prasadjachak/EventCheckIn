@@ -11,6 +11,7 @@ export interface TicketPassModel {
   entryOTPTime?: string | null;
   entrySecurity?: string | null;
   entryStatus?: number;
+  entryStatusName?: string | null;
   eventId?: number;
   eventModel?: EventModel;
   id?: number;
@@ -21,6 +22,7 @@ export interface TicketPassModel {
   name?: string | null;
   parkSecurity?: string | null;
   parkStatus?: number;
+  parkStatusName?: string | null;
   parkingOTP?: string | null;
   parkingOTPTime?: string | null;
   passDay?: string | null;
