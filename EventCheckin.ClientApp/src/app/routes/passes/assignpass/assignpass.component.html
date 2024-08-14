@@ -14,9 +14,10 @@
               <mat-selection-list [(ngModel)]="selectedEventIds"
               [multiple]="false"
               style="margin: 0;padding:0" class="custom-scroll-bar">
-                <ng-container *ngFor="let item of assignModel.events">
-                <mat-list-option (click)="getList()"
+                <ng-container *ngFor="let item of assignModel.events; index as i;">
+                <mat-list-option (click)="getList(i)"
                 [value]="item.id">
+
                   {{item.name}} - Total Invite:{{item.eventMember.guestNo}} /Pending Invite:{{item.eventMember.pendingGuestNo}}
                   <br>- Total :{{item.eventMember.parkNo}} /Pending Parking:{{item.eventMember.pendingParkNo}}
                 </mat-list-option>
@@ -45,7 +46,7 @@
                   </div>
                 </div>
                 <mat-list>
-                    <ng-container *ngFor="let item of assignModel.ticketPasses| userFilter:userSearch"
+                    <ng-container *ngFor="let item of assignModel.ticketPasses| userFilter:userSearch ;index as i; "
                     [(ngModel)]="selectedUsers" ngDefaultControl>
                       <mat-list-item >
                       <div class="row">
@@ -63,7 +64,7 @@
                             </mat-checkbox>
                           </div>
                           <div class="col-md-2" >
-                            <button class="pull-right" mat-raised-button color="primary" (click)="savePass(item)">
+                            <button [disabled]="item.id == 0 && item.isActive ==false" class="pull-right" mat-raised-button color="primary" (click)="savePass(item,i)">
                               Save
                             </button>
                           </div>

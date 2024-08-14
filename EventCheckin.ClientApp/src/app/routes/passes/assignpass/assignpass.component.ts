@@ -56,6 +56,7 @@ export class AssignPassComponent implements OnInit {
   assignModel: AssignPassModel = {};
 
   selectedEventIds : [0];
+  selectedEventIndex : 0;
   source: any[] = [];
   users: UserModel[] = [];
   selectedEvents : EventModel[] =  [];
@@ -87,7 +88,7 @@ export class AssignPassComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.getList();
+    this.getList(0);
     this.getUserList();
   }
 
@@ -125,7 +126,7 @@ export class AssignPassComponent implements OnInit {
         );
         if(result.body.isSuccess == true){
           this.source.splice(eventIndex, 1);
-          this.getList();
+          this.getList(0);
           this.toastr.info(
             `Event (${eventData?.name}) has been removed successfully`,
           );
@@ -138,7 +139,9 @@ export class AssignPassComponent implements OnInit {
 
   }
 
-  async getList() {
+  async getList(index) {
+    this.selectedEventIndex = index;
+    console.log(this.selectedEventIndex);
     if(this.selectedEventIds === undefined)
       this.selectedEventIds = [0];
     this.isLoading = true;
@@ -155,6 +158,7 @@ export class AssignPassComponent implements OnInit {
      // this.total = result.body.result.total;
       this.isLoading = false;
       console.log(this.assignModel);
+      console.log(this.selectedEventIndex);
     });
   }
 
@@ -162,20 +166,20 @@ export class AssignPassComponent implements OnInit {
     this.query.page = e.pageIndex;
     this.query.per_page = e.pageSize;
     this.query.start = (e.pageIndex * e.pageSize) + 1;
-    this.getList();
+    this.getList(0);
   }
 
   async search() {
     this.query.page = 0;
     this.query.start = 1;
-    this.getList();
+    this.getList(0);
   }
 
   async reset() {
     this.query.page = 0;
     this.query.per_page = 10;
     this.query.start = 1;
-    this.getList();
+    this.getList(0);
   }
 
   async getUserList() {
@@ -218,14 +222,17 @@ export class AssignPassComponent implements OnInit {
     });
   }
 
-  async savePass(ticketPassModal: any) {
+  async savePass(ticketPassModal: any, index: number) {
+
     console.log(ticketPassModal);
     ticketPassModal.eventId = this.selectedEventIds[0];
     await this.ticketPassService.apiTicketPassAddDeleteTicketPassesPost$Json$Response({
       body:ticketPassModal
     }).subscribe(result =>{
-      console.log(result.body);
-      var ticketpass = result.body.result
+      this.assignModel.events[this.selectedEventIndex] =result.body.result.events[0];
+      this.assignModel.ticketPasses[index].id = result.body.result.ticketPasses[0].id;
+      this.assignModel.ticketPasses[index].isActive = result.body.result.ticketPasses[0].isActive;
+      this.assignModel.ticketPasses[index].isParkingAllowed = result.body.result.ticketPasses[0].isParkingAllowed;
       this.toastr.info(
         `TicketPass (${result.body?.message}) has been created successfully`
       );

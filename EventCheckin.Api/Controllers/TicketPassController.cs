@@ -313,6 +313,10 @@ namespace EventCheckin.Api.Controllers
         [HttpPost, Route("AddDeleteTicketPasses")]
         public async Task<ActionResult<CustomApiResponse>> AddDeleteTicketPasses(TicketPassModel model)
         {
+            var assignPassModel = new AssignPassModel();
+            var eventEntity = await _eventService.GetEventEntity(model.EventId);
+            var eventEntityModel = _mapper.Map<EventModel>(eventEntity);
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelStateExtensions.GetErrorMessage(ModelState));
 
@@ -326,62 +330,110 @@ namespace EventCheckin.Api.Controllers
                 userId = CurrentUserId;
 
             var eventMember = await _eventService.GetEventMemberByEventIdAndUserIdAsync(model.EventId, userId);
-          
-
+ 
             TicketPass dto = _mapper.Map<TicketPass>(model);
             if(dto.Id== 0)
             {
-                dto.EntryStatus = (int)EntryStatusEnum.Active;
-                dto.AllowedGuestCount = 1;
-                if (dto.IsParkingAllowed)
+                if(dto.IsActive == true)
                 {
-                    dto.AllowedParkingCount = 1;
-                    dto.ParkStatus = (int)ParkingStatusEnum.Active;
-                }
-                   
-                var ticketPass = await _ticketPassService.AddTicketPass(dto);
-                var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
-
-                if (eventMember != null)
-                {
-                    eventMember.AddedGuestNo += 1; 
+                    dto.EntryStatus = (int)EntryStatusEnum.Active;
+                    dto.AllowedGuestCount = 1;
                     if (dto.IsParkingAllowed)
                     {
-                        eventMember.AddedParkNo += 1;
+                        dto.AllowedParkingCount = 1;
+                        dto.ParkStatus = (int)ParkingStatusEnum.Active;
                     }
-                    await _eventService.UpdateEventMemberAsync(eventMember);
-                }
-
-                return new CustomApiResponse(ticketPassModel, 200, true);
-            }
-            else
-            {
-                if(dto.IsActive == false)
-                {
-                    var ticketPass = await _ticketPassService.DeleteTicketPass(dto);
-                    if (eventMember != null)
-                    {
-                        if (dto.AllowedParkingCount > 0)
-                            eventMember.AddedParkNo -= 1;
-                        dto.AllowedGuestCount = 0;
-                        dto.AllowedParkingCount = 0;
-                        eventMember.AddedGuestNo -= 1;
-                        await _eventService.UpdateEventMemberAsync(eventMember);
-                    }
-              
+                   
+                    var ticketPass = await _ticketPassService.AddTicketPass(dto);
                     var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
-                    return new CustomApiResponse(ticketPassModel, 200, true);
-                }
-                if (dto.IsActive == true)
-                {
+
                     if (eventMember != null)
                     {
+                        eventMember.AddedGuestNo += 1; 
                         if (dto.IsParkingAllowed)
                         {
                             eventMember.AddedParkNo += 1;
                         }
-                        eventMember.AddedGuestNo += 1;
                         await _eventService.UpdateEventMemberAsync(eventMember);
+                        var eventMemberModel = _mapper.Map<EventMemberModel>(eventMember);
+                        eventMemberModel.PendingGuestNo = eventMember.GuestNo - eventMember.AddedGuestNo;
+                        eventMemberModel.PendingParkNo = eventMember.ParkNo - eventMember.AddedParkNo;
+                        eventEntityModel.EventMember = eventMemberModel;
+                        assignPassModel.Events = new List<EventModel>() { eventEntityModel };
+                        ticketPassModel.Id = dto.Id;
+
+                        assignPassModel.TicketPasses = new List<TicketPassModel>() { ticketPassModel };
+                    }
+                }
+                return new CustomApiResponse(assignPassModel, 200, true);
+            }
+            else
+            {
+                var ticketPass = await _ticketPassService.GetTicketPass(dto.Id);
+                var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+
+                if (dto.IsActive == false)
+                {
+                    var isDeleted = await _ticketPassService.DeleteTicketPass(dto);
+                    if (eventMember != null)
+                    {
+                        if (eventMember.AddedParkNo > 0 && ticketPass.ParkStatus == (int)ParkingStatusEnum.Active)
+                        {
+                            eventMember.AddedParkNo -= 1;
+                        }
+                           
+                        dto.AllowedGuestCount = 0;
+                        dto.AllowedParkingCount = 0;
+                        if (eventMember.AddedGuestNo > 0 &&  ticketPass.EntryStatus == (int)EntryStatusEnum.Active)
+                            eventMember.AddedGuestNo -= 1;
+                        await _eventService.UpdateEventMemberAsync(eventMember);
+
+                        
+                        var eventMemberModel = _mapper.Map<EventMemberModel>(eventMember);
+                        eventMemberModel.PendingGuestNo = eventMember.GuestNo - eventMember.AddedGuestNo;
+                        eventMemberModel.PendingParkNo = eventMember.ParkNo - eventMember.AddedParkNo;
+                        eventEntityModel.EventMember = eventMemberModel;
+                        assignPassModel.Events = new List<EventModel>() { eventEntityModel };
+                    }
+              
+                   
+                    if (isDeleted)
+                    {
+                        ticketPassModel.Id = 0;
+                        ticketPassModel.IsActive = false;
+                        ticketPassModel.IsParkingAllowed = false;
+                    }
+                        
+                    assignPassModel.TicketPasses = new List<TicketPassModel>() { ticketPassModel };
+                    return new CustomApiResponse(assignPassModel, 200, true);
+                }
+                if (dto.IsActive == true )
+                {
+                    if (eventMember != null)
+                    {
+                        if (dto.IsParkingAllowed && ticketPass.IsParkingAllowed != true)
+                        {
+                            eventMember.AddedParkNo += 1;
+                        }
+
+                        if (!dto.IsParkingAllowed && ticketPass.IsParkingAllowed == true)
+                        {
+                            if(eventMember.AddedParkNo >0)
+                                eventMember.AddedParkNo -= 1;
+                        }
+
+                        if ( ticketPass.IsActive != true)
+                        {
+                            eventMember.AddedGuestNo += 1;
+                        }
+                       
+                        await _eventService.UpdateEventMemberAsync(eventMember);
+
+                        var eventMemberModel = _mapper.Map<EventMemberModel>(eventMember);
+                        eventMemberModel.PendingGuestNo = eventMember.GuestNo - eventMember.AddedGuestNo;
+                        eventMemberModel.PendingParkNo = eventMember.ParkNo - eventMember.AddedParkNo;
+                        eventEntityModel.EventMember = eventMemberModel;
+                        assignPassModel.Events = new List<EventModel>() { eventEntityModel };
                     }
                     dto.EntryStatus = (int)EntryStatusEnum.Active;
                     dto.AllowedGuestCount = 1;
@@ -391,9 +443,13 @@ namespace EventCheckin.Api.Controllers
                         dto.ParkStatus = (int)ParkingStatusEnum.Active;
                     }
                         
-                    var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
+                    await _ticketPassService.UpdateTicketPass(dto);
+
+                    ticketPassModel = _mapper.Map<TicketPassModel>(dto);
+                    assignPassModel.TicketPasses = new List<TicketPassModel>() { ticketPassModel };
+                    return new CustomApiResponse(assignPassModel, 200, true);
                 }
-                return new CustomApiResponse(model, 200, true);
+                return new CustomApiResponse(model, 400, true);
             }
         }
 
