@@ -441,6 +441,7 @@ namespace EventCheckin.Api.Controllers
                     {
                         var ticketPassModel = new TicketPassModel();
                         ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
+                        ticketPassModel.UserId = userPassModel.Id;
                         ticketPassModel.PhoneNumber = userPassModel.PhoneNumber;
                         ticketPassModel.Name = userPassModel.Name;
                         ticketPassModel.EventId = ticketPassModel.EventId;
