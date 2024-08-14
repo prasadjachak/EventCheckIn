@@ -56,6 +56,7 @@ import { ToastrService } from 'ngx-toastr';
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isSubmitting = false;
+  isParkingSubmitting = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -110,7 +111,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  getOtp(item) {
+  getOtp(item,index) {
     this.isSubmitting = true;
     this.ticketPassService
         .apiTicketPassGetTicketOtpPost$Json$Response({body:item})
@@ -118,7 +119,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           //this.oeeEventModel = result.body.result!;
           console.log(result);
           const loginResponse = result.body.result!;
-          item= result.body.result!;
+          this.source[index]= result.body.result!;
 
           this.toast.error(result.body.message);
           console.log(loginResponse);
@@ -127,19 +128,18 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         });
   }
 
-  getParkingOtp(item) {
-    this.isSubmitting = true;
+  getParkingOtp(item,index) {
+    this.isParkingSubmitting = true;
     this.ticketPassService
         .apiTicketPassGetParkingTicketOtpPost$Json$Response({body:item})
         .subscribe(result =>{
           //this.oeeEventModel = result.body.result!;
-          console.log(result);
           const loginResponse = result.body.result!;
-          item= result.body.result!;
-
+          this.source[index]= result.body.result!;
+          console.log(item);
           this.toast.error(result.body.message);
           console.log(loginResponse);
-          this.isSubmitting = false;
+          this.isParkingSubmitting = false;
           // this._snackBar.error('Updated Successfully.');
         });
   }

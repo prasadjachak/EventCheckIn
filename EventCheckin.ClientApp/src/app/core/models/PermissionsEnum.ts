@@ -40,11 +40,12 @@ export const PermissionGroups = {
 	//Permissions which can be given to any role
 	GENERAL: [
 		PermissionsEnum.dashboard,
-    PermissionsEnum.checkpass,
-    PermissionsEnum.assignpass,
-    PermissionsEnum.evententity,
     PermissionsEnum.events,
     PermissionsEnum.passes,
+    PermissionsEnum.evententity,
+    PermissionsEnum.assignpass,
+    PermissionsEnum.checkpass,
+    PermissionsEnum.checkparking,
     PermissionsEnum.users,
     PermissionsEnum.adminusers,
     PermissionsEnum.memberusers,

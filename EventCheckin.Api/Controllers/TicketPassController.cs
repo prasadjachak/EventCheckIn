@@ -142,6 +142,8 @@ namespace EventCheckin.Api.Controllers
                             ticketPassModel.PassDay = eventModel.StartDate.Value.ToString("MMM dd");
                             ticketPassModel.PassFromTime = eventModel.StartDate.Value.ToString("hh:mm tt");
                             ticketPassModel.PassToTime = eventModel.EndDate.Value.ToString("hh:mm tt");
+                            ticketPassModel.EntryStatusName = Enum.GetName(typeof(EntryStatusEnum), ticketPassModel.EntryStatus).ToString();
+                            ticketPassModel.ParkStatusName = Enum.GetName(typeof(ParkingStatusEnum), ticketPassModel.ParkStatus).ToString();
                         }
                         ticketPassModels.Add(ticketPassModel);
                     }
@@ -179,7 +181,7 @@ namespace EventCheckin.Api.Controllers
                 return apiResponse;
             }
 
-            var eventEntity = await _eventService.GetEventEntity(model.UserId);
+            var eventEntity = await _eventService.GetEventEntity(model.EventId);
             if (eventEntity == null)
             {
                 apiResponse.StatusCode = 400;
@@ -195,6 +197,16 @@ namespace EventCheckin.Api.Controllers
             await _ticketPassService.UpdateTicketPass(ticket);
 
             var ticketModel = _mapper.Map<TicketPassModel>(ticket);
+            if (eventEntity != null)
+            {
+                var eventModel = _mapper.Map<EventModel>(eventEntity);
+                ticketModel.EventModel = eventModel;
+                ticketModel.PassDay = eventModel.StartDate.Value.ToString("MMM dd");
+                ticketModel.PassFromTime = eventModel.StartDate.Value.ToString("hh:mm tt");
+                ticketModel.PassToTime = eventModel.EndDate.Value.ToString("hh:mm tt");
+                ticketModel.EntryStatusName = Enum.GetName(typeof(EntryStatusEnum), ticketModel.EntryStatus).ToString();
+                ticketModel.ParkStatusName = Enum.GetName(typeof(ParkingStatusEnum), ticketModel.ParkStatus).ToString();
+            }
             apiResponse.Result = ticketModel;
             apiResponse.StatusCode = 200;
             apiResponse.IsSuccess = true;
@@ -213,7 +225,7 @@ namespace EventCheckin.Api.Controllers
                 return apiResponse;
             }
 
-            var eventEntity = await _eventService.GetEventEntity(model.UserId);
+            var eventEntity = await _eventService.GetEventEntity(model.EventId);
             if (eventEntity == null)
             {
                 apiResponse.StatusCode = 400;
@@ -229,6 +241,16 @@ namespace EventCheckin.Api.Controllers
             await _ticketPassService.UpdateTicketPass(ticket);
 
             var ticketModel = _mapper.Map<TicketPassModel>(ticket);
+            if (eventEntity != null)
+            {
+                var eventModel = _mapper.Map<EventModel>(eventEntity);
+                ticketModel.EventModel = eventModel;
+                ticketModel.PassDay = eventModel.StartDate.Value.ToString("MMM dd");
+                ticketModel.PassFromTime = eventModel.StartDate.Value.ToString("hh:mm tt");
+                ticketModel.PassToTime = eventModel.EndDate.Value.ToString("hh:mm tt");
+                ticketModel.EntryStatusName = Enum.GetName(typeof(EntryStatusEnum), ticketModel.EntryStatus).ToString();
+                ticketModel.ParkStatusName = Enum.GetName(typeof(ParkingStatusEnum), ticketModel.ParkStatus).ToString();
+            }
             apiResponse.Result = ticketModel;
             apiResponse.StatusCode = 200;
             apiResponse.IsSuccess = true;
@@ -309,9 +331,14 @@ namespace EventCheckin.Api.Controllers
             TicketPass dto = _mapper.Map<TicketPass>(model);
             if(dto.Id== 0)
             {
+                dto.EntryStatus = (int)EntryStatusEnum.Active;
                 dto.AllowedGuestCount = 1;
-                if(dto.IsParkingAllowed)
+                if (dto.IsParkingAllowed)
+                {
                     dto.AllowedParkingCount = 1;
+                    dto.ParkStatus = (int)ParkingStatusEnum.Active;
+                }
+                   
                 var ticketPass = await _ticketPassService.AddTicketPass(dto);
                 var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
 
@@ -324,9 +351,6 @@ namespace EventCheckin.Api.Controllers
                     }
                     await _eventService.UpdateEventMemberAsync(eventMember);
                 }
-                
-                if (dto.IsParkingAllowed)
-                    dto.AllowedParkingCount = 1;
 
                 return new CustomApiResponse(ticketPassModel, 200, true);
             }
@@ -359,10 +383,14 @@ namespace EventCheckin.Api.Controllers
                         eventMember.AddedGuestNo += 1;
                         await _eventService.UpdateEventMemberAsync(eventMember);
                     }
-                       
+                    dto.EntryStatus = (int)EntryStatusEnum.Active;
                     dto.AllowedGuestCount = 1;
                     if (dto.IsParkingAllowed)
+                    {
                         dto.AllowedParkingCount = 1;
+                        dto.ParkStatus = (int)ParkingStatusEnum.Active;
+                    }
+                        
                     var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
                 }
                 return new CustomApiResponse(model, 200, true);
@@ -430,11 +458,11 @@ namespace EventCheckin.Api.Controllers
             foreach (var userPassModel in userTicketModels)
             {
                 var userTicketPassModel = new TicketPassModel();
-                var userticketPasses = ticketPasses.Where(t=>t.UserId == userPassModel.UserId).ToList();
+                var userticketPasses = ticketPasses.Where(t=>t.UserId == userPassModel.Id).ToList();
                 userTicketPassModel.PhoneNumber = userPassModel.PhoneNumber;
                 userTicketPassModel.Name = userPassModel.Name;
                 userTicketPassModel.EventId = assignPassModel.EventId;
-
+                userTicketPassModel.UserId = userPassModel.Id;
                 if (userticketPasses.Count > 0)
                 {
                     foreach (var ticketPass in userticketPasses)

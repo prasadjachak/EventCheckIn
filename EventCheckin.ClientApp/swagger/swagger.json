@@ -3572,7 +3572,6 @@
       },
       "LoginViewModel": {
         "required": [
-          "password",
           "userName"
         ],
         "type": "object",
@@ -3582,9 +3581,8 @@
             "type": "string"
           },
           "password": {
-            "minLength": 1,
             "type": "string",
-            "format": "password"
+            "nullable": true
           },
           "rememberMe": {
             "type": "boolean"

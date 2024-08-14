@@ -44,19 +44,19 @@
             </div>
           </div>
         </div>
-        <button class="m-y-16" mat-raised-button color="primary"
+        <button class="m-y-16" mat-raised-button color="primary"  [disabled]="!(item.entryStatus == 1)"
       [loading]="isSubmitting"
-    (click)="getOtp(item)">{{'Get ENTRY OTP' | translate}}</button>
-
-    <p *ngIf="item.entryOTP != null" class="ticket__fine-print">{{item.entryOTP}}</p>
-    <p *ngIf="item.entryOTP != null" class="ticket__fine-print">Valid Till : {{item.entryOTPTime}}</p>
+    (click)="getOtp(item,i)">{{'Get ENTRY OTP' | translate}}</button>
+    Entry Status : {{item.entryStatusName}}
+    <p *ngIf="item.entryOTP != null && item.entryStatus == 1" class="ticket__fine-print">{{item.entryOTP}}</p>
+    <p *ngIf="item.entryOTP != null && item.entryStatus == 1" class="ticket__fine-print">Valid Till : {{item.entryOTPTime}}</p>
 
     <button class="m-y-16" mat-raised-button color="primary"
     [loading]="isSubmitting"
-  (click)="getParkingOtp(item)">{{'Get Parking OTP' | translate}}</button>
-
-  <p *ngIf="item.entryOTP != null" class="ticket__fine-print">{{item.parkingOTP}}</p>
-  <p *ngIf="item.entryOTP != null" class="ticket__fine-print">Valid Till : {{item.parkingOTPTime}}</p>
+  (click)="getParkingOtp(item,i)" [disabled]="!(item.parkStatus == 1)">{{'Get Parking OTP' | translate}}</button>
+    Parking Status : {{item.parkStatusName}}
+  <p *ngIf="item.entryOTP != null && item.parkStatus == 1" class="ticket__fine-print">{{item.parkingOTP}}</p>
+  <p *ngIf="item.entryOTP != null && item.parkStatus == 1" class="ticket__fine-print">Valid Till : {{item.parkingOTPTime}}</p>
     </div>
 
 
