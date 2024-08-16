@@ -2,7 +2,8 @@
 
   <mat-form-field appearance="outline" class="d-block mb-2">
     <mat-label>Mobile</mat-label>
-    <input formControlName="phoneNumber" matInput placeholder="Mobile" />
+    <input formControlName="phoneNumber" matInput placeholder="Mobile"
+    maxlength="10"  minlength="10"  (keypress)="($event.charCode >= 48 && $event.charCode < 58)"/>
     <mat-error *ngIf="fieldHasError('phoneNumber')">
       {{ getErrorMessage("phoneNumber") }}
     </mat-error>

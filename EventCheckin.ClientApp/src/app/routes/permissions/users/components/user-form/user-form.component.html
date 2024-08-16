@@ -10,7 +10,8 @@
 
   <mat-form-field appearance="outline" class="d-block mb-2">
     <mat-label>Name</mat-label>
-    <input formControlName="name" matInput placeholder="name" />
+    <input formControlName="name" matInput placeholder="name"
+    maxlength="10"  minlength="10" (keypress)="($event.charCode >= 48 && $event.charCode < 58)" />
     <mat-error *ngIf="fieldHasError('name')">
       {{ getErrorMessage("name") }}
     </mat-error>

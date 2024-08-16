@@ -14,11 +14,12 @@ import { ToastrService } from 'ngx-toastr';
 
 })
 export class LoginComponent {
+  onlyNumbers = /^\d+$/;
   isSubmitting = false;
   isOtpSubmitting = false;
-  otpForm = this.fb.nonNullable.group({
-    username: ['', [Validators.required]],
-    password: ['', [Validators.required]],
+  otpForm = this.fb.group({
+    username: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]],
+    password: ['', []],
   });
 
   otp:string;
