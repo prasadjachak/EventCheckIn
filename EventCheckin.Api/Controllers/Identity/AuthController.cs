@@ -18,6 +18,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography.Xml;
 using Microsoft.OpenApi.Extensions;
+using EventCheckin.Services.Permission;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,6 +30,7 @@ namespace EventCheckin.Api.Controllers.Identity
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly IJwtSettings _jwt;
@@ -38,6 +40,7 @@ namespace EventCheckin.Api.Controllers.Identity
         public AuthController(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
+            IUserService userService,
             IConfiguration configuration,
             IEmailService emailService,
             IJwtSettings jwt,
@@ -47,6 +50,7 @@ namespace EventCheckin.Api.Controllers.Identity
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _userService = userService;
             _configuration = configuration;
             _emailService = emailService;
             _jwt = jwt;
@@ -192,6 +196,84 @@ namespace EventCheckin.Api.Controllers.Identity
             return apiResponse;
         }
 
+        [HttpPost("FingerPrintLogin")]
+        public async Task<CustomApiResponse> FingerPrintLogin([FromBody] LoginViewModel model)
+        {
+            var apiResponse = new CustomApiResponse();
+            ApplicationUser user = await _userService.GetUserByFingerPrint(model.DeviceId).ConfigureAwait(false);
+            if (user == null)
+            {
+                apiResponse.StatusCode = 400;
+                //apiResponse.Message = "Invalid OTP.";
+                return apiResponse;
+            }
+
+            TokenModel tokenModel = new TokenModel()
+            {
+                HasVerifiedEmail = false
+            };
+
+            // Only allow login if email is confirmed
+            if (!user.EmailConfirmed)
+            {
+                apiResponse.Message = "Email is not confirmed.";
+                return apiResponse;
+            }
+
+            // Used as user lock
+            if (user.LockoutEnabled)
+            {
+                apiResponse.StatusCode = 400;
+                apiResponse.Message = "This account has been locked.";
+                return apiResponse;
+            }
+
+            tokenModel.HasVerifiedEmail = true;
+
+            try
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                string roleName = "GUEST";
+
+                if (roles.ToList().Where(t => t == "SECURITY").Any())
+                    roleName = "SECURITY";
+
+                if (roles.ToList().Where(t => t == "MEMBERS").Any())
+                    roleName = "MEMBERS";
+
+                if (roles.ToList().Where(t => t == "ADMIN").Any())
+                    roleName = "ADMIN";
+
+                JwtSecurityToken jwtSecurityToken = await CreateJwtToken(user, model.RememberMe).ConfigureAwait(false);
+                tokenModel.TFAEnabled = false;
+                tokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+                var authResponse = new
+                {
+                    ischild = user.ParentId > 0,
+                    rolename = roleName,
+                    refresh_token = tokenModel.Token,
+                    access_token = tokenModel.Token,
+                    expires_in = DateTime.Now.AddDays(100),
+
+                };
+                apiResponse.Result = authResponse;
+                apiResponse.Message = "You have successfully logged in.";
+                apiResponse.StatusCode = 200;
+                apiResponse.IsSuccess = true;
+                return apiResponse;
+
+            }
+            catch (Exception ex)
+            {
+
+                apiResponse.Message = "Invalid login attempt.";
+                tokenModel.TFAEnabled = true;
+                apiResponse.StatusCode = 400;
+                return apiResponse;
+            }
+        }
+
         [HttpPost("GetOtp")]
         public async Task<CustomApiResponse> GetOtp([FromBody] LoginViewModel model)
         {
@@ -271,6 +353,11 @@ namespace EventCheckin.Api.Controllers.Identity
           
             try
             {
+                if(!string.IsNullOrEmpty(model.DeviceId ))
+                    user.DeviceId = model.DeviceId;
+
+                IdentityResult result = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+
                 var roles = await _userManager.GetRolesAsync(user);
                 string roleName = "GUEST";
 
@@ -286,7 +373,7 @@ namespace EventCheckin.Api.Controllers.Identity
                 JwtSecurityToken jwtSecurityToken = await CreateJwtToken(user, model.RememberMe).ConfigureAwait(false);
                 tokenModel.TFAEnabled = false;
                 tokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-
+         
                 var authResponse = new
                 {
                     ischild = user.ParentId > 0,

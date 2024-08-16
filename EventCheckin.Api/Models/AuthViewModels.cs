@@ -58,6 +58,8 @@ namespace EventCheckin.Api.Models
 
         public string Password { get; set; }
 
+        public string DeviceId { get; set; }
+
         public bool RememberMe { get; set; }
     }
 

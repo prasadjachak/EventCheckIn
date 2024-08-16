@@ -11,6 +11,10 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { apiAuthConfirmEmailPost } from '../fn/auth/api-auth-confirm-email-post';
 import { ApiAuthConfirmEmailPost$Params } from '../fn/auth/api-auth-confirm-email-post';
+import { apiAuthFingerPrintLoginPost$Json } from '../fn/auth/api-auth-finger-print-login-post-json';
+import { ApiAuthFingerPrintLoginPost$Json$Params } from '../fn/auth/api-auth-finger-print-login-post-json';
+import { apiAuthFingerPrintLoginPost$Plain } from '../fn/auth/api-auth-finger-print-login-post-plain';
+import { ApiAuthFingerPrintLoginPost$Plain$Params } from '../fn/auth/api-auth-finger-print-login-post-plain';
 import { apiAuthForgotPasswordPost } from '../fn/auth/api-auth-forgot-password-post';
 import { ApiAuthForgotPasswordPost$Params } from '../fn/auth/api-auth-forgot-password-post';
 import { apiAuthGetOtpPost$Json } from '../fn/auth/api-auth-get-otp-post-json';
@@ -140,6 +144,53 @@ export class AuthService extends BaseService {
    */
   apiAuthLoginPost$Json(params?: ApiAuthLoginPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
     return this.apiAuthLoginPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiAuthFingerPrintLoginPost()` */
+  static readonly ApiAuthFingerPrintLoginPostPath = '/api/Auth/FingerPrintLogin';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiAuthFingerPrintLoginPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiAuthFingerPrintLoginPost$Plain$Response(params?: ApiAuthFingerPrintLoginPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiAuthFingerPrintLoginPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiAuthFingerPrintLoginPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiAuthFingerPrintLoginPost$Plain(params?: ApiAuthFingerPrintLoginPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiAuthFingerPrintLoginPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiAuthFingerPrintLoginPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiAuthFingerPrintLoginPost$Json$Response(params?: ApiAuthFingerPrintLoginPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiAuthFingerPrintLoginPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiAuthFingerPrintLoginPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiAuthFingerPrintLoginPost$Json(params?: ApiAuthFingerPrintLoginPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiAuthFingerPrintLoginPost$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

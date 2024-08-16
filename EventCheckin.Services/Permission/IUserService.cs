@@ -19,6 +19,8 @@ namespace EventCheckin.Services.Permission
 
         Task<ApplicationUser> GetUser(string phoneNumber);
 
+        Task<ApplicationUser> GetUserByFingerPrint(string deviceId);
+
         Task<List<ApplicationUser>> GetUserByMemberId(long memberId, string roleName);
 
     }
@@ -103,8 +105,24 @@ namespace EventCheckin.Services.Permission
             }
         }
 
-
-
-
+        public async Task<ApplicationUser> GetUserByFingerPrint(string deviceId)
+        {
+            try
+            {
+                var users =
+                    await (from user in _uow.Query<DbContext.Entities.Identity.ApplicationUser>()
+                           where user.DeviceId == deviceId
+                           select user).AsNoTracking()
+                                 .ToListAsync();
+                _uow.Commit();
+                _uow.ClearChangeTracker();
+                return users.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
     }
 }

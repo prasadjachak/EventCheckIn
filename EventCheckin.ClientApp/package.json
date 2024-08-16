@@ -48,6 +48,7 @@
     "@ngx-formly/material": "^6.2.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
+    "@thumbmarkjs/thumbmarkjs": "^0.14.8",
     "angular-in-memory-web-api": "~0.16.0",
     "apexcharts": "^3.43.0",
     "chart.js": "^4.4.0",

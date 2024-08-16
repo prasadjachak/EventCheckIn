@@ -367,6 +367,59 @@
         }
       }
     },
+    "/api/Auth/FingerPrintLogin": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Auth/GetOtp": {
       "post": {
         "tags": [
@@ -3581,6 +3634,10 @@
             "type": "string"
           },
           "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "deviceId": {
             "type": "string",
             "nullable": true
           },

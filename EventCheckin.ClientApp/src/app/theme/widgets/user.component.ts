@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SettingsService } from '@core';
 import { AuthService, User } from '@core/authentication';
+import { LocalStorageService } from '@shared';
 import { debounceTime, tap } from 'rxjs/operators';
 import screenfull from 'screenfull';
 
@@ -47,7 +48,8 @@ export class UserComponent implements OnInit {
     private router: Router,
     private auth: AuthService,
     private cdr: ChangeDetectorRef,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private store: LocalStorageService,
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +63,7 @@ export class UserComponent implements OnInit {
   }
 
   logout() {
+    this.store.set("deviceid","")
     this.auth.logout().subscribe(() => {
       this.router.navigateByUrl('/auth/login');
     });
