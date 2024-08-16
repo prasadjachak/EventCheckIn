@@ -7,16 +7,15 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { CustomApiResponse } from '../../models/custom-api-response';
-import { EventMemberModel } from '../../models/event-member-model';
 
-export interface ApiEventDeleteteamemployeePost$Json$Params {
-      body?: EventMemberModel
+export interface ApiEventDeleteeventmemberPost$Json$Params {
+  eventMemberId?: number;
 }
 
-export function apiEventDeleteteamemployeePost$Json(http: HttpClient, rootUrl: string, params?: ApiEventDeleteteamemployeePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-  const rb = new RequestBuilder(rootUrl, apiEventDeleteteamemployeePost$Json.PATH, 'post');
+export function apiEventDeleteeventmemberPost$Json(http: HttpClient, rootUrl: string, params?: ApiEventDeleteeventmemberPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+  const rb = new RequestBuilder(rootUrl, apiEventDeleteeventmemberPost$Json.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.query('eventMemberId', params.eventMemberId, {});
   }
 
   return http.request(
@@ -29,4 +28,4 @@ export function apiEventDeleteteamemployeePost$Json(http: HttpClient, rootUrl: s
   );
 }
 
-apiEventDeleteteamemployeePost$Json.PATH = '/api/Event/deleteteamemployee';
+apiEventDeleteeventmemberPost$Json.PATH = '/api/Event/deleteeventmember';

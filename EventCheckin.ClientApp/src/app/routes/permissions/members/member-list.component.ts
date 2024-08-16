@@ -78,7 +78,7 @@ export class MemberListComponent implements OnInit {
     private toastr: ToastrService,
     private roleService: RolesService
   ) {}
-
+  selectedRoleName : "MEMBERS";
   roleName = this.store.get("rolename");
   ischild = this.store.get("ischild");
   newMemberButton = "Create";
@@ -269,6 +269,12 @@ export class MemberListComponent implements OnInit {
     });
   }
 
+
+  async filterSecurityList(role) {
+    console.log(role);
+    this.selectedRoleName = role;
+    this.getList(this.selectedRoleName);
+  }
 
 
 }

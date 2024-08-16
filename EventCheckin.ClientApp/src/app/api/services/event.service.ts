@@ -21,10 +21,10 @@ import { apiEventDeleteEventEntityPut$Json } from '../fn/event/api-event-delete-
 import { ApiEventDeleteEventEntityPut$Json$Params } from '../fn/event/api-event-delete-event-entity-put-json';
 import { apiEventDeleteEventEntityPut$Plain } from '../fn/event/api-event-delete-event-entity-put-plain';
 import { ApiEventDeleteEventEntityPut$Plain$Params } from '../fn/event/api-event-delete-event-entity-put-plain';
-import { apiEventDeleteteamemployeePost$Json } from '../fn/event/api-event-deleteteamemployee-post-json';
-import { ApiEventDeleteteamemployeePost$Json$Params } from '../fn/event/api-event-deleteteamemployee-post-json';
-import { apiEventDeleteteamemployeePost$Plain } from '../fn/event/api-event-deleteteamemployee-post-plain';
-import { ApiEventDeleteteamemployeePost$Plain$Params } from '../fn/event/api-event-deleteteamemployee-post-plain';
+import { apiEventDeleteeventmemberPost$Json } from '../fn/event/api-event-deleteeventmember-post-json';
+import { ApiEventDeleteeventmemberPost$Json$Params } from '../fn/event/api-event-deleteeventmember-post-json';
+import { apiEventDeleteeventmemberPost$Plain } from '../fn/event/api-event-deleteeventmember-post-plain';
+import { ApiEventDeleteeventmemberPost$Plain$Params } from '../fn/event/api-event-deleteeventmember-post-plain';
 import { apiEventGetEventEntitiesByMemberIdGet$Json } from '../fn/event/api-event-get-event-entities-by-member-id-get-json';
 import { ApiEventGetEventEntitiesByMemberIdGet$Json$Params } from '../fn/event/api-event-get-event-entities-by-member-id-get-json';
 import { apiEventGetEventEntitiesByMemberIdGet$Plain } from '../fn/event/api-event-get-event-entities-by-member-id-get-plain';
@@ -429,49 +429,49 @@ export class EventService extends BaseService {
     );
   }
 
-  /** Path part for operation `apiEventDeleteteamemployeePost()` */
-  static readonly ApiEventDeleteteamemployeePostPath = '/api/Event/deleteteamemployee';
+  /** Path part for operation `apiEventDeleteeventmemberPost()` */
+  static readonly ApiEventDeleteeventmemberPostPath = '/api/Event/deleteeventmember';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiEventDeleteteamemployeePost$Plain()` instead.
+   * To access only the response body, use `apiEventDeleteeventmemberPost$Plain()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiEventDeleteteamemployeePost$Plain$Response(params?: ApiEventDeleteteamemployeePost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiEventDeleteteamemployeePost$Plain(this.http, this.rootUrl, params, context);
+  apiEventDeleteeventmemberPost$Plain$Response(params?: ApiEventDeleteeventmemberPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventDeleteeventmemberPost$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiEventDeleteteamemployeePost$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiEventDeleteeventmemberPost$Plain$Response()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiEventDeleteteamemployeePost$Plain(params?: ApiEventDeleteteamemployeePost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiEventDeleteteamemployeePost$Plain$Response(params, context).pipe(
+  apiEventDeleteeventmemberPost$Plain(params?: ApiEventDeleteeventmemberPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventDeleteeventmemberPost$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiEventDeleteteamemployeePost$Json()` instead.
+   * To access only the response body, use `apiEventDeleteeventmemberPost$Json()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiEventDeleteteamemployeePost$Json$Response(params?: ApiEventDeleteteamemployeePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
-    return apiEventDeleteteamemployeePost$Json(this.http, this.rootUrl, params, context);
+  apiEventDeleteeventmemberPost$Json$Response(params?: ApiEventDeleteeventmemberPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiEventDeleteeventmemberPost$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiEventDeleteteamemployeePost$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiEventDeleteeventmemberPost$Json$Response()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiEventDeleteteamemployeePost$Json(params?: ApiEventDeleteteamemployeePost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
-    return this.apiEventDeleteteamemployeePost$Json$Response(params, context).pipe(
+  apiEventDeleteeventmemberPost$Json(params?: ApiEventDeleteeventmemberPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiEventDeleteeventmemberPost$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

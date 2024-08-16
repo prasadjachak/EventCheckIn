@@ -228,7 +228,12 @@ export class SecurityUserListComponent implements OnInit {
       })
     )
     .subscribe(result =>{
-      this.userRoles = result.body.result;
+      console.log(result.body.result);
+      this.userRoles = result.body.result.filter(element => {
+        return element.name == "GATESECURITY" ||  element.name == "PARKSECURITY";
+      })
+
+      ;
       this.isLoading = false;
     });
   }

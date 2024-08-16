@@ -144,7 +144,7 @@ export class EventListComponent implements OnInit {
 
   async delete(eventData: EventModel) {
     this.eventService
-    .apiEventDeleteEventEntityPut$Json$Response({id:eventData?.id})
+    .apiEventDeleteeventmemberPost$Json$Response({eventMemberId:eventData?.id})
     .subscribe(result =>{
       //this.source = result.body.result;
       var event = result.body;

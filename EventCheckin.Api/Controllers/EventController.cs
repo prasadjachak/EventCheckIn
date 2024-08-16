@@ -103,6 +103,13 @@ namespace EventCheckin.Api.Controllers
             //    return await AccessDeniedDataTablesJson();
 
             // prepare model
+
+            var currentUser = await _userManager.FindByIdAsync(CurrentUserId.ToString());
+            var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
+            var isMemberAdmin = await _userManager.IsInRoleAsync(currentUser, "MEMBERSADMIN");
+            var isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "ADMIN");
+            
             var eventMembers = new List<EventMemberModel>();
             var eventEntitys = await _eventEntityService.GetEventMembers(eventEntityId);
             if(eventEntitys != null) { 
@@ -121,9 +128,30 @@ namespace EventCheckin.Api.Controllers
                         TwoFactorEnabled = user.TwoFactorEnabled
                     })
                     .FirstOrDefault();
-                    eventMemberModel.User = _mapper.Map<UserModel>(user);
+                    if(isSuperAdmin || isAdmin)
+                    {
+                        var check = await _userManager.IsInRoleAsync(user,"MEMBERSADMIN");
+                        if (check) { 
+                            eventMemberModel.User = _mapper.Map<UserModel>(user);
+                            eventMembers.Add(eventMemberModel);
+                        }
+                    }
+                    else
+                    {
+                        if (isMemberAdmin)
+                            if (currentUser.Id == user.Id || currentUser.Id == user.ParentMemberId)
+                            {
+                                eventMemberModel.User = _mapper.Map<UserModel>(user);
+                                eventMembers.Add(eventMemberModel);
+                            }
 
-                    eventMembers.Add(eventMemberModel);
+                        if (isMember)
+                            if(currentUser.Id == user.Id || currentUser.Id == user.ParentId)
+                            {
+                                eventMemberModel.User = _mapper.Map<UserModel>(user);
+                                eventMembers.Add(eventMemberModel);
+                            }
+                    }
                 }
             }
             return new CustomApiResponse(eventMembers);
@@ -148,21 +176,21 @@ namespace EventCheckin.Api.Controllers
             return new CustomApiResponse(model);
         }
 
-        [HttpPost("deleteteamemployee")]
-        public virtual async Task<ActionResult<CustomApiResponse>> DeleteEventMember(EventMemberModel model)
+        [HttpPost("deleteeventmember")]
+        public virtual async Task<ActionResult<CustomApiResponse>> DeleteEventMember(int eventMemberId)
         {
             //if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTeams))
             //    return AccessDeniedView();
 
             // try to get a team with the specified id
-            var eventMember = await _eventEntityService.GetEventMemberByIdAsync(model.Id);
+            var eventMember = await _eventEntityService.GetEventMemberByIdAsync(eventMemberId);
             if (eventMember == null)
                 return RedirectToAction("List");
 
             // delete
             await _eventEntityService.DeleteEventMemberAsync(eventMember.Id);
 
-            return new CustomApiResponse(model);
+            return new CustomApiResponse(eventMemberId);
         }
 
     }

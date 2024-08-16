@@ -49,5 +49,7 @@ namespace EventCheckin.Api.Models
 
         public long ParentId { get; set; }
 
+        public long ParentMemberId { get; set; }
+
     }
 }

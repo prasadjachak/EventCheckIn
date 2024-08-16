@@ -159,7 +159,7 @@ export class MemberEventComponent implements OnInit {
   async delete(employeeData: any) {
     console.log(employeeData);
     this.eventService
-    .apiEventDeleteEventEntityPut$Json$Response({id:employeeData.id})
+    .apiEventDeleteeventmemberPost$Json$Response({eventMemberId:employeeData.id})
     .subscribe(result =>{
       var employee = result.body.result
 
@@ -196,8 +196,8 @@ export class MemberEventComponent implements OnInit {
 
   async getEmployeeList() {
     this.isLoading = true;
-
-    if(this.roleName =="SUPERADMIN" && this.roleName =="ADMIN")
+    console.log(this.roleName);
+    if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
     {
       this.userSearchModel.searchUsername = "MEMBERSADMIN";
     }

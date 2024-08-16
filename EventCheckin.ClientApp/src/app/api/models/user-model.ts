@@ -14,6 +14,7 @@ export interface UserModel {
   name?: string | null;
   otp?: string | null;
   parentId?: number;
+  parentMemberId?: number;
   password?: string | null;
   phoneNumber?: string | null;
   roleId?: number;

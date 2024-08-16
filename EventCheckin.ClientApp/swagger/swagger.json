@@ -1055,35 +1055,21 @@
         }
       }
     },
-    "/api/Event/deleteteamemployee": {
+    "/api/Event/deleteeventmember": {
       "post": {
         "tags": [
           "Event"
         ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/EventMemberModel"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EventMemberModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EventMemberModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/EventMemberModel"
-              }
+        "parameters": [
+          {
+            "name": "eventMemberId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -3349,6 +3335,10 @@
           "parentId": {
             "type": "integer",
             "format": "int64"
+          },
+          "parentMemberId": {
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -4035,6 +4025,10 @@
             "nullable": true
           },
           "parentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "parentMemberId": {
             "type": "integer",
             "format": "int64"
           }

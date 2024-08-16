@@ -19,6 +19,7 @@ export interface ApplicationUser {
   otp?: string | null;
   otpTimeStamp?: string | null;
   parentId?: number;
+  parentMemberId?: number;
   passwordHash?: string | null;
   phoneNumber?: string | null;
   phoneNumberConfirmed?: boolean;

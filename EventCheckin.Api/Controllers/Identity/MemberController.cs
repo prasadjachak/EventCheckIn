@@ -70,13 +70,14 @@ namespace EventCheckin.Api.Controllers.Identity
             string rolename = model.SearchRolename;
             if (string.IsNullOrEmpty(rolename))
                 rolename = "MEMBERS";
-            var users = await _userService.GetUsers(rolename);
+           
             var currentUser = await _userManager.FindByIdAsync(CurrentUserId.ToString());
             var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
             var isMemberAdmin = await _userManager.IsInRoleAsync(currentUser, "MEMBERSADMIN");
             var isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
             var isAdmin = await _userManager.IsInRoleAsync(currentUser, "ADMIN");
 
+            var users = await _userService.GetUsers(rolename);
             var userModels = new List<UserModel>();
             foreach (var user1 in users)
             {
@@ -85,6 +86,15 @@ namespace EventCheckin.Api.Controllers.Identity
                     var user = await _userManager.FindByIdAsync(user1.Id.ToString());
                     var userModel = _mapper.Map<UserModel>(user);
                     userModels.Add(userModel);
+                }
+                else if (isMemberAdmin)
+                {
+                    var user = await _userManager.FindByIdAsync(user1.Id.ToString());
+                    if (user.ParentMemberId == currentUser.Id || user.Id == currentUser.Id)
+                    {
+                        var userModel = _mapper.Map<UserModel>(user);
+                        userModels.Add(userModel);
+                    }
                 }
                 else if (isMember)
                 {
@@ -188,9 +198,54 @@ namespace EventCheckin.Api.Controllers.Identity
                     IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
                 }
             }
-            else
+            else if (roles.Where(t => t == "MEMBERSADMIN").Any())
             {
-                if (roles.Where(t => t == "MEMBERS").Any())
+                
+                parentId = CurrentUser.Id;
+                try
+                {
+                    if (user == null)
+                    {
+                        user = new ApplicationUser
+                        {
+                            UserName = model.PhoneNumber,
+                            PhoneNumber = model.PhoneNumber,
+                            Name = model.Name,
+                            PhoneNumberConfirmed = false,
+                            Email = model.PhoneNumber + "@abc123.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            TwoFactorEnabled = false,
+                            ParentMemberId = parentId
+                        };
+                        model.Password = "Admin@32149870";
+                        model.ConfirmPassword = "Admin@32149870";
+                        IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
+                    }
+                    user.Name = model.Name;
+                    IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
+                    user.LockoutEnabled = false;
+                    IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+                    //if (result2.Succeeded)
+                    {
+                        return new CustomApiResponse(new UserModel
+                        {
+                            Id = user.Id,
+                            PhoneNumber = user.PhoneNumber,
+                            UserName = user.PhoneNumber,
+                            Name = model.Name,
+                        }, 200, true);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
+                }
+            }
+            else if (roles.Where(t => t == "MEMBERS").Any())
+            {
+
                 parentId = CurrentUser.Id;
                 try
                 {

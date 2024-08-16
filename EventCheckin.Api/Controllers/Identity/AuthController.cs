@@ -382,6 +382,9 @@ namespace EventCheckin.Api.Controllers.Identity
                 if (roles.ToList().Where(t => t == "SUPERADMIN").Any())
                     roleName = "SUPERADMIN";
 
+                if (roles.ToList().Where(t => t == "MEMBERSADMIN").Any())
+                    roleName = "MEMBERSADMIN";
+
                 JwtSecurityToken jwtSecurityToken = await CreateJwtToken(user, model.RememberMe).ConfigureAwait(false);
                 tokenModel.TFAEnabled = false;
                 tokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
