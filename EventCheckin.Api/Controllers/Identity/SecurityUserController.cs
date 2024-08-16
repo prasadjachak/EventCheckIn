@@ -67,8 +67,9 @@ namespace EventCheckin.Api.Controllers.Identity
         [Route("ListUser")]
         public async Task<ActionResult<CustomApiResponse>> ListUser(UserSearchModel model)
         {
-
-            var users = await _userService.GetUsers("SECURITY");
+            var users = await _userService.GetUsers(model.SearchRolename);
+            //var parkUsers = await _userService.GetUsers("PARKSECURITY");
+            //users.AddRange(parkUsers);
 
             var userModels = new List<UserModel>();
             foreach (var user1 in users)
@@ -122,7 +123,7 @@ namespace EventCheckin.Api.Controllers.Identity
         }
 
         [HttpPost("AddSecurityUser")]
-        public async Task<ActionResult<CustomApiResponse>> AddUser(UserModel model)
+        public async Task<ActionResult<CustomApiResponse>> AddUser(UserModel model,string roleName)
         {
             if (!ModelState.IsValid)
                 return new CustomApiResponse(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage), 200, false);
@@ -149,7 +150,7 @@ namespace EventCheckin.Api.Controllers.Identity
                 }
                 user.Name = model.Name;
                 user.LockoutEnabled = false;
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "SECURITY" });
+                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { roleName });
                 IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
                 //if (result2.Succeeded)
                 {
@@ -164,7 +165,7 @@ namespace EventCheckin.Api.Controllers.Identity
             }
             catch (Exception ex)
             {
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "SECURITY" });
+                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "GATESECURITY" });
             }
 
             return new CustomApiResponse("Erro", 200, false);
@@ -186,7 +187,26 @@ namespace EventCheckin.Api.Controllers.Identity
             user.UserName = model.PhoneNumber;
             user.Name = model.Name;
 
-            await _userManager.AddToRolesAsync(user, new List<string>() { "SECURITY" });
+            var roles = _roleManager.Roles
+                           .Select(t => new ApplicationRole()
+                           {
+                               Id = t.Id,
+                               Name = t.Name
+                           });
+
+            var userRoleNames = await _userManager.GetRolesAsync(user);
+            var editUserRoles = new List<string>();
+
+            foreach (var userRoleId in model.RoleIds)
+            {
+                var role = roles.Where(t => t.Id == userRoleId).Select(t => t.Name).FirstOrDefault();
+                if (role != null)
+                    editUserRoles.Add(role);
+            }
+
+            await _userManager.RemoveFromRolesAsync(user, userRoleNames.ToArray());
+
+            await _userManager.AddToRolesAsync(user, editUserRoles);
 
             IdentityResult result = await _userManager.UpdateAsync(user).ConfigureAwait(false);
             if (result.Succeeded)

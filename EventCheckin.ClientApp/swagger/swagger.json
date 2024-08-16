@@ -1959,6 +1959,15 @@
         "tags": [
           "SecurityUser"
         ],
+        "parameters": [
+          {
+            "name": "roleName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json-patch+json": {
@@ -4065,6 +4074,10 @@
             "nullable": true
           },
           "searchEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "searchRolename": {
             "type": "string",
             "nullable": true
           },

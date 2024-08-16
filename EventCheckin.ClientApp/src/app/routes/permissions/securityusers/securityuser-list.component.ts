@@ -54,6 +54,8 @@ export class SecurityUserListComponent implements OnInit {
   source: any[] = [];
   total = 0;
   isLoading = true;
+  newMemberButton = "Create";
+  selectedRoleName = "GATESECURITY";
 
   query = {
     q: '',
@@ -78,6 +80,7 @@ export class SecurityUserListComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.newMemberButton = "Add " + this.selectedRoleName;
     this.getList();
     this.getRoleList();
   }
@@ -178,7 +181,7 @@ export class SecurityUserListComponent implements OnInit {
   async getList() {
     this.isLoading = true;
     const userSearchModel : UserSearchModel =
-    {pageSize:this.query.per_page , pageNumber:this.query.start};
+    {pageSize:this.query.per_page , pageNumber:this.query.start,searchRolename:this.selectedRoleName};
     this.userService
     .apiSecurityUserListUserPost$Json$Response({body:userSearchModel})
     .pipe(
@@ -229,4 +232,12 @@ export class SecurityUserListComponent implements OnInit {
       this.isLoading = false;
     });
   }
+
+  async filterSecurityList(role) {
+    console.log(role);
+    this.selectedRoleName = role;
+    this.newMemberButton = "Add " + this.selectedRoleName;
+    this.getList();
+  }
+
 }

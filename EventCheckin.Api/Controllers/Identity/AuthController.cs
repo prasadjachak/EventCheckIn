@@ -167,8 +167,11 @@ namespace EventCheckin.Api.Controllers.Identity
                     var roles = await _userManager.GetRolesAsync(user);
                     string roleName = "GUEST";
 
-                    if (roles.ToList().Where(t => t == "SECURITY").Any())
-                        roleName = "SECURITY";
+                    if (roles.ToList().Where(t => t == "GATESECURITY").Any())
+                        roleName = "GATESECURITY";
+
+                    if (roles.ToList().Where(t => t == "PARKSECURITY").Any())
+                        roleName = "PARKSECURITY";
 
                     if (roles.ToList().Where(t => t == "MEMBERS").Any())
                         roleName = "MEMBERS";
@@ -235,8 +238,11 @@ namespace EventCheckin.Api.Controllers.Identity
                 var roles = await _userManager.GetRolesAsync(user);
                 string roleName = "GUEST";
 
-                if (roles.ToList().Where(t => t == "SECURITY").Any())
-                    roleName = "SECURITY";
+                if (roles.ToList().Where(t => t == "GATESECURITY").Any())
+                    roleName = "GATESECURITY";
+
+                if (roles.ToList().Where(t => t == "PARKSECURITY").Any())
+                    roleName = "PARKSECURITY";
 
                 if (roles.ToList().Where(t => t == "MEMBERS").Any())
                     roleName = "MEMBERS";
@@ -361,14 +367,20 @@ namespace EventCheckin.Api.Controllers.Identity
                 var roles = await _userManager.GetRolesAsync(user);
                 string roleName = "GUEST";
 
-                if (roles.ToList().Where(t => t == "SECURITY").Any())
-                    roleName = "SECURITY";
+                if (roles.ToList().Where(t => t == "GATESECURITY").Any())
+                    roleName = "GATESECURITY";
+
+                if (roles.ToList().Where(t => t == "PARKSECURITY").Any())
+                    roleName = "PARKSECURITY";
 
                 if (roles.ToList().Where(t => t == "MEMBERS").Any())
                     roleName = "MEMBERS";
 
                 if (roles.ToList().Where(t => t == "ADMIN").Any())
                     roleName = "ADMIN";
+
+                if (roles.ToList().Where(t => t == "SUPERADMIN").Any())
+                    roleName = "SUPERADMIN";
 
                 JwtSecurityToken jwtSecurityToken = await CreateJwtToken(user, model.RememberMe).ConfigureAwait(false);
                 tokenModel.TFAEnabled = false;

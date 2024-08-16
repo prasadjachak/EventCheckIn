@@ -14,6 +14,7 @@ export interface UserSearchModel {
   searchFirstName?: string | null;
   searchLastName?: string | null;
   searchPhone?: string | null;
+  searchRolename?: string | null;
   searchUsername?: string | null;
   selectedRoleIds?: Array<number> | null;
   token_type?: string | null;

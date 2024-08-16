@@ -79,10 +79,20 @@ export class MemberListComponent implements OnInit {
     private roleService: RolesService
   ) {}
 
-  roleName = this.store.get("roleName");
+  roleName = this.store.get("rolename");
   ischild = this.store.get("ischild");
+  newMemberButton = "Create";
   async ngOnInit() {
-    this.getList();
+    console.log(this.roleName);
+    if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+      this.newMemberButton = "Add Members Admin";
+    else
+      this.newMemberButton = "Add Members";
+
+      if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+        this.getList("MEMBERSADMIN");
+      else
+      this.getList("MEMBERS");
     this.getRoleList();
   }
 
@@ -96,7 +106,10 @@ export class MemberListComponent implements OnInit {
           console.log(success);
           if (success) {
             this.source.push(userData);
-            this.getList();
+            if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+              this.getList("MEMBERSADMIN");
+            else
+              this.getList("MEMBERS");
             this.toastr.info(
               `User (${userData?.fullName}) has been created successfully`
             );
@@ -129,7 +142,10 @@ export class MemberListComponent implements OnInit {
         console.log(userIndex);
         if (userIndex >= 0) {
           this.source[userIndex] = userData;
-          this.getList();
+          if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+            this.getList("MEMBERSADMIN");
+          else
+            this.getList("MEMBERS");
           this.toastr.info(
              `User (${userData?.fullName}) has been updated successfully`
            );
@@ -160,7 +176,10 @@ export class MemberListComponent implements OnInit {
         if(result.body.isSuccess == true){
           if (userIndex >= 0 ) {
             this.source.splice(userIndex, 1);
-            this.getList();
+            if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+              this.getList("MEMBERSADMIN");
+            else
+              this.getList("MEMBERS");
             this.toastr.info(
               `User (${userData?.userName}) has been removed successfully`,
             );
@@ -186,10 +205,10 @@ export class MemberListComponent implements OnInit {
     return await userDialog.afterClosed().toPromise();
   }
 
-  async getList() {
+  async getList(roleName1) {
     this.isLoading = true;
     const userSearchModel : UserSearchModel =
-    {pageSize:this.query.per_page , pageNumber:this.query.start};
+    {pageSize:this.query.per_page , pageNumber:this.query.start, searchRolename:roleName1};
     this.userService
     .apiMemberListUserPost$Json$Response({body:userSearchModel})
     .pipe(
@@ -209,20 +228,29 @@ export class MemberListComponent implements OnInit {
     this.query.page = e.pageIndex;
     this.query.per_page = e.pageSize;
     this.query.start = (e.pageIndex * e.pageSize) + 1;
-    this.getList();
+    if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+      this.getList("MEMBERSADMIN");
+    else
+      this.getList("MEMBERS");
   }
 
   async search() {
     this.query.page = 0;
     this.query.start = 1;
-    this.getList();
+    if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+      this.getList("MEMBERSADMIN");
+    else
+      this.getList("MEMBERS");
   }
 
   async reset() {
     this.query.page = 0;
     this.query.per_page = 10;
     this.query.start = 1;
-    this.getList();
+    if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+      this.getList("MEMBERSADMIN");
+    else
+      this.getList("MEMBERS");
   }
 
   async getRoleList() {
@@ -240,4 +268,7 @@ export class MemberListComponent implements OnInit {
       this.isLoading = false;
     });
   }
+
+
+
 }

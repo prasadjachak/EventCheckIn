@@ -80,7 +80,7 @@ export class MemberEventComponent implements OnInit {
     public eventService: EventService,
     public memberService: MemberService,
     private store: LocalStorageService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
   ) {
     // INIT USER FORM
   }
@@ -197,6 +197,14 @@ export class MemberEventComponent implements OnInit {
   async getEmployeeList() {
     this.isLoading = true;
 
+    if(this.roleName =="SUPERADMIN" && this.roleName =="ADMIN")
+    {
+      this.userSearchModel.searchUsername = "MEMBERSADMIN";
+    }
+    else
+    {
+      this.userSearchModel.searchUsername = "MEMBERS";
+    }
     this.memberService
       .apiMemberListUserPost$Json$Response({body:this.userSearchModel})
       .pipe(

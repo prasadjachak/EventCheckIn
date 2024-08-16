@@ -3,10 +3,13 @@
 <div class="row">
   <div class="col-md-12">
     <button class="pull-right" mat-raised-button color="primary" (click)="createNewUser()">
-      Create
+      {{newMemberButton}}
     </button>
   </div>
 </div>
+
+
+
 <mtx-grid [data]="source"
           [columns]="columns"
           [length]="total"

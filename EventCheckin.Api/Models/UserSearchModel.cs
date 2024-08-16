@@ -27,7 +27,9 @@ namespace EventCheckin.Api.Models
         public IList<SelectListItem> AvailableUserRoles { get; set; }
 
         public string SearchEmail { get; set; }
-
+        
+        public string SearchRolename { get; set; }
+        
         public string SearchUsername { get; set; }
 
         public bool UsernamesEnabled { get; set; }

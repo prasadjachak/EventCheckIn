@@ -16,4 +16,18 @@
     </mat-error>
   </mat-form-field>
 
+  <ng-container  *ngIf="userData.id > 0">
+    <mat-form-field appearance="outline" class="d-block mb-2">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="roleIds" multiple="true">
+        <mat-option *ngFor="let userRole of userData.userRoles" [value]="userRole.id">
+          {{ userRole.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="fieldHasError('roleIds')">
+        {{ getErrorMessage("roleIds") }}
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
 </form>
