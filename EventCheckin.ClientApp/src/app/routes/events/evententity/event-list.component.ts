@@ -170,7 +170,7 @@ export class EventListComponent implements OnInit {
   // OPEN MODAL WITH SOME CONFIGRATION
   private async openEventModal(event?: EventModel) {
     const eventDialog = this.dialog.open(EventModal, {
-      width: '450px',
+      width: '80%',
       maxWidth: '100%',
       data: event,
       disableClose: true,

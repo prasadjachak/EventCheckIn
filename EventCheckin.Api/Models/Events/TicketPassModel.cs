@@ -17,6 +17,8 @@ namespace EventCheckin.Api.Models.Events
 
         public long UserId { get; set; }
 
+        public string EnteredOTP { get; set; }
+
         public string EntryOTP { get; set; }
 
         public DateTime? EntryOTPTime { get; set; }
@@ -31,6 +33,8 @@ namespace EventCheckin.Api.Models.Events
 
         public int AllowedParkingCount { get; set; }
 
+        public string EnteredParkingOTP { get; set; }
+        
         public string ParkingOTP { get; set; }
 
         public DateTime? ParkingOTPTime { get; set; }

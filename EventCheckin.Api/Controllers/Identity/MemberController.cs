@@ -81,7 +81,7 @@ namespace EventCheckin.Api.Controllers.Identity
             var userModels = new List<UserModel>();
             foreach (var user1 in users)
             {
-                if (isSuperAdmin)
+                if (isSuperAdmin || isAdmin)
                 {
                     var user = await _userManager.FindByIdAsync(user1.Id.ToString());
                     var userModel = _mapper.Map<UserModel>(user);

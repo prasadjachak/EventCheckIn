@@ -169,6 +169,7 @@ export class SecurityUserListComponent implements OnInit {
   // OPEN MODAL WITH SOME CONFIGRATION
   private async openUserModal(user?: UserModel) {
     user.userRoles = this.userRoles;
+    user.roleName = this.selectedRoleName;
     const userDialog = this.dialog.open(SecurityUserModal, {
       width: '450px',
       maxWidth: '100%',

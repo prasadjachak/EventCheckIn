@@ -24,6 +24,7 @@ using System.IdentityModel.Tokens.Jwt;
 using EventCheckin.Services;
 using EventCheckin.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Intrinsics.X86;
 
 namespace EventCheckin.Api.Controllers.Identity
 {
@@ -72,6 +73,7 @@ namespace EventCheckin.Api.Controllers.Identity
             var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
             var isAdmin = await _userManager.IsInRoleAsync(currentUser, "ADMIN");
             var isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
+            var isMemberAdmin = await _userManager.IsInRoleAsync(currentUser, "MEMBERSADMIN");
 
             var userModels = new List<UserModel>();
 
@@ -83,6 +85,18 @@ namespace EventCheckin.Api.Controllers.Identity
                     var user = await _userManager.FindByIdAsync(user1.Id.ToString());
                     var userModel = _mapper.Map<UserModel>(user);
                     userModels.Add(userModel); 
+                }
+            }
+            else if (isMemberAdmin)
+            {
+                var users1 = await _userService.GetUsers("GUEST");
+                foreach (var user1 in users1)
+                {
+                    if (user1.ParentId == currentUser.Id || user1.Id == currentUser.Id)
+                    {
+                        var userModel = _mapper.Map<UserModel>(user1);
+                        userModels.Add(userModel);
+                    }
                 }
             }
             else if (isMember && !isAdmin)

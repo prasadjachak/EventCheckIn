@@ -48,7 +48,7 @@ export class SecurityUserFormComponent implements OnInit {
     console.log(this.userData);
     console.log(this.securityUserForm.value);
     console.log(this.securityUserForm);
-    return { ...this.securityUserForm.value, roleIds: this.securityUserForm.value?.roleIds || 1 };
+    return { ...this.securityUserForm.value, roleIds: this.securityUserForm.value?.roleIds || [1] };
   }
 
   // USER FORM PROPERTIES

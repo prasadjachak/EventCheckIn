@@ -54,18 +54,6 @@ export class UserFormComponent implements OnInit {
 
   // USER FORM PROPERTIES
   private get inituserForm() {
-    const passwordValidator = [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(16),
-      Validators.pattern(
-        '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
-      ),
-    ];
-    const passwordConfirmValidator = [
-      ...passwordValidator,
-      this.passwordMatchValidator(),
-    ];
 
     return new FormGroup(
       {
@@ -94,14 +82,6 @@ export class UserFormComponent implements OnInit {
     return this.formValidationService.getErrorMessage(fieldName, this.userForm);
   }
 
-  // CUSTOM VALIDATOR
-  private passwordMatchValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const passwordVal = this.userForm?.get('password')?.value;
-      const forbidden = control.value !== passwordVal;
-      return forbidden ? { mismatch: true } : null;
-    };
-  }
 
   async changePassword(){
 

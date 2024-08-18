@@ -147,7 +147,7 @@ namespace EventCheckin.Api.Controllers.Identity
             };
             model.Password = "Admin@32149870";
             model.ConfirmPassword = "Admin@32149870";
-
+            user.LockoutEnabled = false;
             IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
             if (result.Succeeded)
             {

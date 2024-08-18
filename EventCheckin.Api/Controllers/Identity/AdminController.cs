@@ -150,6 +150,7 @@ namespace EventCheckin.Api.Controllers.Identity
                     IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
                 }
                 user.Name = model.Name;
+                user.LockoutEnabled = false;
                 IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "ADMIN" });
                 user.LockoutEnabled = false;
                 IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);

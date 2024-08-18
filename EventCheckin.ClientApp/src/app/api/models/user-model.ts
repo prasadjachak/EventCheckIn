@@ -19,6 +19,8 @@ export interface UserModel {
   phoneNumber?: string | null;
   roleId?: number;
   roleIds?: Array<number> | null;
+  roleName?: string | null;
+  roleNames?: Array<string> | null;
   userId?: number;
   userName?: string | null;
   userRoles?: Array<RoleModel> | null;

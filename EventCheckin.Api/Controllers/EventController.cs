@@ -121,11 +121,12 @@ namespace EventCheckin.Api.Controllers
                     .Select(user => new ApplicationUser()
                     {
                         Id = user.Id,
+                        Name = user.Name,
                         Email = user.Email,
                         PhoneNumber = user.PhoneNumber,
                         EmailConfirmed = user.EmailConfirmed,
                         LockoutEnabled = user.LockoutEnabled,
-                        TwoFactorEnabled = user.TwoFactorEnabled
+                        TwoFactorEnabled = user.TwoFactorEnabled,
                     })
                     .FirstOrDefault();
                     if(isSuperAdmin || isAdmin)
@@ -133,6 +134,7 @@ namespace EventCheckin.Api.Controllers
                         var check = await _userManager.IsInRoleAsync(user,"MEMBERSADMIN");
                         if (check) { 
                             eventMemberModel.User = _mapper.Map<UserModel>(user);
+                            eventMemberModel.User.RoleNames = (await _userManager.GetRolesAsync(user)).ToList();
                             eventMembers.Add(eventMemberModel);
                         }
                     }
@@ -142,6 +144,7 @@ namespace EventCheckin.Api.Controllers
                             if (currentUser.Id == user.Id || currentUser.Id == user.ParentMemberId)
                             {
                                 eventMemberModel.User = _mapper.Map<UserModel>(user);
+                                eventMemberModel.User.RoleNames = (await _userManager.GetRolesAsync(user)).ToList();
                                 eventMembers.Add(eventMemberModel);
                             }
 
@@ -149,6 +152,7 @@ namespace EventCheckin.Api.Controllers
                             if(currentUser.Id == user.Id || currentUser.Id == user.ParentId)
                             {
                                 eventMemberModel.User = _mapper.Map<UserModel>(user);
+                                eventMemberModel.User.RoleNames = (await _userManager.GetRolesAsync(user)).ToList();
                                 eventMembers.Add(eventMemberModel);
                             }
                     }
@@ -165,10 +169,20 @@ namespace EventCheckin.Api.Controllers
 
             if (ModelState.IsValid)
             {
-                var teamEmployee = _mapper.Map<EventMember>(model);
-                teamEmployee.CreatedOnUtc = DateTime.UtcNow;
-                await _eventEntityService.AddEventMemberAsync(teamEmployee);
-                model.Id = teamEmployee.Id;
+                var eventUser = await _eventEntityService.GetEventMemberByEventIdAndUserIdAsync(model.EventId, model.UserId);
+                if(eventUser == null) { 
+                    var teamEmployee = _mapper.Map<EventMember>(model);
+                    teamEmployee.CreatedOnUtc = DateTime.UtcNow;
+                    await _eventEntityService.AddEventMemberAsync(teamEmployee);
+                    model.Id = teamEmployee.Id;
+                    return new CustomApiResponse(model);
+                }
+                else
+                {
+                    var resp =  new CustomApiResponse("",200,false);
+                    resp.Message = "Member is already added";
+                    return resp;
+                }
             }
             // prepare model
 

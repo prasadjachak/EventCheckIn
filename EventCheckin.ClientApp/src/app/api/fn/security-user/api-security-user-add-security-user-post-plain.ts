@@ -10,14 +10,12 @@ import { CustomApiResponse } from '../../models/custom-api-response';
 import { UserModel } from '../../models/user-model';
 
 export interface ApiSecurityUserAddSecurityUserPost$Plain$Params {
-  roleName?: string;
       body?: UserModel
 }
 
 export function apiSecurityUserAddSecurityUserPost$Plain(http: HttpClient, rootUrl: string, params?: ApiSecurityUserAddSecurityUserPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
   const rb = new RequestBuilder(rootUrl, apiSecurityUserAddSecurityUserPost$Plain.PATH, 'post');
   if (params) {
-    rb.query('roleName', params.roleName, {});
     rb.body(params.body, 'application/*+json');
   }
 

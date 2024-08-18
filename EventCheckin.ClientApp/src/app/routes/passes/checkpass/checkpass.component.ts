@@ -220,18 +220,24 @@ export class CheckPassComponent implements OnInit {
     });
   }
 
-  async savePass(ticketPassModal: any) {
+  async savePass(ticketPassModal: any, index : number) {
     console.log(ticketPassModal);
     ticketPassModal.eventId = this.selectedEventIds[0];
     await this.ticketPassService.apiTicketPassAddSecurityEntryPassStatusPost$Json$Response({
       body:ticketPassModal
     }).subscribe(result =>{
       console.log(result.body);
-      this.getList();
-      var ticketpass = result.body.result
-      this.toastr.info(
-        `TicketPass (${result.body?.message}) has been created successfully`
-      );
+      if(result.body.isSuccess){
+       // this.getList();
+        this.assignModel.ticketPasses[index] = result.body.result
+        this.toastr.info(
+          `TicketPass (${result.body?.message}) has been created successfully`
+        );
+      }else{
+        this.toastr.error(
+          result.body.message
+        );
+      }
     }) ;
   }
 }

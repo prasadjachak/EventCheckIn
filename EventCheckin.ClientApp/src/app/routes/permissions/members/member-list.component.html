@@ -10,7 +10,7 @@
 
 <div class="row">
   <div class="col-md-12">
-<mat-form-field appearance="outline" class="d-block mb-2">
+
   <mat-select [(ngModel)]="selectedRoleName" *ngIf="roleName == 'SUPERADMIN'"  placeholder="Filter Securities" (selectionChange)="filterSecurityList($event.value)">
     <mat-option value="MEMBERSADMIN">
       MEMBERSADMIN
@@ -20,7 +20,7 @@
     </mat-option>
   </mat-select>
 
-</mat-form-field>
+
 </div>
 </div>
 

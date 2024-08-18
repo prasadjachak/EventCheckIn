@@ -31,10 +31,11 @@ export class MemberEventComponent implements OnInit {
     { header: 'Mobile', field: 'user.phoneNumber'  },
     { header: 'GuestNo', field: 'guestNo'  },
     { header: 'ParkNo', field: 'parkNo'  },
+    { header: 'Role', field: 'user.roleNames'  },
     {
       header: 'Operation',
       field: 'operation',
-      width: '180px',
+      width: '50px',
       pinned: 'right',
       right: '0px',
       type: 'button',
@@ -199,11 +200,11 @@ export class MemberEventComponent implements OnInit {
     console.log(this.roleName);
     if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
     {
-      this.userSearchModel.searchUsername = "MEMBERSADMIN";
+      this.userSearchModel.searchRolename = "MEMBERSADMIN";
     }
     else
     {
-      this.userSearchModel.searchUsername = "MEMBERS";
+      this.userSearchModel.searchRolename = "MEMBERS";
     }
     this.memberService
       .apiMemberListUserPost$Json$Response({body:this.userSearchModel})
@@ -233,8 +234,14 @@ export class MemberEventComponent implements OnInit {
         body:formData
       }).subscribe(result =>{
         console.log(result.body);
+        if(result.body.isSuccess){
         var ticketpass = result.body.result;
         this.getList();
+      }else{
+        this.toastr.error(
+          result.body?.message
+        );
+      }
       });
   }
 }

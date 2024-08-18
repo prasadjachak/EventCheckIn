@@ -123,7 +123,7 @@ namespace EventCheckin.Api.Controllers.Identity
         }
 
         [HttpPost("AddSecurityUser")]
-        public async Task<ActionResult<CustomApiResponse>> AddUser(UserModel model,string roleName)
+        public async Task<ActionResult<CustomApiResponse>> AddUser(UserModel model)
         {
             if (!ModelState.IsValid)
                 return new CustomApiResponse(ModelState.Values.Select(x => x.Errors.FirstOrDefault().ErrorMessage), 200, false);
@@ -150,7 +150,7 @@ namespace EventCheckin.Api.Controllers.Identity
                 }
                 user.Name = model.Name;
                 user.LockoutEnabled = false;
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { roleName });
+                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { model.RoleName });
                 IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
                 //if (result2.Succeeded)
                 {

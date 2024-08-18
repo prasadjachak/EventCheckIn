@@ -17,22 +17,22 @@ namespace EventCheckin.Api.Infrastructure.Helpers
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings
-                options.Password.RequireDigit = true;
+                options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
                 // Ideally it should be no less than 6, Vue boilerplate forced me to scale it way down,
                 // becase people are lazy and complaining all the time
-                options.Password.RequiredUniqueChars = 1; 
+                options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 options.Lockout.MaxFailedAccessAttempts = 10;
-                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.AllowedForNewUsers = false;
 
                 // User settings
-                options.User.RequireUniqueEmail = true;
+                options.User.RequireUniqueEmail = false;
             });
         }
     }

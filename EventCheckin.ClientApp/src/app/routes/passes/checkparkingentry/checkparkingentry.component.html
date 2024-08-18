@@ -1,6 +1,6 @@
 <page-header class="bg-blue-600"></page-header>
 
-<div class="row">
+<div class="row" *ngIf="false">
   <div class="col-md-12">
 
     <mat-label>Total Invited : 0 </mat-label>
@@ -53,26 +53,31 @@
                   </div>
                 </div>
                 <mat-list>
-                    <ng-container *ngFor="let item of assignModel.ticketPasses| userFilter:userSearch"
+                    <ng-container *ngFor="let item of assignModel.ticketPasses| userFilter:userSearch; index as i; "
                     [(ngModel)]="selectedUsers" ngDefaultControl>
                       <mat-list-item >
                       <div class="row">
                           <div class="col-md-4" >
                             {{item.name}} - {{item.phoneNumber}}
                           </div>
-                          <div class="col-md-1" >
-                            {{item.parkingOTP}}
-                          </div>
                           <div class="col-md-3" >
                             {{item.parkingOTPTime}}
                           </div>
-                          <div class="col-md-2" >
+                          <div class="col-md-1" >
                             {{item.parkStatusName}}
                           </div>
-                          <div class="col-md-2" >
-                            <button class="pull-right" mat-raised-button color="primary" (click)="savePass(item)">
+                          <div class="col-md-3"  *ngIf="item.parkStatus == 1" >
+                            <input matInput placeholder="Enter OTP" [(ngModel)]="item.enteredParkingOTP" required
+                            maxlength="4"  (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+                            {{item.entryParkingOTP}}
+                          </div>
+                          <div class="col-md-1" >
+                            <button class="pull-right" *ngIf="item.parkStatus == 1" mat-raised-button color="primary" (click)="savePass(item,i)">
                               Accept
                             </button>
+                            <span class="pull-right" *ngIf="item.parkStatus != 1">
+                              OTP Validated
+                            </span>
                           </div>
                         </div>
                     </mat-list-item>

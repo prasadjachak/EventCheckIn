@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using EventCheckin.DbContext.Enums;
 using System.Runtime.Intrinsics.X86;
 using EventCheckin.Services.Permission;
+using Microsoft.IdentityModel.Abstractions;
 
 namespace EventCheckin.Api.Controllers
 {
@@ -608,15 +609,29 @@ namespace EventCheckin.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelStateExtensions.GetErrorMessage(ModelState));
 
-            TicketPass dto = _mapper.Map<TicketPass>(model);
-            if (dto.Id > 0)
+            if (model.Id > 0)
             {
-                if (dto.IsActive == true)
+                TicketPass dto = await _ticketPassService.GetTicketPass(model.Id);
                 {
-                    dto.EntryStatus = (int)EntryStatusEnum.Close;
-                    var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
+                    if (dto.EntryOTP == model.EnteredOTP)
+                    {
+                        if (dto.IsActive == true)
+                        {
+                            dto.EntryStatus = (int)EntryStatusEnum.Close;
+                            var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
+                            model.EntryStatus = (int)EntryStatusEnum.Close;
+                            model.EntryStatusName = Enum.GetName(typeof(EntryStatusEnum), model.EntryStatus).ToString();
+                         
+                        }
+                        return new CustomApiResponse(model, 200, true);
+                    }
+                    else
+                    {
+                        var resp = new CustomApiResponse("", 200, false);
+                        resp.Message = "OTP is not Valid.";
+                        return resp;
+                    }
                 }
-                return new CustomApiResponse(model, 200, true);
             }
 
             return new CustomApiResponse("Record not found.", 400, true);
@@ -681,15 +696,27 @@ namespace EventCheckin.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelStateExtensions.GetErrorMessage(ModelState));
 
-            TicketPass dto = _mapper.Map<TicketPass>(model);
-            if (dto.Id > 0)
+            if (model.Id > 0)
             {
-                if (dto.IsActive == true)
+                TicketPass dto = await _ticketPassService.GetTicketPass(model.Id);
+
+                if (dto.ParkingOTP == model.EnteredParkingOTP)
                 {
-                    dto.ParkStatus = (int)ParkingStatusEnum.Close;
-                    var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
+                    if (dto.IsActive == true)
+                    {
+                        dto.ParkStatus = (int)ParkingStatusEnum.Close;
+                        var ticketPass = await _ticketPassService.UpdateTicketPass(dto);
+                        model.ParkStatus = (int)ParkingStatusEnum.Close;
+                        model.ParkStatusName = Enum.GetName(typeof(ParkingStatusEnum), model.ParkStatus).ToString();
+                    }
+                    return new CustomApiResponse(model, 200, true);
                 }
-                return new CustomApiResponse(model, 200, true);
+                else
+                {
+                    var resp = new CustomApiResponse("", 200, false);
+                    resp.Message = "OTP is not Valid.";
+                    return resp;
+                }
             }
 
             return new CustomApiResponse("Record not found.", 400, true);

@@ -1945,15 +1945,6 @@
         "tags": [
           "SecurityUser"
         ],
-        "parameters": [
-          {
-            "name": "roleName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json-patch+json": {
@@ -3852,6 +3843,10 @@
             "type": "integer",
             "format": "int64"
           },
+          "enteredOTP": {
+            "type": "string",
+            "nullable": true
+          },
           "entryOTP": {
             "type": "string",
             "nullable": true
@@ -3879,6 +3874,10 @@
           "allowedParkingCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "enteredParkingOTP": {
+            "type": "string",
+            "nullable": true
           },
           "parkingOTP": {
             "type": "string",
@@ -4000,6 +3999,13 @@
             },
             "nullable": true
           },
+          "roleNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
           "userId": {
             "type": "integer",
             "format": "int64"
@@ -4013,6 +4019,10 @@
             "nullable": true
           },
           "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "roleName": {
             "type": "string",
             "nullable": true
           },

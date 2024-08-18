@@ -7,6 +7,8 @@ export interface TicketPassModel {
   allowedParkingCount?: number;
   assignedBy?: number;
   assignedDateUtc?: string | null;
+  enteredOTP?: string | null;
+  enteredParkingOTP?: string | null;
   entryOTP?: string | null;
   entryOTPTime?: string | null;
   entrySecurity?: string | null;

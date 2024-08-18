@@ -100,7 +100,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     )
     .subscribe(result =>{
-      this.source = result.body.result;
+      if(result.body.result.length > 0)
+      {
+        this.source = result.body.result;
+      }
      // this.total = result.body.result.total;
       this.isLoading = false;
       console.log(result);
