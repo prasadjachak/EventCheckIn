@@ -2114,6 +2114,59 @@
         }
       }
     },
+    "/api/TicketPass/SearchTicketPasses": {
+      "post": {
+        "tags": [
+          "TicketPass"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassSearchModel"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassSearchModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassSearchModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketPassSearchModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TicketPass/GetTicketPass": {
       "get": {
         "tags": [
@@ -3940,6 +3993,27 @@
           },
           "isParkingSelected": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TicketPassSearchModel": {
+        "type": "object",
+        "properties": {
+          "selectedEventIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "nullable": true
+          },
+          "availableEvents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SelectListItem"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

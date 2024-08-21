@@ -69,6 +69,10 @@ import { apiTicketPassListUserPost$Json } from '../fn/ticket-pass/api-ticket-pas
 import { ApiTicketPassListUserPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-list-user-post-json';
 import { apiTicketPassListUserPost$Plain } from '../fn/ticket-pass/api-ticket-pass-list-user-post-plain';
 import { ApiTicketPassListUserPost$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-list-user-post-plain';
+import { apiTicketPassSearchTicketPassesPost$Json } from '../fn/ticket-pass/api-ticket-pass-search-ticket-passes-post-json';
+import { ApiTicketPassSearchTicketPassesPost$Json$Params } from '../fn/ticket-pass/api-ticket-pass-search-ticket-passes-post-json';
+import { apiTicketPassSearchTicketPassesPost$Plain } from '../fn/ticket-pass/api-ticket-pass-search-ticket-passes-post-plain';
+import { ApiTicketPassSearchTicketPassesPost$Plain$Params } from '../fn/ticket-pass/api-ticket-pass-search-ticket-passes-post-plain';
 import { apiTicketPassUpdateTicketPassPut$Json } from '../fn/ticket-pass/api-ticket-pass-update-ticket-pass-put-json';
 import { ApiTicketPassUpdateTicketPassPut$Json$Params } from '../fn/ticket-pass/api-ticket-pass-update-ticket-pass-put-json';
 import { apiTicketPassUpdateTicketPassPut$Plain } from '../fn/ticket-pass/api-ticket-pass-update-ticket-pass-put-plain';
@@ -124,6 +128,53 @@ export class TicketPassService extends BaseService {
    */
   apiTicketPassListTicketPasssGet$Json(params?: ApiTicketPassListTicketPasssGet$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
     return this.apiTicketPassListTicketPasssGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `apiTicketPassSearchTicketPassesPost()` */
+  static readonly ApiTicketPassSearchTicketPassesPostPath = '/api/TicketPass/SearchTicketPasses';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassSearchTicketPassesPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassSearchTicketPassesPost$Plain$Response(params?: ApiTicketPassSearchTicketPassesPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassSearchTicketPassesPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassSearchTicketPassesPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassSearchTicketPassesPost$Plain(params?: ApiTicketPassSearchTicketPassesPost$Plain$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassSearchTicketPassesPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiTicketPassSearchTicketPassesPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassSearchTicketPassesPost$Json$Response(params?: ApiTicketPassSearchTicketPassesPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CustomApiResponse>> {
+    return apiTicketPassSearchTicketPassesPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiTicketPassSearchTicketPassesPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiTicketPassSearchTicketPassesPost$Json(params?: ApiTicketPassSearchTicketPassesPost$Json$Params, context?: HttpContext): Observable<CustomApiResponse> {
+    return this.apiTicketPassSearchTicketPassesPost$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CustomApiResponse>): CustomApiResponse => r.body)
     );
   }

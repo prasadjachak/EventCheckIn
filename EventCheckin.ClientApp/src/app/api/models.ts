@@ -19,6 +19,7 @@ export { RolePermissionSearchModel } from './models/role-permission-search-model
 export { SelectListGroup } from './models/select-list-group';
 export { SelectListItem } from './models/select-list-item';
 export { TicketPassModel } from './models/ticket-pass-model';
+export { TicketPassSearchModel } from './models/ticket-pass-search-model';
 export { UserModel } from './models/user-model';
 export { UserRoleModel } from './models/user-role-model';
 export { UserSearchModel } from './models/user-search-model';

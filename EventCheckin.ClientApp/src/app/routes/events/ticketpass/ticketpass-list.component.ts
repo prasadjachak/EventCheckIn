@@ -7,8 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs';
-import { TicketPassService } from 'app/api/services';
-import { TicketPassModel } from 'app/api/models';
+import { EventService, TicketPassService } from 'app/api/services';
+import { TicketPassModel, TicketPassSearchModel } from 'app/api/models';
 import { TicketPassModal } from './components';
 // COMP
 @Component({
@@ -20,42 +20,23 @@ import { TicketPassModal } from './components';
 export class TicketPassListComponent implements OnInit {
 
   columns: MtxGridColumn[] = [
+     { header: 'Event', field: 'eventName'  },
+     { header: 'User', field: 'guestName'  },
+     { header: 'Mobile', field: 'guestPhoneNumber'  },
+     { header: 'Date', field: 'startDate'  },
     { header: 'Pass No', field: 'ticketNo'  },
     { header: 'Allowed Guest', field: 'allowedGuestCount'  },
     { header: 'Allowed Parking', field: 'allowedParkingCount'  },
-    { header: 'Event Day Id', field: 'eventDayId'  },
-    {
-      header: 'Operation',
-      field: 'operation',
-      width: '180px',
-      pinned: 'right',
-      right: '0px',
-      type: 'button',
-      buttons: [
-        {
-          type: 'icon',
-          text: 'edit',
-          icon: 'edit',
-          tooltip: 'Edit',
-          click: (data: any) => this.update(data),
-        },
-        {
-          type: 'icon',
-          text: 'delete',
-          icon: 'delete',
-          tooltip: 'Delete',
-          color: 'warn',
-          pop: 'Confirm delete?',
-          click: (data: any) => this.delete(data),
-        },
-      ],
-    },
+    { header: 'Entry Status', field: 'entryStatusName'  },
+    { header: 'Park Status', field: 'parkStatusName'  },
+    { header: 'AssignedBy', field: 'assignedByName'  },
   ];
 
   source: any[] = [];
+  searchModel: TicketPassSearchModel = {};
   total = 0;
   isLoading = true;
-
+  events: any[] = [];
   query = {
     q: 'event:nzbin',
     sort: 'stars',
@@ -73,107 +54,27 @@ export class TicketPassListComponent implements OnInit {
 
   constructor(
     private ticketPassService: TicketPassService,
+    private eventService: EventService,
     private dialog: MatDialog,
     private toastr: ToastrService
   ) {}
 
   async ngOnInit() {
+    this.getEventList();
     this.getList();
   }
 
-  async createNewTicketPass() {
-    var event1 : TicketPassModel= {id:0};
-    try {
-      const { success, ticketpassData } = await this.openTicketPassModal(event1);
-      if (success) {
-        this.source.push(ticketpassData);
-        this.getList();
-        this.toastr.info(
-          `TicketPass (${ticketpassData?.name}) has been created successfully`
-        );
-      }
-      else{
-        if(ticketpassData != undefined && ticketpassData.errors.length > 0){
-          this.toastr.error(ticketpassData.errors[0]);
-        }
-      }
-    } catch (error: any) {
-      this.toastr.error(
-         error?.message || 'An error occoured when creating new event',
-       );
-    }
+  async searchTicketPass() {
+   this.getList();
   }
 
-  async update(event: TicketPassModel) {
-    try {
-      const { success, ticketpassData } = await this.openTicketPassModal(event);
-      if (success) {
-        console.log(ticketpassData);
-        const eventIndex = this.source.findIndex(
-          (usr) => usr?.id === event?.id
-        );
-        console.log(eventIndex);
-        if (eventIndex >= 0) {
-          this.source[eventIndex] = ticketpassData;
-          this.getList();
-          this.toastr.info(
-             `TicketPass (${ticketpassData?.name}) has been updated successfully`
-           );
-        }
-      }
-      else{
-        if(ticketpassData != undefined && ticketpassData.errors.length > 0){
-          this.toastr.error(ticketpassData.errors[0]);
-        }
-      }
-    } catch (error: any) {
-      this.toastr.error(
-         error?.message || 'An error occoured when updating  event'
-       );
-    }
-  }
 
-  async delete(ticketpassData: TicketPassModel) {
-    this.ticketPassService
-    .apiTicketPassDeleteTicketPassPut$Json$Response({id:ticketpassData?.id})
-    .subscribe(result =>{
-      //this.source = result.body.result;
-      var event = result.body;
-
-        const eventIndex = this.source.findIndex(
-          (usr) => usr.id === ticketpassData?.id
-        );
-        if(result.body.isSuccess == true){
-          this.source.splice(eventIndex, 1);
-          this.getList();
-          this.toastr.info(
-            `TicketPass (${ticketpassData?.ticketNo}) has been removed successfully`,
-          );
-        }else{
-          if(ticketpassData != undefined && event.isSuccess ==false){
-            this.toastr.error(event.message);
-          }
-        }
-    });
-
-  }
-
-  // OPEN MODAL WITH SOME CONFIGRATION
-  private async openTicketPassModal(event?: TicketPassModel) {
-    const eventDialog = this.dialog.open(TicketPassModal, {
-      width: '450px',
-      maxWidth: '100%',
-      data: event,
-      disableClose: true,
-    });
-    return await eventDialog.afterClosed().toPromise();
-  }
 
   async getList() {
     this.isLoading = true;
 
     this.ticketPassService
-    .apiTicketPassListTicketPasssGet$Json$Response()
+    .apiTicketPassSearchTicketPassesPost$Json$Response({body:this.searchModel})
     .pipe(
       finalize(() => {
         this.isLoading = false;
@@ -186,6 +87,26 @@ export class TicketPassListComponent implements OnInit {
       console.log(result);
     });
   }
+
+
+  async getEventList() {
+    this.isLoading = true;
+
+    this.eventService
+    .apiEventListEventEntitysGet$Json$Response()
+    .pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    )
+    .subscribe(result =>{
+      this.events = result.body.result;
+     // this.total = result.body.result.total;
+      this.isLoading = false;
+      console.log(result);
+    });
+  }
+
 
   async getNextPage(e: PageEvent) {
     this.query.page = e.pageIndex;

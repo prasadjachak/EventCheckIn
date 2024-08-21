@@ -18,7 +18,7 @@ export class HeaderComponent {
   @HostBinding('class') class = 'matero-header';
 
   @Input() showToggle = true;
-  @Input() showBranding = false;
+  @Input() showBranding = true;
 
   @Output() toggleSidenav = new EventEmitter<void>();
   @Output() toggleSidenavNotice = new EventEmitter<void>();

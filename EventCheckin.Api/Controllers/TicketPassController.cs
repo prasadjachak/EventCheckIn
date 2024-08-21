@@ -75,6 +75,13 @@ namespace EventCheckin.Api.Controllers
             return eventEntitys != null ? new CustomApiResponse(eventEntitys, 200, true) : new CustomApiResponse(500, false);
         }
 
+        [HttpPost, Route("SearchTicketPasses")]
+        public async Task<ActionResult<CustomApiResponse>> SearchTicketPasses(TicketPassSearchModel searchModel)
+        {
+            var eventEntitys = await _ticketPassService.SearchTicketPasss(eventIds:searchModel.SelectedEventIds.ToList());
+            return eventEntitys != null ? new CustomApiResponse(eventEntitys, 200, true) : new CustomApiResponse(500, false);
+        }
+
         [HttpGet, Route("GetTicketPass")]
         public async Task<ActionResult<CustomApiResponse>> GetTicketPass(long eventEntityId)
         {
@@ -193,7 +200,7 @@ namespace EventCheckin.Api.Controllers
             var ticket = await _ticketPassService.GetTicketPass(model.Id);
             ticket.EntryStatus = (int)EntryStatusEnum.Active;
             ticket.EntryOTP = GenerateRandomNo().ToString();
-            ticket.EntryOTPTime = DateTime.Now.AddMinutes(15);
+            ticket.EntryOTPTime = DateTime.UtcNow.AddMinutes(15);
 
             await _ticketPassService.UpdateTicketPass(ticket);
 
@@ -202,9 +209,13 @@ namespace EventCheckin.Api.Controllers
             {
                 var eventModel = _mapper.Map<EventModel>(eventEntity);
                 ticketModel.EventModel = eventModel;
-                ticketModel.PassDay = eventModel.StartDate.Value.ToString("MMM dd");
-                ticketModel.PassFromTime = eventModel.StartDate.Value.ToString("hh:mm tt");
-                ticketModel.PassToTime = eventModel.EndDate.Value.ToString("hh:mm tt");
+                DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(eventModel.StartDate.Value, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
+                DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(eventModel.EndDate.Value, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
+
+
+                ticketModel.PassDay = startDate.ToString("MMM dd");
+                ticketModel.PassFromTime = startDate.ToString("hh:mm tt");
+                ticketModel.PassToTime = endDate.ToString("hh:mm tt");
                 ticketModel.EntryStatusName = Enum.GetName(typeof(EntryStatusEnum), ticketModel.EntryStatus).ToString();
                 ticketModel.ParkStatusName = Enum.GetName(typeof(ParkingStatusEnum), ticketModel.ParkStatus).ToString();
             }
@@ -237,7 +248,7 @@ namespace EventCheckin.Api.Controllers
             var ticket = await _ticketPassService.GetTicketPass(model.Id);
             ticket.ParkStatus = (int)ParkingStatusEnum.Active;
             ticket.ParkingOTP = GenerateRandomNo().ToString();
-            ticket.ParkingOTPTime = DateTime.Now.AddMinutes(15);
+            ticket.ParkingOTPTime = DateTime.UtcNow.AddMinutes(15);
 
             await _ticketPassService.UpdateTicketPass(ticket);
 
@@ -246,9 +257,12 @@ namespace EventCheckin.Api.Controllers
             {
                 var eventModel = _mapper.Map<EventModel>(eventEntity);
                 ticketModel.EventModel = eventModel;
-                ticketModel.PassDay = eventModel.StartDate.Value.ToString("MMM dd");
-                ticketModel.PassFromTime = eventModel.StartDate.Value.ToString("hh:mm tt");
-                ticketModel.PassToTime = eventModel.EndDate.Value.ToString("hh:mm tt");
+                DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(eventModel.StartDate.Value, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
+                DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(eventModel.EndDate.Value, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
+
+                ticketModel.PassDay = startDate.ToString("MMM dd");
+                ticketModel.PassFromTime = startDate.ToString("hh:mm tt");
+                ticketModel.PassToTime = endDate.ToString("hh:mm tt");
                 ticketModel.EntryStatusName = Enum.GetName(typeof(EntryStatusEnum), ticketModel.EntryStatus).ToString();
                 ticketModel.ParkStatusName = Enum.GetName(typeof(ParkingStatusEnum), ticketModel.ParkStatus).ToString();
             }
@@ -344,7 +358,9 @@ namespace EventCheckin.Api.Controllers
                         dto.AllowedParkingCount = 1;
                         dto.ParkStatus = (int)ParkingStatusEnum.Active;
                     }
-                   
+
+                    dto.AssignedBy = CurrentUserId;
+                    dto.AssignedDateUtc = DateTime.UtcNow;
                     var ticketPass = await _ticketPassService.AddTicketPass(dto);
                     var ticketPassModel = _mapper.Map<TicketPassModel>(ticketPass);
 

@@ -68,8 +68,7 @@ export class AdminLayoutComponent implements OnDestroy {
         this.isMobileScreen = state.breakpoints[MOBILE_MEDIAQUERY];
         this.options.sidenavCollapsed = state.breakpoints[TABLET_MEDIAQUERY];
         this.isContentWidthFixed = state.breakpoints[MONITOR_MEDIAQUERY];
-        this.options.sidenavCollapsed = false;
-        this. toggleCollapsed();
+
       });
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(e => {

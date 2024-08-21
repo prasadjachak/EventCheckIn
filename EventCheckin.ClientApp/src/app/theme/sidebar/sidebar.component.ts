@@ -9,7 +9,7 @@ import { Component, Output, EventEmitter, Input, ViewEncapsulation } from '@angu
 export class SidebarComponent {
   @Input() showToggle = true;
   @Input() showUser = true;
-  @Input() showHeader = false;
+  @Input() showHeader = true;
   @Input() toggleChecked = false;
 
   @Output() toggleCollapsed = new EventEmitter<void>();

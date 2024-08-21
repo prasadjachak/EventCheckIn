@@ -38,9 +38,9 @@
             </mat-card-title>
           </mat-card-header>
             <mat-card-content class="card-body" >
-              <div class="col-md-12">
+              <div class="container">
                 <div class="row">
-                  <div class="col-md-6" >
+                  <div class="col-md-12 col-sm-12 col-12" >
                     <input matInput [(ngModel)]="userSearch" placeholder="Search"/>
                     <button  mat-button color="primary" class="pull-right" > Clear</button>
                   </div>
@@ -49,28 +49,29 @@
                     <ng-container *ngFor="let item of assignModel.ticketPasses| userFilter:userSearch ;index as i; "
                     [(ngModel)]="selectedUsers" ngDefaultControl>
                       <mat-list-item >
-                      <div class="row">
-                          <div class="col-md-7" >
-                            {{item.name}} - {{item.phoneNumber}}
-                          </div>
-                          <div class="col-md-1" >
-                            <mat-checkbox [(ngModel)]="item.isActive" [checked]="item.isActive"
-                              name="{{i}}-name">
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-md-7 col-sm-7 col-12" >
+                              {{item.name}} - {{item.phoneNumber}}
+                            </div>
+                            <div class="col-md-1 col-sm-1 col-1" >
+                              <mat-checkbox [(ngModel)]="item.isActive" [checked]="item.isActive"
+                                name="{{i}}-name">
+                                </mat-checkbox>
+                            </div>
+                            <div class="col-md-1 col-sm-1  col-1" >
+                              <mat-checkbox [(ngModel)]="item.isParkingAllowed" [checked]="item.isParkingAllowed"
+                              name="{{i}}-name1">
                               </mat-checkbox>
-                          </div>
-                          <div class="col-md-1" >
-                            <mat-checkbox [(ngModel)]="item.isParkingAllowed" [checked]="item.isParkingAllowed"
-                            name="{{i}}-name1">
-                            </mat-checkbox>
-                          </div>
-                          <div class="col-md-2" >
-                            <button [disabled]="item.id == 0 && item.isActive ==false" class="pull-right" mat-raised-button color="primary" (click)="savePass(item,i)">
-                              Save
-                            </button>
-                          </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2  col-2" >
+                              <button [disabled]="item.id == 0 && item.isActive ==false" class="pull-right" mat-raised-button color="primary" (click)="savePass(item,i)">
+                                Save
+                              </button>
+                            </div>
 
+                          </div>
                         </div>
-
                     </mat-list-item>
                     <mat-divider ></mat-divider>
                   </ng-container>

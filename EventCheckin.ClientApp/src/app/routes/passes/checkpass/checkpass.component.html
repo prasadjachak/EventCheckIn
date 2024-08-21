@@ -57,21 +57,21 @@
                     [(ngModel)]="selectedUsers" ngDefaultControl>
                       <mat-list-item >
                       <div class="row">
-                          <div class="col-md-4" >
+                          <div class="col-md-4  col-12" >
                             {{item.name}} - {{item.phoneNumber}}
                           </div>
-                          <div class="col-md-3" >
+                          <div class="col-md-3 col-3" >
                             {{item.entryOTPTime}}
                           </div>
-                          <div class="col-md-1" >
+                          <div class="col-md-1  col-1" >
                             {{item.entryStatusName}}
                           </div>
-                          <div class="col-md-3"  *ngIf="item.entryStatus == 1" >
+                          <div class="col-md-3  col-3"  *ngIf="item.entryStatus == 1" >
                             {{item.entryOTP}}
                             <input matInput placeholder="Enter OTP" [(ngModel)]="item.enteredOTP" required
                             maxlength="4"  (keypress)="($event.charCode >= 48 && $event.charCode < 58)"/>
                           </div>
-                          <div class="col-md-1" >
+                          <div class="col-md-1  col-1" >
                             <button class="pull-right" *ngIf="item.entryStatus == 1" mat-raised-button color="primary" (click)="savePass(item,i)">
                               Accept
                             </button>

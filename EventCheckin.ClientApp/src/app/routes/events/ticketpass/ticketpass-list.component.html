@@ -2,11 +2,30 @@
 
 <div class="row">
   <div class="col-md-12">
-    <button class="pull-right" mat-raised-button color="primary" (click)="createNewTicketPass()">
-      Create
+    <div class="row">
+      <div class="col-sm-6 col-md-2" style="padding-left: 0px;">
+        <ng-container>
+          <mat-form-field appearance="outline" class="d-block mb-2">
+            <mat-label>Select Events</mat-label>
+            <mat-select [(ngModel)]="searchModel.selectedEventIds" multiple="true">
+              <mat-option *ngFor="let event of events" [value]="event.id">
+                {{ event.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <button class="pull-right" mat-raised-button color="primary" (click)="searchTicketPass()">
+      Search
     </button>
   </div>
 </div>
+
 <mtx-grid [data]="source"
           [columns]="columns"
           [length]="total"
