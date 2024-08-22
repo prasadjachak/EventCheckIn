@@ -30,11 +30,11 @@ export class SecurityUserModalComponent implements OnInit {
          body:this.data
         }).subscribe(result =>{
           var user = result.body.result
-          this.dialogRef.close({ success: result.body.isSuccess, userData: user });
+          this.dialogRef.close({ success: result.body.isSuccess, userData: user,message : result.body.message });
         })
       : await this.userService.apiSecurityUserAddSecurityUserPost$Json$Response({body:this.data}).subscribe(result =>{
         var user = result.body.result
-        this.dialogRef.close({ success: result.body.isSuccess, userData: user });
+        this.dialogRef.close({ success: result.body.isSuccess, userData: user,message : result.body.message });
       });
   }
 

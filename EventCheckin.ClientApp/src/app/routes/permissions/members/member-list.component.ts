@@ -84,12 +84,12 @@ export class MemberListComponent implements OnInit {
   newMemberButton = "Create";
   async ngOnInit() {
     console.log(this.roleName);
-    if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+    if(this.roleName =="SUPERADMIN" )
       this.newMemberButton = "Add Members Admin";
     else
       this.newMemberButton = "Add Members";
 
-      if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+      if(this.roleName =="SUPERADMIN")
         this.getList("MEMBERSADMIN");
       else
       this.getList("MEMBERS");
@@ -101,12 +101,12 @@ export class MemberListComponent implements OnInit {
     if(!(this.ischild == true)){
         var user1 = {userRoles : this.userRoles};
         try {
-          const { success, userData } = await this.openUserModal(user1);
+          const { success, userData,message } = await this.openUserModal(user1);
           console.log(userData);
           console.log(success);
           if (success) {
             this.source.push(userData);
-            if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+            if(this.roleName =="SUPERADMIN")
               this.getList("MEMBERSADMIN");
             else
               this.getList("MEMBERS");
@@ -115,10 +115,7 @@ export class MemberListComponent implements OnInit {
             );
           }
           else{
-            console.log(userData);
-            if(userData !=undefined && userData.length > 0){
-              this.toastr.error(userData[0]);
-            }
+            this.toastr.error(message);
           }
         } catch (error: any) {
           this.toastr.error(
@@ -134,7 +131,7 @@ export class MemberListComponent implements OnInit {
 
   async update(user: UserModel) {
     try {
-      const { success, userData } = await this.openUserModal(user);
+      const { success, userData ,message} = await this.openUserModal(user);
       if (success) {
         const userIndex = this.source.findIndex(
           (usr) => usr?.id === user?.id
@@ -142,7 +139,7 @@ export class MemberListComponent implements OnInit {
         console.log(userIndex);
         if (userIndex >= 0) {
           this.source[userIndex] = userData;
-          if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+          if(this.roleName =="SUPERADMIN")
             this.getList("MEMBERSADMIN");
           else
             this.getList("MEMBERS");
@@ -152,10 +149,7 @@ export class MemberListComponent implements OnInit {
         }
       }
       else{
-        console.log(userData);
-        if(userData !=undefined && userData.length > 0){
-          this.toastr.error(userData[0]);
-        }
+        this.toastr.error(message);
       }
     } catch (error: any) {
       this.toastr.error(
@@ -176,7 +170,7 @@ export class MemberListComponent implements OnInit {
         if(result.body.isSuccess == true){
           if (userIndex >= 0 ) {
             this.source.splice(userIndex, 1);
-            if(this.roleName =="SUPERADMIN" || this.roleName =="ADMIN")
+            if(this.roleName =="SUPERADMIN")
               this.getList("MEMBERSADMIN");
             else
               this.getList("MEMBERS");

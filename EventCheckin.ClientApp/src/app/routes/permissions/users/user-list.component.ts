@@ -86,7 +86,7 @@ export class UserListComponent implements OnInit {
   async createNewUser() {
     var user1 = {userRoles : this.userRoles};
     try {
-      const { success, userData } = await this.openUserModal(user1);
+      const { success, userData, message } = await this.openUserModal(user1);
       console.log(userData);
       console.log(success);
       if (success) {
@@ -97,10 +97,7 @@ export class UserListComponent implements OnInit {
         );
       }
       else{
-        console.log(userData);
-        if(userData !=undefined && userData.length > 0){
-          this.toastr.error(userData[0]);
-        }
+        this.toastr.error(message);
       }
     } catch (error: any) {
       this.toastr.error(
@@ -111,7 +108,7 @@ export class UserListComponent implements OnInit {
 
   async update(user: UserModel) {
     try {
-      const { success, userData } = await this.openUserModal(user);
+      const { success, userData, message } = await this.openUserModal(user);
       if (success) {
         const userIndex = this.source.findIndex(
           (usr) => usr?.id === user?.id
@@ -126,10 +123,7 @@ export class UserListComponent implements OnInit {
         }
       }
       else{
-        console.log(userData);
-        if(userData !=undefined && userData.length > 0){
-          this.toastr.error(userData[0]);
-        }
+          this.toastr.error(message);
       }
     } catch (error: any) {
       this.toastr.error(

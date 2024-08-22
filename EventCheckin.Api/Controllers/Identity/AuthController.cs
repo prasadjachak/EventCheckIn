@@ -176,8 +176,11 @@ namespace EventCheckin.Api.Controllers.Identity
                     if (roles.ToList().Where(t => t == "MEMBERS").Any())
                         roleName = "MEMBERS";
 
-                    if (roles.ToList().Where(t => t == "ADMIN").Any())
-                        roleName = "ADMIN";
+                    if (roles.ToList().Where(t => t == "MEMBERSADMIN").Any())
+                        roleName = "MEMBERSADMIN";
+
+                    if (roles.ToList().Where(t => t == "SUPERADMIN").Any())
+                        roleName = "SUPERADMIN";
 
                     var authResponse = new
                     {
@@ -247,8 +250,11 @@ namespace EventCheckin.Api.Controllers.Identity
                 if (roles.ToList().Where(t => t == "MEMBERS").Any())
                     roleName = "MEMBERS";
 
-                if (roles.ToList().Where(t => t == "ADMIN").Any())
-                    roleName = "ADMIN";
+                if (roles.ToList().Where(t => t == "MEMBERSADMIN").Any())
+                    roleName = "MEMBERSADMIN";
+
+                if (roles.ToList().Where(t => t == "SUPERADMIN").Any())
+                    roleName = "SUPERADMIN";
 
                 JwtSecurityToken jwtSecurityToken = await CreateJwtToken(user, model.RememberMe).ConfigureAwait(false);
                 tokenModel.TFAEnabled = false;
@@ -375,9 +381,6 @@ namespace EventCheckin.Api.Controllers.Identity
 
                 if (roles.ToList().Where(t => t == "MEMBERS").Any())
                     roleName = "MEMBERS";
-
-                if (roles.ToList().Where(t => t == "ADMIN").Any())
-                    roleName = "ADMIN";
 
                 if (roles.ToList().Where(t => t == "SUPERADMIN").Any())
                     roleName = "SUPERADMIN";

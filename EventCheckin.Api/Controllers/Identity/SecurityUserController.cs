@@ -147,28 +147,35 @@ namespace EventCheckin.Api.Controllers.Identity
                     model.Password = "Admin@32149870";
                     model.ConfirmPassword = "Admin@32149870";
                     IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
-                }
-                user.Name = model.Name;
-                user.LockoutEnabled = false;
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { model.RoleName });
-                IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
-                //if (result2.Succeeded)
-                {
-                    return new CustomApiResponse(new UserModel
+
+                    user.Name = model.Name;
+                    user.LockoutEnabled = false;
+                    IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { model.RoleName });
+                    IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+                    //if (result2.Succeeded)
                     {
-                        Id = user.Id,
-                        PhoneNumber = user.PhoneNumber,
-                        UserName = user.PhoneNumber,
-                        Name = model.Name,
-                    }, 200, true);
+                        return new CustomApiResponse(new UserModel
+                        {
+                            Id = user.Id,
+                            PhoneNumber = user.PhoneNumber,
+                            UserName = user.PhoneNumber,
+                            Name = model.Name,
+                        }, 200, true);
+                    }
+                }
+                else
+                {
+                    var result = new CustomApiResponse(model, 200, false);
+                    result.Message = model.PhoneNumber + " mobile no is already registered.";
+                    return result;
                 }
             }
             catch (Exception ex)
             {
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "GATESECURITY" });
+                //IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "GATESECURITY" });
             }
 
-            return new CustomApiResponse("Erro", 200, false);
+            return new CustomApiResponse("Error", 200, false);
         }
 
         [HttpPut("UpdateUser")]

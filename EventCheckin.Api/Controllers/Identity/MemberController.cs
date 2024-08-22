@@ -75,13 +75,12 @@ namespace EventCheckin.Api.Controllers.Identity
             var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
             var isMemberAdmin = await _userManager.IsInRoleAsync(currentUser, "MEMBERSADMIN");
             var isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
-            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "ADMIN");
 
             var users = await _userService.GetUsers(rolename);
             var userModels = new List<UserModel>();
             foreach (var user1 in users)
             {
-                if (isSuperAdmin || isAdmin)
+                if (isSuperAdmin)
                 {
                     var user = await _userManager.FindByIdAsync(user1.Id.ToString());
                     var userModel = _mapper.Map<UserModel>(user);
@@ -155,7 +154,7 @@ namespace EventCheckin.Api.Controllers.Identity
 
             long parentId = 0;
 
-            if (roles.Where(t => t == "SUPERADMIN" || t == "ADMIN").Any())
+            if (roles.Where(t => t == "SUPERADMIN").Any())
             {
                 try
                 {
@@ -176,22 +175,26 @@ namespace EventCheckin.Api.Controllers.Identity
                         model.Password = "Admin@32149870";
                         model.ConfirmPassword = "Admin@32149870";
                         IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
-                    }
-                    user.Name = model.Name;
-                    IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERSADMIN" });
-                    user.LockoutEnabled = false;
-                    IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
-                    //if (result2.Succeeded)
-                    {
-                        return new CustomApiResponse(new UserModel
-                        {
-                            Id = user.Id,
-                            PhoneNumber = user.PhoneNumber,
-                            UserName = user.PhoneNumber,
-                            Name = model.Name,
-                        }, 200, true);
-                    }
 
+                        user.Name = model.Name;
+                        IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERSADMIN" });
+                        user.LockoutEnabled = false;
+                        IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+                        //if (result2.Succeeded)
+                        {
+                            return new CustomApiResponse(new UserModel
+                            {
+                                Id = user.Id,
+                                PhoneNumber = user.PhoneNumber,
+                                UserName = user.PhoneNumber,
+                                Name = model.Name,
+                            }, 200, true);
+                        }
+                    }
+                    else
+                    {
+                        new CustomApiResponse("Mobile No is already registered.", 200, false);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -221,22 +224,26 @@ namespace EventCheckin.Api.Controllers.Identity
                         model.Password = "Admin@32149870";
                         model.ConfirmPassword = "Admin@32149870";
                         IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
-                    }
-                    user.Name = model.Name;
-                    IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
-                    user.LockoutEnabled = false;
-                    IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
-                    //if (result2.Succeeded)
-                    {
-                        return new CustomApiResponse(new UserModel
-                        {
-                            Id = user.Id,
-                            PhoneNumber = user.PhoneNumber,
-                            UserName = user.PhoneNumber,
-                            Name = model.Name,
-                        }, 200, true);
-                    }
 
+                        user.Name = model.Name;
+                        IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
+                        user.LockoutEnabled = false;
+                        IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+                        //if (result2.Succeeded)
+                        {
+                            return new CustomApiResponse(new UserModel
+                            {
+                                Id = user.Id,
+                                PhoneNumber = user.PhoneNumber,
+                                UserName = user.PhoneNumber,
+                                Name = model.Name,
+                            }, 200, true);
+                        }
+                    }
+                    else
+                    {
+                        new CustomApiResponse("Mobile No is already registered.", 200, false);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -266,26 +273,31 @@ namespace EventCheckin.Api.Controllers.Identity
                         model.Password = "Admin@32149870";
                         model.ConfirmPassword = "Admin@32149870";
                         IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
-                    }
-                    user.Name = model.Name;
-                    IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
-                    user.LockoutEnabled = false;
-                    IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
-                    //if (result2.Succeeded)
-                    {
-                        return new CustomApiResponse(new UserModel
+                        user.Name = model.Name;
+                        IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
+                        user.LockoutEnabled = false;
+                        IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+                        //if (result2.Succeeded)
                         {
-                            Id = user.Id,
-                            PhoneNumber = user.PhoneNumber,
-                            UserName = user.PhoneNumber,
-                            Name = model.Name,
-                        }, 200, true);
+                            return new CustomApiResponse(new UserModel
+                            {
+                                Id = user.Id,
+                                PhoneNumber = user.PhoneNumber,
+                                UserName = user.PhoneNumber,
+                                Name = model.Name,
+                            }, 200, true);
+                        }
                     }
-
+                    else
+                    {
+                        var result = new CustomApiResponse(model, 200, false);
+                        result.Message = model.PhoneNumber + " mobile no is already registered.";
+                        return result;
+                    }
                 }
                 catch (Exception ex)
                 {
-                    IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
+                    //IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "MEMBERS" });
                 }
             }
             return new CustomApiResponse("Erro", 200, false);

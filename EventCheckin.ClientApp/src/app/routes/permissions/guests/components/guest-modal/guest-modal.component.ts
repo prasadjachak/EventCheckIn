@@ -30,11 +30,12 @@ export class GuestModalComponent implements OnInit {
          body:this.data
         }).subscribe(result =>{
           var user = result.body.result
-          this.dialogRef.close({ success: result.body.isSuccess, userData: user });
+          this.dialogRef.close({ success: result.body.isSuccess, userData: user,message : result.body.message});
         })
       : await this.userService.apiGuestAddGuestUserPost$Json$Response({body:this.data}).subscribe(result =>{
         var user = result.body.result
-        this.dialogRef.close({ success: result.body.isSuccess, userData: user });
+        console.log(result.body);
+        this.dialogRef.close({ success: result.body.isSuccess, userData: user,message : result.body.message });
       });
   }
 

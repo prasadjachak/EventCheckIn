@@ -71,7 +71,6 @@ namespace EventCheckin.Api.Controllers.Identity
             
             var currentUser = await _userManager.FindByIdAsync(CurrentUserId.ToString());
             var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
-            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "ADMIN");
             var isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
             var isMemberAdmin = await _userManager.IsInRoleAsync(currentUser, "MEMBERSADMIN");
 
@@ -99,7 +98,7 @@ namespace EventCheckin.Api.Controllers.Identity
                     }
                 }
             }
-            else if (isMember && !isAdmin)
+            else if (isMember)
             {
                 var members = new List<ApplicationUser>();
                 if (currentUser.ParentId == 0)
@@ -183,29 +182,35 @@ namespace EventCheckin.Api.Controllers.Identity
                     model.Password = "Admin@32149870";
                     model.ConfirmPassword = "Admin@32149870";
                     IdentityResult result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(false);
-                }
-                user.Name = model.Name;
-                user.LockoutEnabled = false;
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "GUEST" });
-                IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
-                //if (result2.Succeeded)
-                {
-                    return new CustomApiResponse(new UserModel
-                    {
-                        Id = user.Id,
-                        PhoneNumber = user.PhoneNumber,
-                        UserName = user.PhoneNumber,
-                        Name = model.Name,
-                    }, 200, true);
-                }
 
+                    user.Name = model.Name;
+                    user.LockoutEnabled = false;
+                    IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "GUEST" });
+                    IdentityResult result3 = await _userManager.UpdateAsync(user).ConfigureAwait(false);
+                    //if (result2.Succeeded)
+                    {
+                        return new CustomApiResponse(new UserModel
+                        {
+                            Id = user.Id,
+                            PhoneNumber = user.PhoneNumber,
+                            UserName = user.PhoneNumber,
+                            Name = model.Name,
+                        }, 200, true);
+                    }
+                }
+                else
+                {
+                    var result = new CustomApiResponse(model, 200, false);
+                    result.Message = model.PhoneNumber + " mobile no is already registered.";
+                    return result;
+                }
             }
             catch(Exception ex)
             {
-                IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "GUEST" });
+                //IdentityResult result2 = await _userManager.AddToRolesAsync(user, new List<string>() { "GUEST" });
             }
             
-            return new CustomApiResponse("Erro", 200, false);
+            return new CustomApiResponse("Error", 200, false);
         }
 
         [HttpPut("UpdateUser")]

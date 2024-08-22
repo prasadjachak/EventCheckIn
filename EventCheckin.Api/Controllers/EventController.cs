@@ -108,7 +108,6 @@ namespace EventCheckin.Api.Controllers
             var isMember = await _userManager.IsInRoleAsync(currentUser, "MEMBERS");
             var isMemberAdmin = await _userManager.IsInRoleAsync(currentUser, "MEMBERSADMIN");
             var isSuperAdmin = await _userManager.IsInRoleAsync(currentUser, "SUPERADMIN");
-            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "ADMIN");
             
             var eventMembers = new List<EventMemberModel>();
             var eventEntitys = await _eventEntityService.GetEventMembers(eventEntityId);
@@ -129,7 +128,7 @@ namespace EventCheckin.Api.Controllers
                         TwoFactorEnabled = user.TwoFactorEnabled,
                     })
                     .FirstOrDefault();
-                    if(isSuperAdmin || isAdmin)
+                    if(isSuperAdmin)
                     {
                         var check = await _userManager.IsInRoleAsync(user,"MEMBERSADMIN");
                         if (check) { 
