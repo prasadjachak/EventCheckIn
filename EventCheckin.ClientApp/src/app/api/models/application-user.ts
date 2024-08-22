@@ -13,6 +13,7 @@ export interface ApplicationUser {
   lockoutEnabled?: boolean;
   lockoutEnd?: string | null;
   loggings?: Array<Logging> | null;
+  memberNo?: string | null;
   name?: string | null;
   normalizedEmail?: string | null;
   normalizedUserName?: string | null;

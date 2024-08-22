@@ -164,6 +164,7 @@ namespace EventCheckin.Api.Controllers.Identity
                         {
                             UserName = model.PhoneNumber,
                             PhoneNumber = model.PhoneNumber,
+                            MemberNo = model.MemberNo,
                             Name = model.Name,
                             PhoneNumberConfirmed = false,
                             Email = model.PhoneNumber + "@abc123.com",
@@ -214,6 +215,7 @@ namespace EventCheckin.Api.Controllers.Identity
                             UserName = model.PhoneNumber,
                             PhoneNumber = model.PhoneNumber,
                             Name = model.Name,
+                            MemberNo = model.MemberNo,
                             PhoneNumberConfirmed = false,
                             Email = model.PhoneNumber + "@abc123.com",
                             EmailConfirmed = true,
@@ -263,6 +265,7 @@ namespace EventCheckin.Api.Controllers.Identity
                             UserName = model.PhoneNumber,
                             PhoneNumber = model.PhoneNumber,
                             Name = model.Name,
+                            MemberNo = model.MemberNo,
                             PhoneNumberConfirmed = false,
                             Email = model.PhoneNumber + "@abc123.com",
                             EmailConfirmed = true,

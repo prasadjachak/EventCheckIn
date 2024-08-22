@@ -11,6 +11,7 @@ export interface UserModel {
   id?: number;
   lockoutEnabled?: boolean;
   loggings?: Array<Logging> | null;
+  memberNo?: string | null;
   name?: string | null;
   otp?: string | null;
   parentId?: number;

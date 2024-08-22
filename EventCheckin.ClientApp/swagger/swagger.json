@@ -3383,6 +3383,10 @@
           "parentMemberId": {
             "type": "integer",
             "format": "int64"
+          },
+          "memberNo": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4115,6 +4119,10 @@
           "parentMemberId": {
             "type": "integer",
             "format": "int64"
+          },
+          "memberNo": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

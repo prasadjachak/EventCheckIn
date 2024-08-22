@@ -22,9 +22,9 @@ export class MemberModalComponent implements OnInit {
     console.log(formData);
     this.data.name = formData?.name;
     this.data.phoneNumber = formData?.phoneNumber;
+    this.data.memberNo = formData?.memberNo;
     this.data.email = formData?.email;
     this.data.roleIds = formData?.roleIds;
-
      this.data.id > 0
       ? await this.userService.apiMemberUpdateUserPut$Json$Response({
          body:this.data

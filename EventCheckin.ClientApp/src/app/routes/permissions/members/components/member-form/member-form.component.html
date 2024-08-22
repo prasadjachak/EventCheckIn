@@ -15,6 +15,13 @@
       {{ getErrorMessage("name") }}
     </mat-error>
   </mat-form-field>
+  <mat-form-field appearance="outline" class="d-block mb-2">
+    <mat-label>Member Id</mat-label>
+    <input formControlName="memberNo" matInput placeholder="Member Id" />
+    <mat-error *ngIf="fieldHasError('memberNo')">
+      {{ getErrorMessage("memberNo") }}
+    </mat-error>
+  </mat-form-field>
 
 
 </form>

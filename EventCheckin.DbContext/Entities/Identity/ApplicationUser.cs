@@ -32,5 +32,6 @@ namespace EventCheckin.DbContext.Entities.Identity
 
         public long ParentMemberId { get; set; }
 
+        public string MemberNo { get; set; }
     }
 }

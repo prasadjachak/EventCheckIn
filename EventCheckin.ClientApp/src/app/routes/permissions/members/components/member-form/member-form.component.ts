@@ -70,7 +70,8 @@ export class MemberFormComponent implements OnInit {
       {
         name: new FormControl(this.userData?.name || '', [
         ]),
-
+        memberNo: new FormControl(this.userData?.memberNo || '', [
+        ]),
         phoneNumber: new FormControl(this.userData?.phoneNumber || '',
           [
             Validators.required

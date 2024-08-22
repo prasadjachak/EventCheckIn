@@ -139,6 +139,7 @@ namespace EventCheckin.Api.Controllers.Identity
                 UserName = model.PhoneNumber,
                 PhoneNumber = model.PhoneNumber,
                 Name = model.Name,
+                MemberNo = model.MemberNo,
                 PhoneNumberConfirmed = false,
                 Email = model.PhoneNumber + "@abc123.com",
                 EmailConfirmed = true,
