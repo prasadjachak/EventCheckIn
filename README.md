@@ -3,4 +3,4 @@
 
 ## What ?
 
-Guest Pass allocation members and allowing those guest during entry in events.
+Guest Pass allocation by members and allowing those guest during entry in events.
